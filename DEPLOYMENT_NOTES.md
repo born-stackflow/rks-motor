@@ -10,7 +10,9 @@ Running log of what's been done and what's still outstanding. Kept in the repo s
 - **Vercel org**: `ms-real-estates-projects`
 - **Vercel account email**: born04416@gmail.com
 - **Sanity project ID**: `f3zi3siz` (dataset: `production`)
-- Deployed via Vercel CLI direct deploy (no GitHub connected — re-deploys need `vercel --prod --yes` run manually, not automatic on save)
+- **GitHub repo**: https://github.com/born-stackflow/rks-motor (main branch) — connected to Vercel, **auto-deploys on every push to `main`**. No need to run `vercel --prod` manually anymore; just `git push`.
+- Push access from this machine is via SSH key (`~/.ssh/id_ed25519`, authenticated as GitHub user `codewithahmedkhan`, added as a collaborator on `born-stackflow/rks-motor`).
+- An earlier repo (`codewithahmedkhan/Motorcycle-website-dev-machine`) was created first and has an initial commit pushed to it, but is **not** the one connected to Vercel — `born-stackflow/rks-motor` is the real one in use.
 - `vercel.json` has `"framework": "nextjs"` — required fix, Vercel didn't auto-detect the framework on first link and defaulted to looking for a `dist` folder, which failed the first deploy attempt.
 - `package.json` has `"engines": { "node": ">=20.9.0" }` — Next.js 16 requires it; this dev machine's default Node (18.19.1) is too old to even run `next build`, so use `nvm use 20` before any local build/lint check.
 
