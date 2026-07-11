@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+/* ─── DESIGN TOKENS (Tailwind v4 CSS-first) ──────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-red:           #CC0000;
+  --color-red-dark:      #990000;
+  --color-red-light:     #FF1A1A;
+  --color-red-muted:     #4D0000;
+
+  --color-black:         #0A0A0A;
+  --color-dark:          #111111;
+  --color-dark-2:        #1A1A1A;
+  --color-dark-3:        #242424;
+  --color-mid:           #555555;
+  --color-light:         #AAAAAA;
+  --color-off-white:     #F5F5F5;
+
+  --color-gold:          #C9A84C;
+
+  /* Fonts */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  /* Shadows */
+  --shadow-red-sm:  0 0 10px rgba(204,0,0,0.3);
+  --shadow-red-md:  0 0 20px rgba(204,0,0,0.4);
+  --shadow-red-lg:  0 0 40px rgba(204,0,0,0.5);
+  --shadow-red-glow:0 0 60px rgba(204,0,0,0.6);
+
+  /* Animations */
+  --animate-fade-up:     fadeUp 0.6s ease forwards;
+  --animate-fade-in:     fadeIn 0.4s ease forwards;
+  --animate-slide-right: slideRight 0.5s ease forwards;
+  --animate-pulse-red:   pulseRed 2s ease-in-out infinite;
+  --animate-spin-slow:   spin 8s linear infinite;
+}
+
+/* ─── KEYFRAMES ───────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideRight {
+  from { transform: translateX(-20px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes pulseRed {
+  0%, 100% { box-shadow: 0 0 20px rgba(204,0,0,0.4); }
+  50%       { box-shadow: 0 0 40px rgba(204,0,0,0.8); }
+}
+
+/* ─── BASE ────────────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    background-color: #0A0A0A;
+    color: #F5F5F5;
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0A0A0A;
+    color: #F5F5F5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bebas Neue', sans-serif;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+  }
+
+  img { display: block; max-width: 100%; }
+
+  ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #111111; }
+  ::-webkit-scrollbar-thumb { background: #CC0000; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #990000; }
+
+  ::selection { background: #CC0000; color: #ffffff; }
+
+  *:focus-visible {
+    outline: 2px solid #CC0000;
+    outline-offset: 2px;
+  }
+}
+
+/* ─── COMPONENT CLASSES ───────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-8 py-3.5
+           bg-red text-white font-semibold text-sm uppercase tracking-widest
+           border-2 border-red rounded-none
+           transition-all duration-300
+           hover:bg-red-dark hover:border-red-dark
+           active:scale-95 cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-8 py-3.5
+           bg-transparent text-off-white font-semibold text-sm uppercase tracking-widest
+           border-2 border-dark-3 rounded-none
+           transition-all duration-300
+           hover:border-red hover:text-red
+           active:scale-95 cursor-pointer;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-6 py-3
+           bg-transparent text-light text-sm uppercase tracking-wider
+           border border-transparent rounded-none
+           transition-all duration-200
+           hover:text-off-white hover:border-dark-3 cursor-pointer;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-dark border border-dark-3
+           transition-all duration-300
+           hover:border-red;
+  }
+
+  .card-elevated {
+    @apply bg-dark-2 border border-dark-3
+           transition-all duration-300
+           hover:border-red;
+  }
+
+  /* ── Form elements ── */
+  .input {
+    @apply w-full px-4 py-3.5
+           bg-dark-3 border border-dark-3 text-off-white
+           text-sm placeholder:text-mid rounded-none
+           outline-none transition-all duration-200
+           focus:border-red;
+  }
+
+  .label {
+    @apply block text-xs font-semibold uppercase tracking-widest text-light mb-2;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    @apply inline-flex items-center px-3 py-1
+           text-xs font-semibold uppercase tracking-wider;
+  }
+
+  /* ── Layout ── */
+  .section     { @apply py-20 md:py-28 lg:py-32; }
+  .section-sm  { @apply py-12 md:py-16; }
+  .container   { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+
+  /* ── Dividers ── */
+  .divider-red  { @apply h-px w-full bg-gradient-to-r from-transparent via-red to-transparent; }
+  .divider-dark { @apply h-px w-full bg-dark-3; }
+
+  /* ── Spec rows ── */
+  .spec-row    { @apply flex justify-between items-center py-3 border-b border-dark-3 last:border-0; }
+  .spec-label  { @apply text-sm text-light uppercase tracking-wide; }
+  .spec-value  { @apply text-sm text-off-white font-medium; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── Section heading red underline ── */
+  .heading-underline {
+    @apply block mt-3 h-[3px] w-[60px] bg-red;
+  }
+  .heading-underline-center {
+    @apply block mt-3 h-[3px] w-[60px] bg-red mx-auto;
+  }
+}
