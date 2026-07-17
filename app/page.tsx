@@ -12,7 +12,7 @@ import { PartCard } from '@/components/ui/PartCard'
 import { ArrowRight, Zap, Award, Globe, Wrench, Building2 } from '@/components/ui/Icon'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
-import type { BikeModelCard, BikePartCard, BlogPostCard, SiteSettings } from '@/lib/sanity'
+import type { BikeModelCard, BikePartCard, BlogPostCard, SiteSettings, PartCategorySummary } from '@/lib/sanity'
 
 const BRAND_LABELS: Record<string, string> = {
   aperyder: 'Ape Ryder',
@@ -164,6 +164,7 @@ export default function HomePage() {
   const [featuredParts,   setFeaturedParts]   = useState<BikePartCard[]>([])
   const [latestPosts,     setLatestPosts]     = useState<BlogPostCard[]>([])
   const [siteSettings,    setSiteSettings]    = useState<SiteSettings | null>(null)
+  const [partCategorySummary, setPartCategorySummary] = useState<PartCategorySummary | null>(null)
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
 
@@ -172,6 +173,7 @@ export default function HomePage() {
     sanityClient.fetch(queries.featuredParts).then((data: BikePartCard[]) => setFeaturedParts(data ?? []))
     sanityClient.fetch(queries.latestPosts).then((data: BlogPostCard[]) => setLatestPosts((data ?? []).slice(0, 3)))
     sanityClient.fetch(queries.siteSettings).then((data: SiteSettings) => setSiteSettings(data ?? null))
+    sanityClient.fetch(queries.partCategorySummary).then((data: PartCategorySummary) => setPartCategorySummary(data ?? null))
   }, [])
 
   // Helper: resolve CMS image to URL, or return undefined (falls back to hardcoded)
@@ -359,7 +361,12 @@ export default function HomePage() {
 
             {/* Right — 2×2 category grid */}
             <div className="grid grid-cols-2 gap-3">
-              {h.parts.categories.map((cat, i) => (
+              {h.parts.categories.map((cat, i) => {
+                const catKey = cat.href.split('category=')[1] as keyof PartCategorySummary | undefined
+                const summary = catKey ? partCategorySummary?.[catKey] : undefined
+                const cmsImage = (summary?.image as any)?.asset ? urlFor(summary!.image!).width(600).quality(80).url() : undefined
+                const count = summary ? `${summary.count}+` : cat.count
+                return (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -370,7 +377,7 @@ export default function HomePage() {
                 >
                   <Link href={cat.href} className="group relative block aspect-square overflow-hidden bg-dark-3">
                     <Image
-                      src={cat.image} alt={cat.title} fill
+                      src={cmsImage ?? cat.image} alt={cat.title} fill
                       className="object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -378,7 +385,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 border border-transparent group-hover:border-red/40 transition-colors duration-300" />
                     <div className="absolute bottom-0 left-0 p-4">
                       <p className="text-off-white font-bold text-sm uppercase tracking-wide group-hover:text-red transition-colors">{cat.title}</p>
-                      <p className="text-light/60 text-xs mt-0.5">{cat.count} parts</p>
+                      <p className="text-light/60 text-xs mt-0.5">{count} parts</p>
                     </div>
                     <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
                       <div className="w-7 h-7 bg-red flex items-center justify-center">
@@ -387,7 +394,8 @@ export default function HomePage() {
                     </div>
                   </Link>
                 </motion.div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>
