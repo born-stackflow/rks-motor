@@ -91,6 +91,26 @@ export const queries = {
 
   partSlugs: `*[_type == "bikePart"] { "slug": slug.current }`,
 
+  // One representative image + live count per part category, for the homepage teaser grid
+  partCategorySummary: `{
+    "motor": {
+      "count": count(*[_type == "bikePart" && category == "motor"]),
+      "image": *[_type == "bikePart" && category == "motor" && count(images) > 0] | order(name asc) [0].images[0]
+    },
+    "battery": {
+      "count": count(*[_type == "bikePart" && category == "battery"]),
+      "image": *[_type == "bikePart" && category == "battery" && count(images) > 0] | order(name asc) [0].images[0]
+    },
+    "brakes": {
+      "count": count(*[_type == "bikePart" && category == "brakes"]),
+      "image": *[_type == "bikePart" && category == "brakes" && count(images) > 0] | order(name asc) [0].images[0]
+    },
+    "accessories": {
+      "count": count(*[_type == "bikePart" && category == "accessories"]),
+      "image": *[_type == "bikePart" && category == "accessories" && count(images) > 0] | order(name asc) [0].images[0]
+    }
+  }`,
+
   // Blog / News
   latestPosts: `*[_type == "blogPost"] | order(publishedDate desc) [0...6] {
     _id, title, slug, excerpt, category, isFeatured, publishedDate, tags,
@@ -264,6 +284,11 @@ export type BikePartCard = {
   compatibleModels?: Array<{ name: string; slug: SlugRef }>
   image?: SanityImageSource & { alt?: string }
 }
+
+export type PartCategorySummary = Record<
+  'motor' | 'battery' | 'brakes' | 'accessories',
+  { count: number; image?: (SanityImageSource & { alt?: string }) | null }
+>
 
 export type BlogPostCard = {
   _id: string
