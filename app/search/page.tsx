@@ -2,25 +2,25 @@
 
 import { useState, useMemo, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/Badge'
 import { Search, ArrowRight } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 
 const searchData = {
   models: [
-    { id: '1', name: 'Thunder Sport 650',  category: 'Sport',     price: 12999, url: '/models/thunder-sport-650',  image: 'https://images.unsplash.com/photo-1558980394-4c7c9299fe96?w=400&q=80', type: 'model' as const },
-    { id: '2', name: 'Adventure Pro 800',  category: 'Adventure', price: 15799, url: '/models/adventure-pro-800',  image: 'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=400&q=80', type: 'model' as const },
-    { id: '3', name: 'Urban Cruiser 400',  category: 'Cruiser',   price: 8499,  url: '/models/urban-cruiser-400',  image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&q=80', type: 'model' as const },
-    { id: '4', name: 'Street Naked 500',   category: 'Naked',     price: 7999,  url: '/models/street-naked-500',   image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', type: 'model' as const },
-    { id: '5', name: 'R-E1000 Electric',   category: 'Electric',  price: 21999, url: '/models/r-e1000-electric',   image: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=400&q=80', type: 'model' as const },
+    { id: '1', name: 'Thunder Sport 650',  category: 'Sport',     price: 12999, url: '/models/thunder-sport-650',  type: 'model' as const },
+    { id: '2', name: 'Adventure Pro 800',  category: 'Adventure', price: 15799, url: '/models/adventure-pro-800',  type: 'model' as const },
+    { id: '3', name: 'Urban Cruiser 400',  category: 'Cruiser',   price: 8499,  url: '/models/urban-cruiser-400',  type: 'model' as const },
+    { id: '4', name: 'Street Naked 500',   category: 'Naked',     price: 7999,  url: '/models/street-naked-500',   type: 'model' as const },
+    { id: '5', name: 'R-E1000 Electric',   category: 'Electric',  price: 21999, url: '/models/r-e1000-electric',   type: 'model' as const },
   ],
   parts: [
-    { id: '1', name: 'Sport Air Filter Kit',      partNumber: 'ENG-AF-002', category: 'Engine',    price: 125, url: '/parts/sport-air-filter',   image: 'https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=400&q=80', type: 'part' as const },
-    { id: '2', name: 'HP Brake Pads',             partNumber: 'BRK-HP-001', category: 'Brakes',    price: 89,  url: '/parts/hp-brake-pads',       image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d33?w=400&q=80', type: 'part' as const },
-    { id: '3', name: 'LED Headlight Assembly',    partNumber: 'ELC-HL-003', category: 'Electrical', price: 249, url: '/parts/led-headlight',       image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=400&q=80', type: 'part' as const },
+    { id: '1', name: 'Sport Air Filter Kit',      partNumber: 'ENG-AF-002', category: 'Engine',    price: 125, url: '/parts/sport-air-filter',   type: 'part' as const },
+    { id: '2', name: 'HP Brake Pads',             partNumber: 'BRK-HP-001', category: 'Brakes',    price: 89,  url: '/parts/hp-brake-pads',       type: 'part' as const },
+    { id: '3', name: 'LED Headlight Assembly',    partNumber: 'ELC-HL-003', category: 'Electrical', price: 249, url: '/parts/led-headlight',       type: 'part' as const },
   ],
   news: [
     { id: '1', title: 'New Thunder Sport 650R Unveiled', category: 'Product Launch', date: '15 March 2024', url: '/news/thunder-sport-650r-eicma', type: 'news' as const },
@@ -113,7 +113,7 @@ function SearchResults() {
                     <motion.div key={m.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
                       <Link href={m.url} className="group card overflow-hidden flex flex-col hover:border-red">
                         <div className="relative aspect-[16/9] overflow-hidden">
-                          <Image src={m.image} alt={m.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <ImagePlaceholder />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                           <div className="absolute bottom-3 left-3"><Badge variant="red">{m.category}</Badge></div>
                         </div>
@@ -141,7 +141,7 @@ function SearchResults() {
                     <motion.div key={p.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
                       <Link href={p.url} className="group card overflow-hidden flex flex-col hover:border-red">
                         <div className="relative aspect-[4/3] overflow-hidden">
-                          <Image src={p.image} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <ImagePlaceholder />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                           <div className="absolute bottom-3 left-3"><Badge variant="dark">{p.category}</Badge></div>
                         </div>

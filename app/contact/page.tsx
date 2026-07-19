@@ -1,13 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import {
   Phone, Mail, MapPin, Clock, ArrowRight,
   Zap, Wrench, ShoppingCart, Headphones, Send, CheckCircle, Info,
 } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
 import type { SiteSettings } from '@/lib/sanity'
 
@@ -166,12 +166,7 @@ export default function ContactPage() {
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="relative h-[42vh] min-h-[280px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=90"
-          alt="Contact RKS E-Bikes"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/95" />
 
         {/* Floating particles */}
@@ -269,12 +264,7 @@ export default function ContactPage() {
               variants={slideRight}
               className="relative aspect-[4/3] overflow-hidden bg-dark border border-dark-3"
             >
-              <Image
-                src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=800&q=80"
-                alt="Milan, Italy"
-                fill
-                className="object-cover opacity-25"
-              />
+              <ImagePlaceholder icon={MapPin} className="opacity-40" />
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
                 <motion.div
                   className="w-5 h-5 bg-red rounded-full"

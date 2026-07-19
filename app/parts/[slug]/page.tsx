@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Badge } from '@/components/ui/Badge'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { PartCard } from '@/components/ui/PartCard'
 import { ArrowRight, ChevronLeft, Check, X } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 
 const partData = {
@@ -24,12 +24,7 @@ const partData = {
   soldAs: 'Single Unit',
   packageIncludes: ['1× Air Filter', 'Installation Instructions', 'Service Interval Sticker'],
   warranty: '24 months manufacturer warranty',
-  gallery: [
-    'https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=1200&q=85',
-    'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=1200&q=85',
-    'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=85',
-    'https://images.unsplash.com/photo-1558618047-3c8c76ca7d33?w=1200&q=85',
-  ],
+  gallery: [0, 1, 2, 3],
   specs: {
     identification: {
       'Part Number':           'ENG-AF-650-002',
@@ -58,16 +53,16 @@ const partData = {
     },
   },
   compatibleModels: [
-    { name: 'Thunder Sport 650', slug: 'thunder-sport-650', years: '2020–2024', notes: 'All variants — direct fit',        image: 'https://images.unsplash.com/photo-1558980394-4c7c9299fe96?w=400&q=80' },
-    { name: 'Street Naked 500',  slug: 'street-naked-500',  years: '2021–2024', notes: 'Requires bracket (sold separately)', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80' },
-    { name: 'Urban Cruiser 400', slug: 'urban-cruiser-400', years: '2022–2024', notes: 'All variants — direct fit',        image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&q=80' },
+    { name: 'Thunder Sport 650', slug: 'thunder-sport-650', years: '2020–2024', notes: 'All variants — direct fit' },
+    { name: 'Street Naked 500',  slug: 'street-naked-500',  years: '2021–2024', notes: 'Requires bracket (sold separately)' },
+    { name: 'Urban Cruiser 400', slug: 'urban-cruiser-400', years: '2022–2024', notes: 'All variants — direct fit' },
   ],
 }
 
 const relatedParts = [
-  { id: 1, name: 'Engine Oil Filter',    slug: 'engine-oil-filter',  partNumber: 'ENG-OF-006', category: 'engine',    price: 19,  availability: 'in-stock' as const,  isOEM: true,  image: 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=800&q=85' },
-  { id: 2, name: 'Spark Plugs Set (4)',  slug: 'spark-plugs-set',    partNumber: 'ENG-SP-007', category: 'engine',    price: 34,  availability: 'in-stock' as const,  isOEM: true,  image: 'https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=800&q=85' },
-  { id: 3, name: 'Fuel Filter',          slug: 'fuel-filter',        partNumber: 'FUL-FF-008', category: 'fuel',      price: 25,  availability: 'in-stock' as const,  isOEM: true,  image: 'https://images.unsplash.com/photo-1526178613658-3f1622045557?w=800&q=85' },
+  { id: 1, name: 'Engine Oil Filter',    slug: 'engine-oil-filter',  partNumber: 'ENG-OF-006', category: 'engine',    price: 19,  availability: 'in-stock' as const,  isOEM: true },
+  { id: 2, name: 'Spark Plugs Set (4)',  slug: 'spark-plugs-set',    partNumber: 'ENG-SP-007', category: 'engine',    price: 34,  availability: 'in-stock' as const,  isOEM: true },
+  { id: 3, name: 'Fuel Filter',          slug: 'fuel-filter',        partNumber: 'FUL-FF-008', category: 'fuel',      price: 25,  availability: 'in-stock' as const,  isOEM: true },
 ]
 
 const availabilityMap = {
@@ -94,7 +89,6 @@ export default function PartDetailPage() {
 
   const avail    = availabilityMap[partData.availability]
   const catLabel = categoryLabel[partData.category] || partData.category
-  const currentImg = partData.gallery[activeImage]
   const specSections = Object.entries(partData.specs)
 
   return (
@@ -132,13 +126,7 @@ export default function PartDetailPage() {
                   transition={{ duration: 0.3 }}
                   className="absolute inset-0"
                 >
-                  <Image
-                    src={currentImg}
-                    alt={partData.name}
-                    fill priority
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
-                  />
+                  <ImagePlaceholder />
                 </motion.div>
               </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
@@ -149,13 +137,13 @@ export default function PartDetailPage() {
 
             {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-2 mt-3">
-              {partData.gallery.map((img, i) => (
+              {partData.gallery.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
                   className={`relative aspect-[4/3] overflow-hidden border-2 transition-all ${i === activeImage ? 'border-red' : 'border-dark-3 opacity-60 hover:opacity-90'}`}
                 >
-                  <Image src={img} alt={`Part view ${i + 1}`} fill className="object-cover" />
+                  <ImagePlaceholder />
                 </button>
               ))}
             </div>
@@ -206,12 +194,7 @@ export default function PartDetailPage() {
                     className="group card overflow-hidden flex flex-col hover:border-red"
                   >
                     <div className="relative aspect-[16/9] overflow-hidden">
-                      <Image
-                        src={m.image}
-                        alt={m.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                      <ImagePlaceholder />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
                     <div className="p-4">
@@ -358,7 +341,7 @@ export default function PartDetailPage() {
               className="relative w-full max-w-4xl aspect-[4/3]"
               onClick={e => e.stopPropagation()}
             >
-              <Image src={currentImg} alt={partData.name} fill className="object-contain" />
+              <ImagePlaceholder />
             </motion.div>
             <div className="absolute bottom-6 flex gap-2">
               {partData.gallery.map((_, i) => (

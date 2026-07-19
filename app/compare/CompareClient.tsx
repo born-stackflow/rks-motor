@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/Badge'
 import type { BadgeVariant } from '@/components/ui/Badge'
 import { Check, X, ArrowRight } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 import { urlFor } from '@/lib/sanity'
 import type { BikeModelCard, EBikeSpecs } from '@/lib/sanity'
@@ -25,8 +26,6 @@ const AVAIL_MAP: Record<string, { label: string; variant: BadgeVariant }> = {
   'coming-soon':  { label: 'Coming Soon',  variant: 'gold'  },
   'discontinued': { label: 'Discontinued', variant: 'dark'  },
 }
-
-const FALLBACK_IMG = 'https://images.unsplash.com/photo-1558980394-4c7c9299fe96?w=800&q=85'
 
 type SpecField = { key: keyof EBikeSpecs; label: string; suffix?: string }
 
@@ -85,10 +84,10 @@ function hasAsset(img: unknown): img is { asset: unknown } {
   return typeof img === 'object' && img !== null && 'asset' in img
 }
 
-function modelImage(model: CompareModel): string {
+function modelImage(model: CompareModel): string | undefined {
   const src = model.thumbnailImage ?? model.heroImage
   if (src && hasAsset(src)) return urlFor(src).width(800).height(450).quality(85).url()
-  return FALLBACK_IMG
+  return undefined
 }
 
 function modelSlug(model: CompareModel): string {
@@ -152,7 +151,11 @@ export default function CompareClient({ models }: { models: CompareModel[] }) {
                 disabled={!selected.includes(m._id) && selected.length >= 3}
               >
                 <div className="relative w-10 h-7 overflow-hidden">
-                  <Image src={modelImage(m)} alt={m.name} fill className="object-cover" />
+                  {modelImage(m) ? (
+                    <Image src={modelImage(m)!} alt={m.name} fill className="object-cover" />
+                  ) : (
+                    <ImagePlaceholder />
+                  )}
                 </div>
                 <span className="text-sm font-semibold">{m.name}</span>
                 {selected.includes(m._id) && <X className="h-3.5 w-3.5 text-red" />}
@@ -179,7 +182,11 @@ export default function CompareClient({ models }: { models: CompareModel[] }) {
                 return (
                   <div key={m._id} className="card overflow-hidden">
                     <div className="relative aspect-[16/9] overflow-hidden">
-                      <Image src={modelImage(m)} alt={m.name} fill className="object-cover" />
+                      {modelImage(m) ? (
+                        <Image src={modelImage(m)!} alt={m.name} fill className="object-cover" />
+                      ) : (
+                        <ImagePlaceholder />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                       <div className="absolute bottom-3 left-3 flex items-center gap-2">
                         <Badge variant="red">{BRAND_LABELS[m.category] ?? m.category}</Badge>

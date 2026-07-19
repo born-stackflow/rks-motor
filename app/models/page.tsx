@@ -2,11 +2,11 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ModelCard } from '@/components/ui/ModelCard'
 import { ChevronDown, Search, SlidersHorizontal, X, ArrowRight } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
 import type { BikeModelCard } from '@/lib/sanity'
@@ -109,12 +109,7 @@ export default function ModelsPage() {
     <div className="min-h-screen bg-black">
       {/* Hero banner */}
       <div className="relative h-[40vh] min-h-[280px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=90"
-          alt="Our E-Bikes"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">

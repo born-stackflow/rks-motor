@@ -55,10 +55,10 @@ export const translations = {
         browse: 'Browse All E-Bike Parts', allParts: 'All Parts',
         shopTag: 'Shop', popularTitle: 'Popular E-Bike Parts',
         categories: [
-          { title: 'Motor & Drive',    href: '/parts?category=motor',       image: 'https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=600&q=80', count: '120+' },
-          { title: 'Battery & Charging', href: '/parts?category=battery',   image: 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=600&q=80', count: '80+' },
-          { title: 'Brakes & Wheels',  href: '/parts?category=brakes',      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d33?w=600&q=80', count: '180+' },
-          { title: 'Accessories',      href: '/parts?category=accessories', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&q=80', count: '150+' },
+          { title: 'Motor & Drive',    href: '/parts?category=motor' },
+          { title: 'Battery & Charging', href: '/parts?category=battery' },
+          { title: 'Brakes & Wheels',  href: '/parts?category=brakes' },
+          { title: 'Accessories',      href: '/parts?category=accessories' },
         ],
       },
       why: {
@@ -74,11 +74,6 @@ export const translations = {
       newsSection: {
         tag: 'Latest', title: 'News & Updates', allNews: 'All News', readMore: 'Read more',
       },
-      newsItems: [
-        { title: 'New Volt Sport 75R Unveiled at EICMA',      category: 'Product Launch', date: 'March 15, 2024', excerpt: 'The 75R delivers 15% more range and an all-new aerodynamics package.', slug: 'volt-sport-75r-eicma',              image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=900&q=85' },
-        { title: 'RKS Wins E-Racing Constructor Title',       category: 'Racing',         date: 'March 10, 2024', excerpt: 'Historic first-ever e-racing constructor championship for RKS E-Bikes.',  slug: 'e-racing-constructor-championship', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85' },
-        { title: 'RKS E1000 Sets New Electric Speed Record',  category: 'Innovation',     date: 'March 5, 2024',  excerpt: '2.8 seconds. 400km range. Zero emissions. The future is here.',          slug: 'e1000-speed-record',                image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=900&q=85' },
-      ],
       dealer: {
         locations: '50+ Locations',
         title: 'Find Your Nearest Dealer',
@@ -101,11 +96,11 @@ export const translations = {
     },
     hero: {
       slides: [
-        { tag: 'BUILT FOR THE ROAD',     headline: ['POWER', 'REDEFINED'],       sub: 'Italian engineering. Zero emissions. Pure performance.',      cta: { label: 'Explore E-Bikes',        href: '/models' },     ctaSec: { label: 'Our Story',           href: '/about' },       bg: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=90' },
-        { tag: 'PRECISION ENGINEERING',  headline: ['CRAFTED', 'TO PERFECTION'],  sub: 'Every component engineered for electric performance.',        cta: { label: 'View E-Bike Lineup',     href: '/models' },     ctaSec: { label: 'Our Story',           href: '/about' },       bg: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=1920&q=90' },
-        { tag: 'DISCOVER YOUR E-BIKE',   headline: ['FIND YOUR', 'PERFECT RIDE'], sub: 'From city commuters to adventure machines. All electric.',    cta: { label: 'Browse All E-Bikes',     href: '/models' },     ctaSec: { label: 'Compare E-Bikes',     href: '/compare' },     bg: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=90' },
-        { tag: 'OEM E-BIKE PARTS',       headline: ['BUILT TO', 'LAST'],          sub: 'Genuine e-bike parts. Fast dispatch. Guaranteed performance.', cta: { label: 'Shop E-Bike Parts',     href: '/parts' },      ctaSec: { label: 'Find Compatible',     href: '/parts' },       bg: 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=1920&q=90' },
-        { tag: 'BECOME A PARTNER',       headline: ['GROW YOUR', 'BUSINESS'],     sub: 'Join our global e-bike dealer and distributor network.',      cta: { label: 'Apply as Trade Partner', href: '/trade/apply' }, ctaSec: { label: 'Learn More',         href: '/trade' },       bg: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&q=90' },
+        { tag: 'BUILT FOR THE ROAD',     headline: ['POWER', 'REDEFINED'],       sub: 'Italian engineering. Zero emissions. Pure performance.',      cta: { label: 'Explore E-Bikes',        href: '/models' },     ctaSec: { label: 'Our Story',           href: '/about' } },
+        { tag: 'PRECISION ENGINEERING',  headline: ['CRAFTED', 'TO PERFECTION'],  sub: 'Every component engineered for electric performance.',        cta: { label: 'View E-Bike Lineup',     href: '/models' },     ctaSec: { label: 'Our Story',           href: '/about' } },
+        { tag: 'DISCOVER YOUR E-BIKE',   headline: ['FIND YOUR', 'PERFECT RIDE'], sub: 'From city commuters to adventure machines. All electric.',    cta: { label: 'Browse All E-Bikes',     href: '/models' },     ctaSec: { label: 'Compare E-Bikes',     href: '/compare' } },
+        { tag: 'OEM E-BIKE PARTS',       headline: ['BUILT TO', 'LAST'],          sub: 'Genuine e-bike parts. Fast dispatch. Guaranteed performance.', cta: { label: 'Shop E-Bike Parts',     href: '/parts' },      ctaSec: { label: 'Find Compatible',     href: '/parts' } },
+        { tag: 'BECOME A PARTNER',       headline: ['GROW YOUR', 'BUSINESS'],     sub: 'Join our global e-bike dealer and distributor network.',      cta: { label: 'Apply as Trade Partner', href: '/trade/apply' }, ctaSec: { label: 'Learn More',         href: '/trade' } },
       ],
     },
   },
@@ -166,10 +161,10 @@ export const translations = {
         browse: 'Sfoglia Tutti i Ricambi E-Bike', allParts: 'Tutti i Ricambi',
         shopTag: 'Acquista', popularTitle: 'Ricambi E-Bike Popolari',
         categories: [
-          { title: 'Motore e Trasmissione', href: '/parts?category=motor',     image: 'https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=600&q=80', count: '120+' },
-          { title: 'Batteria e Ricarica',   href: '/parts?category=battery',   image: 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=600&q=80', count: '80+' },
-          { title: 'Freni e Ruote',         href: '/parts?category=brakes',    image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d33?w=600&q=80', count: '180+' },
-          { title: 'Accessori',             href: '/parts?category=accessories', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&q=80', count: '150+' },
+          { title: 'Motore e Trasmissione', href: '/parts?category=motor' },
+          { title: 'Batteria e Ricarica',   href: '/parts?category=battery' },
+          { title: 'Freni e Ruote',         href: '/parts?category=brakes' },
+          { title: 'Accessori',             href: '/parts?category=accessories' },
         ],
       },
       why: {
@@ -185,11 +180,6 @@ export const translations = {
       newsSection: {
         tag: 'Ultime', title: 'Notizie e Aggiornamenti', allNews: 'Tutte le Notizie', readMore: 'Leggi tutto',
       },
-      newsItems: [
-        { title: 'Nuovo Volt Sport 75R Presentato a EICMA',          category: 'Lancio Prodotto', date: '15 Marzo 2024', excerpt: 'Il 75R offre il 15% di autonomia in più e un nuovo pacchetto aerodinamico.',  slug: 'volt-sport-75r-eicma',              image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=900&q=85' },
-        { title: 'RKS Vince il Titolo Constructor E-Racing',         category: 'Racing',          date: '10 Marzo 2024', excerpt: 'Primo storico campionato constructor e-racing per RKS E-Bikes.',            slug: 'e-racing-constructor-championship', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85' },
-        { title: 'RKS E1000 Stabilisce il Record di Velocità Elettrica', category: 'Innovazione', date: '5 Marzo 2024',  excerpt: '2,8 secondi. 400km di autonomia. Zero emissioni. Il futuro è qui.',          slug: 'e1000-speed-record',                image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=900&q=85' },
-      ],
       dealer: {
         locations: '50+ Sedi',
         title: 'Trova il Rivenditore Più Vicino',
@@ -212,11 +202,11 @@ export const translations = {
     },
     hero: {
       slides: [
-        { tag: 'COSTRUITA PER LA STRADA',  headline: ['POTENZA', 'RIDEFINITA'],         sub: "Ingegneria italiana. Zero emissioni. Performance pura.",              cta: { label: 'Esplora le E-Bike',   href: '/models' },      ctaSec: { label: 'La Nostra Storia',  href: '/about' },    bg: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=90' },
-        { tag: 'INGEGNERIA DI PRECISIONE', headline: ['COSTRUITA', 'ALLA PERFEZIONE'],   sub: 'Ogni componente ingegnerizzato per la performance elettrica.',        cta: { label: 'Vedi la Gamma',      href: '/models' },      ctaSec: { label: 'La Nostra Storia',  href: '/about' },    bg: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=1920&q=90' },
-        { tag: 'SCOPRI LA TUA E-BIKE',     headline: ['TROVA LA TUA', 'RIDE PERFETTA'],  sub: 'Dalla città all\'avventura. Completamente elettrico.',               cta: { label: 'Sfoglia le E-Bike',  href: '/models' },      ctaSec: { label: 'Confronta E-Bike',  href: '/compare' }, bg: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=90' },
-        { tag: 'RICAMBI OEM E-BIKE',       headline: ['COSTRUITA PER', 'DURARE'],        sub: 'Ricambi originali e-bike. Spedizione rapida. Performance garantita.', cta: { label: 'Acquista Ricambi',   href: '/parts' },       ctaSec: { label: 'Trova Compatibile', href: '/parts' },    bg: 'https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=1920&q=90' },
-        { tag: 'DIVENTA UN PARTNER',       headline: ['FAI CRESCERE', 'IL TUO BUSINESS'], sub: 'Unisciti alla nostra rete globale di rivenditori di e-bike.',       cta: { label: 'Candidati come Partner', href: '/trade/apply' }, ctaSec: { label: 'Scopri di Più',   href: '/trade' },    bg: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&q=90' },
+        { tag: 'COSTRUITA PER LA STRADA',  headline: ['POTENZA', 'RIDEFINITA'],         sub: "Ingegneria italiana. Zero emissioni. Performance pura.",              cta: { label: 'Esplora le E-Bike',   href: '/models' },      ctaSec: { label: 'La Nostra Storia',  href: '/about' } },
+        { tag: 'INGEGNERIA DI PRECISIONE', headline: ['COSTRUITA', 'ALLA PERFEZIONE'],   sub: 'Ogni componente ingegnerizzato per la performance elettrica.',        cta: { label: 'Vedi la Gamma',      href: '/models' },      ctaSec: { label: 'La Nostra Storia',  href: '/about' } },
+        { tag: 'SCOPRI LA TUA E-BIKE',     headline: ['TROVA LA TUA', 'RIDE PERFETTA'],  sub: 'Dalla città all\'avventura. Completamente elettrico.',               cta: { label: 'Sfoglia le E-Bike',  href: '/models' },      ctaSec: { label: 'Confronta E-Bike',  href: '/compare' } },
+        { tag: 'RICAMBI OEM E-BIKE',       headline: ['COSTRUITA PER', 'DURARE'],        sub: 'Ricambi originali e-bike. Spedizione rapida. Performance garantita.', cta: { label: 'Acquista Ricambi',   href: '/parts' },       ctaSec: { label: 'Trova Compatibile', href: '/parts' } },
+        { tag: 'DIVENTA UN PARTNER',       headline: ['FAI CRESCERE', 'IL TUO BUSINESS'], sub: 'Unisciti alla nostra rete globale di rivenditori di e-bike.',       cta: { label: 'Candidati come Partner', href: '/trade/apply' }, ctaSec: { label: 'Scopri di Più',   href: '/trade' } },
       ],
     },
   },

@@ -4,7 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Badge } from './Badge'
-import { ArrowRight } from './Icon'
+import { ArrowRight, Gauge } from './Icon'
+import { ImagePlaceholder } from './ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 
 interface ModelCardProps {
@@ -22,22 +23,10 @@ interface ModelCardProps {
   compareSelected?: boolean
 }
 
-const CATEGORY_IMAGES: Record<string, string> = {
-  sport:     'https://images.unsplash.com/photo-1558980394-4c7c9299fe96?w=800&q=85',
-  racing:    'https://images.unsplash.com/photo-1551524164-6cf5ac833c2a?w=800&q=85',
-  adventure: 'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=800&q=85',
-  touring:   'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800&q=85',
-  cruiser:   'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=800&q=85',
-  scooter:   'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&q=85',
-  electric:  'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&q=85',
-}
-
-const FALLBACK = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85'
-
 export function ModelCard({
   name, slug, category, price, tagline, image, isNew, isFeatured, engineCC, index = 0, onCompare, compareSelected,
 }: ModelCardProps) {
-  const src = image || CATEGORY_IMAGES[category?.toLowerCase()] || FALLBACK
+  const src = image
 
   return (
     <motion.div
@@ -63,13 +52,17 @@ export function ModelCard({
         <div className="card overflow-hidden h-full flex flex-col">
           {/* Image */}
           <div className="relative aspect-[16/10] overflow-hidden bg-dark">
-            <Image
-              src={src}
-              alt={name}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-            />
+            {src ? (
+              <Image
+                src={src}
+                alt={name}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <ImagePlaceholder icon={Gauge} />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
             <div className="absolute top-3 right-3 flex gap-2">
               {isNew && <Badge variant="gold">NEW</Badge>}

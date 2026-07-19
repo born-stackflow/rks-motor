@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Badge } from '@/components/ui/Badge'
 import { Download, ArrowRight } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatDate } from '@/lib/utils'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
 import type { BlogPostCard, DownloadAsset } from '@/lib/sanity'
@@ -30,15 +31,13 @@ const TYPE_BADGE: Record<string, 'red' | 'gold' | 'green' | 'amber' | 'dark'> = 
   manual: 'dark', pricelist: 'green', 'parts-catalogue': 'dark', 'brand-asset': 'dark',
 }
 
-const FALLBACK_IMG = 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&q=80'
-
 function postSlug(post: BlogPostCard) {
   return (post.slug as any)?.current ?? ''
 }
 
-function thumbUrl(img: any, w = 600, h = 340): string {
+function thumbUrl(img: any, w = 600, h = 340): string | undefined {
   if (img?.asset) return urlFor(img).width(w).height(h).quality(80).url()
-  return FALLBACK_IMG
+  return undefined
 }
 
 export default async function MediaPage() {
@@ -55,12 +54,7 @@ export default async function MediaPage() {
 
       {/* ── Hero ────────────────────────────────────────────────── */}
       <section className="relative h-[40vh] min-h-[260px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=90"
-          alt="Media Center"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">
@@ -94,12 +88,16 @@ export default async function MediaPage() {
               {pressReleases.map(pr => (
                 <div key={pr._id} className="group card overflow-hidden flex flex-col hover:border-red transition-colors">
                   <div className="relative aspect-[16/7] overflow-hidden">
-                    <Image
-                      src={thumbUrl(pr.featuredImage, 600, 260)}
-                      alt={pr.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {thumbUrl(pr.featuredImage, 600, 260) ? (
+                      <Image
+                        src={thumbUrl(pr.featuredImage, 600, 260)!}
+                        alt={pr.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <ImagePlaceholder />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                     <div className="absolute bottom-3 left-3">
                       <Badge variant="red">Press Release</Badge>
@@ -144,12 +142,16 @@ export default async function MediaPage() {
               {downloads.map(d => (
                 <div key={d._id} className="group card overflow-hidden hover:border-red transition-colors">
                   <div className="relative aspect-[16/9] overflow-hidden">
-                    <Image
-                      src={thumbUrl(d.thumbnail, 600, 338)}
-                      alt={d.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {thumbUrl(d.thumbnail, 600, 338) ? (
+                      <Image
+                        src={thumbUrl(d.thumbnail, 600, 338)!}
+                        alt={d.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <ImagePlaceholder icon={Download} />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                     {d.language && (
                       <div className="absolute top-3 right-3">
