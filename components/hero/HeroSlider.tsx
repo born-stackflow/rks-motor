@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { ChevronLeft, ChevronRight } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const Scene1 = dynamic(() => import('./slides/Slide1Scene'), { ssr: false })
@@ -62,7 +63,7 @@ export function HeroSlider({ cmsBgs = [], cmsFgs = [] }: HeroSliderProps) {
 
   const slide = slides[current]
   const Scene = SCENES[current]
-  const bgSrc = cmsBgs[current] || slide.bg
+  const bgSrc = cmsBgs[current]
   const fgSrc = cmsFgs[current]
 
   return (
@@ -81,14 +82,18 @@ export function HeroSlider({ cmsBgs = [], cmsFgs = [] }: HeroSliderProps) {
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
           className="absolute inset-0"
         >
-          <Image
-            src={bgSrc}
-            alt={slide.headline.join(' ')}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+          {bgSrc ? (
+            <Image
+              src={bgSrc}
+              alt={slide.headline.join(' ')}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          ) : (
+            <ImagePlaceholder />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/85" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
         </motion.div>

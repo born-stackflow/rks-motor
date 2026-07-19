@@ -10,6 +10,7 @@ import { StatCounter } from '@/components/ui/StatCounter'
 import { ModelCard } from '@/components/ui/ModelCard'
 import { PartCard } from '@/components/ui/PartCard'
 import { ArrowRight, Zap, Award, Globe, Wrench, Building2 } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
 import type { BikeModelCard, BikePartCard, BlogPostCard, SiteSettings, PartCategorySummary } from '@/lib/sanity'
@@ -65,10 +66,11 @@ function Marquee() {
 }
 
 // ── Parallax section wrapper ─────────────────────────────────────────────────
-function ParallaxBg({ src, alt, opacity = 0.12 }: { src: string; alt: string; opacity?: number }) {
+function ParallaxBg({ src, alt, opacity = 0.12 }: { src?: string; alt: string; opacity?: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
+  if (!src) return null
   return (
     <motion.div ref={ref} className="absolute inset-0 overflow-hidden" style={{ y }}>
       <Image src={src} alt={alt} fill className="object-cover object-center" style={{ opacity }} />
@@ -299,7 +301,7 @@ export default function HomePage() {
       {/* ── E-Bike Parts Teaser ─────────────────────────────── */}
       <section className="section relative overflow-hidden bg-dark">
         <ParallaxBg
-          src={cmsBg('partsSectionBg') ?? 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=85'}
+          src={cmsBg('partsSectionBg')}
           alt="E-bike parts"
           opacity={0.08}
         />
@@ -365,7 +367,7 @@ export default function HomePage() {
                 const catKey = cat.href.split('category=')[1] as keyof PartCategorySummary | undefined
                 const summary = catKey ? partCategorySummary?.[catKey] : undefined
                 const cmsImage = (summary?.image as any)?.asset ? urlFor(summary!.image!).width(600).quality(80).url() : undefined
-                const count = summary ? `${summary.count}+` : cat.count
+                const count = summary?.count ?? 0
                 return (
                 <motion.div
                   key={i}
@@ -376,10 +378,14 @@ export default function HomePage() {
                   whileHover={{ scale: 1.03 }}
                 >
                   <Link href={cat.href} className="group relative block aspect-square overflow-hidden bg-dark-3">
-                    <Image
-                      src={cmsImage ?? cat.image} alt={cat.title} fill
-                      className="object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700"
-                    />
+                    {cmsImage ? (
+                      <Image
+                        src={cmsImage} alt={cat.title} fill
+                        className="object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700"
+                      />
+                    ) : (
+                      <ImagePlaceholder className="opacity-70 group-hover:opacity-90 transition-opacity duration-700" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                     {/* Electric border on hover */}
                     <div className="absolute inset-0 border border-transparent group-hover:border-red/40 transition-colors duration-300" />
@@ -457,7 +463,7 @@ export default function HomePage() {
       {/* ── Why Choose RKS ─────────────────────────────────── */}
       <section className="section relative overflow-hidden bg-dark">
         <ParallaxBg
-          src={cmsBg('whySectionBg') ?? 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=85'}
+          src={cmsBg('whySectionBg')}
           alt="E-bike technology"
           opacity={0.05}
         />
@@ -607,12 +613,16 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden border border-dark-3">
             {/* Map side */}
             <div className="relative h-64 lg:h-auto min-h-[320px] overflow-hidden">
-              <Image
-                src={cmsBg('dealerSectionBg') ?? 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1200&q=85'}
-                alt="Find a dealer"
-                fill
-                className="object-cover object-center"
-              />
+              {cmsBg('dealerSectionBg') ? (
+                <Image
+                  src={cmsBg('dealerSectionBg')!}
+                  alt="Find a dealer"
+                  fill
+                  className="object-cover object-center"
+                />
+              ) : (
+                <ImagePlaceholder icon={Globe} />
+              )}
               <div className="absolute inset-0 bg-black/50" />
               {/* Animated pulse pins */}
               {[
@@ -669,12 +679,16 @@ export default function HomePage() {
 
         {/* ── E-bike background image ── */}
         <div className="absolute inset-0">
-          <Image
-            src={cmsBg('b2bSectionBg') ?? 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=85'}
-            alt="E-bike background"
-            fill
-            className="object-cover object-center"
-          />
+          {cmsBg('b2bSectionBg') ? (
+            <Image
+              src={cmsBg('b2bSectionBg')!}
+              alt="E-bike background"
+              fill
+              className="object-cover object-center"
+            />
+          ) : (
+            <ImagePlaceholder icon={Building2} />
+          )}
         </div>
         {/* Dark overlay to keep text readable */}
         <div className="absolute inset-0 bg-black/75" />

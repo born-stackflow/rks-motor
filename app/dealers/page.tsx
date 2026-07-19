@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Phone, Mail, Globe, Clock, Search, MapPin, ArrowRight } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import Link from 'next/link'
 
 const dealers = [
@@ -16,7 +16,6 @@ const dealers = [
     services: ['Sales', 'Service', 'Parts', 'Trade', 'Racing'],
     hours: { weekday: '9:00 – 19:00', saturday: '9:00 – 18:00', sunday: 'Closed' },
     country: 'Italy', city: 'Milano',
-    image: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600&q=80',
   },
   {
     id: '2', name: 'RKS London Chelsea', type: 'dealer',
@@ -26,7 +25,6 @@ const dealers = [
     services: ['Sales', 'Service', 'Parts'],
     hours: { weekday: '9:00 – 18:00', saturday: '9:00 – 17:00', sunday: 'Closed' },
     country: 'United Kingdom', city: 'London',
-    image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=600&q=80',
   },
   {
     id: '3', name: 'RKS Paris Champs-Élysées', type: 'dealer',
@@ -36,7 +34,6 @@ const dealers = [
     services: ['Sales', 'Service', 'Parts'],
     hours: { weekday: '9:00 – 19:00', saturday: '10:00 – 18:00', sunday: 'Closed' },
     country: 'France', city: 'Paris',
-    image: 'https://images.unsplash.com/photo-1566933293069-b55c7f326dd4?w=600&q=80',
   },
   {
     id: '4', name: 'RKS Berlin Mitte', type: 'dealer',
@@ -46,7 +43,6 @@ const dealers = [
     services: ['Sales', 'Service', 'Parts', 'Trade'],
     hours: { weekday: '9:00 – 18:30', saturday: '9:00 – 16:00', sunday: 'Closed' },
     country: 'Germany', city: 'Berlin',
-    image: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600&q=80',
   },
   {
     id: '5', name: 'RKS Madrid', type: 'dealer',
@@ -56,7 +52,6 @@ const dealers = [
     services: ['Sales', 'Service', 'Parts'],
     hours: { weekday: '9:00 – 20:00', saturday: '10:00 – 18:00', sunday: 'Closed' },
     country: 'Spain', city: 'Madrid',
-    image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=600&q=80',
   },
   {
     id: '6', name: 'RKS Amsterdam', type: 'service',
@@ -66,7 +61,6 @@ const dealers = [
     services: ['Service', 'Parts'],
     hours: { weekday: '8:30 – 17:30', saturday: '9:00 – 14:00', sunday: 'Closed' },
     country: 'Netherlands', city: 'Amsterdam',
-    image: 'https://images.unsplash.com/photo-1566933293069-b55c7f326dd4?w=600&q=80',
   },
 ]
 
@@ -100,12 +94,7 @@ export default function DealersPage() {
     <div className="min-h-screen bg-black">
       {/* Hero */}
       <section className="relative h-[40vh] min-h-[260px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&q=90"
-          alt="Find a Dealer"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">
@@ -165,7 +154,7 @@ export default function DealersPage() {
                   className={`w-full text-left card overflow-hidden transition-all duration-200 ${d.id === active ? 'border-red shadow-red-sm' : 'hover:border-red'}`}
                 >
                   <div className="relative aspect-[16/6] overflow-hidden">
-                    <Image src={d.image} alt={d.name} fill className="object-cover" />
+                    <ImagePlaceholder icon={MapPin} />
                     <div className="absolute inset-0 bg-black/40" />
                     <div className="absolute top-3 left-3">
                       <span className={`badge text-xs ${typeBadge[d.type]}`}>{typeMap[d.type]}</span>
@@ -198,7 +187,7 @@ export default function DealersPage() {
                 className="card p-8"
               >
                 <div className="relative aspect-[16/7] overflow-hidden mb-6">
-                  <Image src={activeDealer.image} alt={activeDealer.name} fill className="object-cover" />
+                  <ImagePlaceholder icon={MapPin} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-4 left-4">
                     <span className={`badge text-xs ${typeBadge[activeDealer.type]}`}>{typeMap[activeDealer.type]}</span>
@@ -252,12 +241,7 @@ export default function DealersPage() {
               </motion.div>
             ) : (
               <div className="relative bg-dark border border-dark-3 aspect-[16/11] flex flex-col items-center justify-center overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1200&q=85"
-                  alt="Dealer map"
-                  fill
-                  className="object-cover opacity-20"
-                />
+                <ImagePlaceholder className="opacity-40" />
                 <div className="relative text-center px-8">
                   <MapPin className="h-12 w-12 text-red mx-auto mb-4 animate-pulse" />
                   <h3 className="text-2xl text-off-white mb-2" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Select a Dealer</h3>
@@ -275,9 +259,6 @@ export default function DealersPage() {
 
         {/* B2B callout */}
         <div className="mt-16 p-8 md:p-12 border-l-4 border-red bg-dark relative overflow-hidden">
-          <div className="absolute inset-0">
-            <Image src="https://images.unsplash.com/photo-1566933293069-b55c7f326dd4?w=1200&q=80" alt="" fill className="object-cover opacity-5" />
-          </div>
           <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red mb-2">For Business</p>

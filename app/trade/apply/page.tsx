@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import {
   ArrowRight, ChevronLeft, Check, CheckCircle, Building2,
   Globe, Package, Truck, Info, Send, Zap,
 } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { sanityClient, queries } from '@/lib/sanity'
 import type { SiteSettings } from '@/lib/sanity'
 
@@ -172,12 +172,7 @@ export default function TradeApplyPage() {
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="relative h-[36vh] min-h-[220px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1920&q=90"
-          alt="Apply as Trade Partner"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/95" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">

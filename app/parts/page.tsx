@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PartCard } from '@/components/ui/PartCard'
 import { ChevronDown, Search, SlidersHorizontal, X } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
 import type { BikePartCard } from '@/lib/sanity'
@@ -116,12 +116,7 @@ export default function PartsPage() {
     <div className="min-h-screen bg-black">
       {/* Hero banner */}
       <div className="relative h-[40vh] min-h-[260px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=1920&q=90"
-          alt="E-Bike Parts & Accessories"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">
@@ -372,14 +367,6 @@ export default function PartsPage() {
                 viewport={{ once: true }}
                 className="mt-12 p-8 bg-dark border-l-4 border-red relative overflow-hidden"
               >
-                <div className="absolute inset-0">
-                  <Image
-                    src="https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=1200&q=80"
-                    alt="Parts team"
-                    fill
-                    className="object-cover opacity-5"
-                  />
-                </div>
                 <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red mb-2">Expert Help</p>

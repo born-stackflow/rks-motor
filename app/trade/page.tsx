@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { ArrowRight, Check, ChevronDown, Building2, Users, Globe, Truck, BadgePercent, Headphones } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 
 const steps = [
   { n: '01', title: 'Apply',    desc: 'Submit your trade partner application with your business credentials and dealership details.' },
@@ -50,12 +50,7 @@ export default function TradePage() {
     <div className="min-h-screen bg-black">
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=1920&q=90"
-          alt="Trade Partners"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">
@@ -127,14 +122,6 @@ export default function TradePage() {
 
       {/* Benefits */}
       <section className="section bg-black relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=1920&q=85"
-            alt="Benefits"
-            fill
-            className="object-cover opacity-5"
-          />
-        </div>
         <div className="container relative">
           <SectionHeading tag="Partnership Benefits" title="What You Get" align="center" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
@@ -159,14 +146,6 @@ export default function TradePage() {
 
       {/* Who It's For */}
       <section className="section bg-dark relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1920&q=85"
-            alt="Who it's for"
-            fill
-            className="object-cover opacity-5"
-          />
-        </div>
         <div className="container relative">
           <SectionHeading tag="Eligibility" title="Who Is It For?" align="center" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
@@ -238,14 +217,6 @@ export default function TradePage() {
       <section className="section-sm bg-dark">
         <div className="container">
           <div className="relative p-10 md:p-14 border-l-4 border-red overflow-hidden">
-            <div className="absolute inset-0">
-              <Image
-                src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&q=85"
-                alt="Apply now"
-                fill
-                className="object-cover opacity-5"
-              />
-            </div>
             <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red mb-3">Ready to Partner?</p>

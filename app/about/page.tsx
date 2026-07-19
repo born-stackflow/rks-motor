@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { StatCounter } from '@/components/ui/StatCounter'
-import { ArrowRight, Award, Zap, Globe, Wrench } from '@/components/ui/Icon'
+import { ArrowRight, Award, Zap, Globe, Wrench, Users } from '@/components/ui/Icon'
+import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 
 export const metadata: Metadata = {
   title: 'About RKS | Premium Italian E-Bikes Since 1985',
@@ -28,10 +28,10 @@ const milestones = [
 ]
 
 const team = [
-  { name: 'Marco Kaleo',      role: 'CEO & Founder\'s Son',    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=85' },
-  { name: 'Elena Rossetti',   role: 'Chief Design Officer',    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=85' },
-  { name: 'Stefan Braun',     role: 'Head of Engineering',     image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=85' },
-  { name: 'Lucia Fontana',    role: 'VP Global Sales & Trade', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=85' },
+  { name: 'Marco Kaleo',      role: 'CEO & Founder\'s Son' },
+  { name: 'Elena Rossetti',   role: 'Chief Design Officer' },
+  { name: 'Stefan Braun',     role: 'Head of Engineering' },
+  { name: 'Lucia Fontana',    role: 'VP Global Sales & Trade' },
 ]
 
 export default function AboutPage() {
@@ -39,12 +39,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-black">
       {/* Hero */}
       <section className="relative h-[65vh] min-h-[420px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=90"
-          alt="About RKS"
-          fill priority
-          className="object-cover object-center"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/90" />
         <div className="absolute inset-0 flex items-end pb-16">
           <div className="container">
@@ -93,12 +88,7 @@ export default function AboutPage() {
               </Link>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=85"
-                alt="RKS factory"
-                fill
-                className="object-cover"
-              />
+              <ImagePlaceholder icon={Wrench} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
           </div>
@@ -107,12 +97,7 @@ export default function AboutPage() {
 
       {/* Full-bleed factory image */}
       <div className="relative h-[50vh] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1601758174493-bc7a2b5a4a87?w=1920&q=85"
-          alt="Factory"
-          fill
-          className="object-cover"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
           <div className="text-center px-4">
             <p className="text-red text-xs font-semibold uppercase tracking-[0.3em] mb-3">Milan, Italy</p>
@@ -173,12 +158,7 @@ export default function AboutPage() {
             {team.map((member, i) => (
               <div key={i} className="group text-center">
                 <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 overflow-hidden border-2 border-dark-3 group-hover:border-red transition-colors duration-300">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover object-top"
-                  />
+                  <ImagePlaceholder icon={Users} />
                 </div>
                 <h4 className="text-off-white font-bold text-sm group-hover:text-red transition-colors">{member.name}</h4>
                 <p className="text-mid text-xs mt-1 uppercase tracking-wider">{member.role}</p>
@@ -190,12 +170,7 @@ export default function AboutPage() {
 
       {/* Quality / heritage */}
       <section className="relative h-[45vh] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920&q=85"
-          alt="RKS Heritage"
-          fill
-          className="object-cover"
-        />
+        <ImagePlaceholder />
         <div className="absolute inset-0 bg-black/65 flex items-center">
           <div className="container">
             <div className="max-w-2xl">
