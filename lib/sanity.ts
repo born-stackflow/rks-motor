@@ -181,6 +181,7 @@ export const queries = {
     heroSlide1Fg, heroSlide2Fg, heroSlide3Fg, heroSlide4Fg, heroSlide5Fg,
     heroSlide1Bg, heroSlide2Bg, heroSlide3Bg, heroSlide4Bg, heroSlide5Bg,
     partsSectionBg, whySectionBg, b2bSectionBg, dealerSectionBg,
+    partsTileMotorImage, partsTileBatteryImage, partsTileBrakesImage, partsTileAccessoriesImage,
     modelsPageBg, partsPageBg, newsPageBg, aboutPageBg, contactPageBg, dealersPageBg
   }`,
 }
@@ -375,6 +376,11 @@ export type SiteSettings = {
   whySectionBg?: SanityImageSource
   b2bSectionBg?: SanityImageSource
   dealerSectionBg?: SanityImageSource
+  // Homepage parts 2×2 tile pictures
+  partsTileMotorImage?: SanityImageSource
+  partsTileBatteryImage?: SanityImageSource
+  partsTileBrakesImage?: SanityImageSource
+  partsTileAccessoriesImage?: SanityImageSource
   // Other-page hero backgrounds
   modelsPageBg?: SanityImageSource
   partsPageBg?: SanityImageSource

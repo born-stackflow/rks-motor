@@ -21,6 +21,13 @@ const BRAND_LABELS: Record<string, string> = {
   skyjet:   'Skyjet',
 }
 
+const PARTS_TILE_BG_FIELDS: Record<keyof PartCategorySummary, keyof SiteSettings> = {
+  motor:       'partsTileMotorImage',
+  battery:     'partsTileBatteryImage',
+  brakes:      'partsTileBrakesImage',
+  accessories: 'partsTileAccessoriesImage',
+}
+
 const whyIcons = [
   <Award className="h-8 w-8" key="award" />,
   <Zap className="h-8 w-8" key="zap" />,
@@ -365,7 +372,10 @@ export default function HomePage() {
               {h.parts.categories.map((cat, i) => {
                 const catKey = cat.href.split('category=')[1] as keyof PartCategorySummary | undefined
                 const summary = catKey ? partCategorySummary?.[catKey] : undefined
-                const cmsImage = (summary?.image as any)?.asset ? urlFor(summary!.image!).width(600).quality(80).url() : undefined
+                const dedicatedImage = catKey ? siteSettings?.[PARTS_TILE_BG_FIELDS[catKey]] : undefined
+                const cmsImage = (dedicatedImage as any)?.asset
+                  ? urlFor(dedicatedImage!).width(600).quality(80).url()
+                  : (summary?.image as any)?.asset ? urlFor(summary!.image!).width(600).quality(80).url() : undefined
                 const count = summary?.count ?? 0
                 return (
                 <motion.div
