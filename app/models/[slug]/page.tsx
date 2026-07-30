@@ -191,7 +191,7 @@ function KeyFeaturesSection({ features }: { features: KeyFeature[] }) {
                   >
                     <div className="flex items-center gap-4">
                       <span className={`text-xs font-bold font-mono transition-colors ${
-                        i === active ? 'text-gold' : 'text-dark-3 group-hover:text-mid'
+                        i === active ? 'text-red' : 'text-dark-3 group-hover:text-mid'
                       }`}>
                         {String(i + 1).padStart(2, '0')}
                       </span>
@@ -202,7 +202,7 @@ function KeyFeaturesSection({ features }: { features: KeyFeature[] }) {
                       </span>
                     </div>
                     {i === active && (
-                      <div className="h-[2px] bg-gold mt-3 w-full" style={{ marginLeft: '0' }} />
+                      <div className="h-[2px] bg-red mt-3 w-full" style={{ marginLeft: '0' }} />
                     )}
                   </button>
                 </li>
@@ -433,7 +433,7 @@ export default function ModelDetailPage() {
               {/* Main product image — driven by colour selection */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className="relative aspect-[16/10] overflow-hidden bg-dark cursor-zoom-in group"
+                className="relative aspect-[16/10] overflow-hidden product-shot cursor-zoom-in group"
                 onClick={() => { if (productImage) { setLightboxImg(productImage); setLightboxOpen(true) } }}>
                 <AnimatePresence mode="wait">
                   {productImage ? (
@@ -442,7 +442,7 @@ export default function ModelDetailPage() {
                       exit={{ opacity: 0 }} transition={{ duration: 0.4 }} className="absolute inset-0">
                       <Image src={productImage} alt={model.name} fill priority
                              sizes="(max-width: 1024px) 100vw, 60vw"
-                             className="object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
+                             className="object-contain p-6 product-shot-img" />
                     </motion.div>
                   ) : (
                     <motion.div key="placeholder" className="absolute inset-0 flex items-center justify-center">

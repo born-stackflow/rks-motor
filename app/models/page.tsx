@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ModelCard } from '@/components/ui/ModelCard'
@@ -9,7 +10,7 @@ import { ChevronDown, Search, SlidersHorizontal, X, ArrowRight } from '@/compone
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
-import type { BikeModelCard } from '@/lib/sanity'
+import type { BikeModelCard, SiteSettings } from '@/lib/sanity'
 
 const BRAND_LABELS: Record<string, string> = {
   aperyder: 'Ape Ryder',
@@ -28,6 +29,7 @@ export default function ModelsPage() {
   const brandParam     = searchParams.get('brand') ?? 'All'
 
   const [allModels,     setAllModels]     = useState<BikeModelCard[]>([])
+  const [settings,      setSettings]      = useState<SiteSettings | null>(null)
   const [loading,       setLoading]       = useState(true)
   const [search,        setSearch]        = useState('')
   const [category,      setCategory]      = useState(brandParam)
@@ -45,6 +47,7 @@ export default function ModelsPage() {
       const top = Math.max(...(data ?? []).map(m => m.price ?? 0), 10000)
       setMaxPrice(top)
     })
+    sanityClient.fetch(queries.siteSettings).then((d: SiteSettings) => setSettings(d ?? null))
   }, [])
 
   const toggleCompare = (id: string) => {
@@ -109,7 +112,11 @@ export default function ModelsPage() {
     <div className="min-h-screen bg-black">
       {/* Hero banner */}
       <div className="relative h-[40vh] min-h-[280px] overflow-hidden">
-        <ImagePlaceholder />
+        {(settings?.modelsPageBg as any)?.asset ? (
+          <Image src={urlFor(settings!.modelsPageBg!).width(1600).quality(80).url()} alt="" fill priority className="object-cover" />
+        ) : (
+          <ImagePlaceholder />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">

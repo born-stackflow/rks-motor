@@ -1,11 +1,14 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Phone, Mail, Globe, Clock, Search, MapPin, ArrowRight } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import Link from 'next/link'
+import Image from 'next/image'
+import { sanityClient, queries, urlFor } from '@/lib/sanity'
+import type { SiteSettings } from '@/lib/sanity'
 
 const dealers = [
   {
@@ -78,6 +81,11 @@ export default function DealersPage() {
   const [search,  setSearch]  = useState('')
   const [country, setCountry] = useState('All')
   const [active,  setActive]  = useState<string | null>(null)
+  const [settings, setSettings] = useState<SiteSettings | null>(null)
+
+  useEffect(() => {
+    sanityClient.fetch(queries.siteSettings).then((d: SiteSettings) => setSettings(d ?? null))
+  }, [])
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase()
@@ -94,7 +102,11 @@ export default function DealersPage() {
     <div className="min-h-screen bg-black">
       {/* Hero */}
       <section className="relative h-[40vh] min-h-[260px] overflow-hidden">
-        <ImagePlaceholder />
+        {(settings?.dealersPageBg as any)?.asset ? (
+          <Image src={urlFor(settings!.dealersPageBg!).width(1600).quality(80).url()} alt="" fill priority className="object-cover" />
+        ) : (
+          <ImagePlaceholder />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">

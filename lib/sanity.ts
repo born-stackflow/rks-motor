@@ -22,7 +22,9 @@ export const queries = {
   // Bike Models
   featuredModels: `*[_type == "bikeModel" && isFeatured == true] | order(order asc, name asc) [0...6] {
     _id, name, slug, category, tagline, price, isNew, isFeatured, availability,
-    heroImage, features
+    heroImage,
+    "thumbnailImage": coalesce(colours[0].image, heroImage),
+    features
   }`,
 
   allModels: `*[_type == "bikeModel"] | order(order asc, name asc) {
@@ -178,7 +180,8 @@ export const queries = {
     metaTitle, metaDescription, ogImage, googleVerification,
     heroSlide1Fg, heroSlide2Fg, heroSlide3Fg, heroSlide4Fg, heroSlide5Fg,
     heroSlide1Bg, heroSlide2Bg, heroSlide3Bg, heroSlide4Bg, heroSlide5Bg,
-    partsSectionBg, whySectionBg, b2bSectionBg, dealerSectionBg
+    partsSectionBg, whySectionBg, b2bSectionBg, dealerSectionBg,
+    modelsPageBg, partsPageBg, newsPageBg, aboutPageBg, contactPageBg, dealersPageBg
   }`,
 }
 
@@ -372,4 +375,11 @@ export type SiteSettings = {
   whySectionBg?: SanityImageSource
   b2bSectionBg?: SanityImageSource
   dealerSectionBg?: SanityImageSource
+  // Other-page hero backgrounds
+  modelsPageBg?: SanityImageSource
+  partsPageBg?: SanityImageSource
+  newsPageBg?: SanityImageSource
+  aboutPageBg?: SanityImageSource
+  contactPageBg?: SanityImageSource
+  dealersPageBg?: SanityImageSource
 }

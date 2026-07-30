@@ -139,6 +139,22 @@
            hover:border-red;
   }
 
+  /* ── Product photo backdrop — studio-style radial gradient instead of flat black ──
+     Image uses object-contain (not cover) so the gradient stays visible behind/around
+     the bike rather than blending onto its pixels. ── */
+  .product-shot {
+    background: radial-gradient(ellipse at center, #3a3a3a 0%, #1c1c1c 50%, #060606 100%);
+  }
+
+  .product-shot-img {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .group:hover .product-shot-img {
+    transform: scale(1.1) translateY(-6px);
+    filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5));
+  }
+
   /* ── Form elements ── */
   .input {
     @apply w-full px-4 py-3.5

@@ -180,10 +180,10 @@ export default function CompareClient({ models }: { models: CompareModel[] }) {
               {compared.map(m => {
                 const avail = AVAIL_MAP[m.availability ?? ''] ?? AVAIL_MAP['in-stock']
                 return (
-                  <div key={m._id} className="card overflow-hidden">
-                    <div className="relative aspect-[16/9] overflow-hidden">
+                  <div key={m._id} className="card overflow-hidden group">
+                    <div className="relative aspect-[16/9] overflow-hidden product-shot">
                       {modelImage(m) ? (
-                        <Image src={modelImage(m)!} alt={m.name} fill className="object-cover" />
+                        <Image src={modelImage(m)!} alt={m.name} fill className="object-contain p-3 product-shot-img" />
                       ) : (
                         <ImagePlaceholder />
                       )}

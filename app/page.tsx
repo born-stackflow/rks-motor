@@ -70,10 +70,9 @@ function ParallaxBg({ src, alt, opacity = 0.12 }: { src?: string; alt: string; o
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
-  if (!src) return null
   return (
     <motion.div ref={ref} className="absolute inset-0 overflow-hidden" style={{ y }}>
-      <Image src={src} alt={alt} fill className="object-cover object-center" style={{ opacity }} />
+      {src && <Image src={src} alt={alt} fill className="object-cover object-center" style={{ opacity }} />}
     </motion.div>
   )
 }
@@ -276,7 +275,7 @@ export default function HomePage() {
                     category={BRAND_LABELS[m.category] ?? m.category}
                     price={m.price}
                     tagline={m.tagline}
-                    image={(m.heroImage as any)?.asset ? urlFor(m.heroImage!).width(800).url() : undefined}
+                    image={(m.thumbnailImage as any)?.asset ? urlFor(m.thumbnailImage!).width(800).url() : undefined}
                     isNew={m.isNew}
                     isFeatured={m.isFeatured}
                     index={0}

@@ -53,7 +53,7 @@ const fadeUp: Variants = {
   }),
 }
 
-export default function NewsClient({ posts }: { posts: BlogPostCard[] }) {
+export default function NewsClient({ posts, bgUrl }: { posts: BlogPostCard[]; bgUrl?: string }) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery,      setSearchQuery]      = useState('')
 
@@ -83,7 +83,11 @@ export default function NewsClient({ posts }: { posts: BlogPostCard[] }) {
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="relative h-[40vh] min-h-[260px] overflow-hidden">
-        <ImagePlaceholder />
+        {bgUrl ? (
+          <Image src={bgUrl} alt="" fill priority className="object-cover" />
+        ) : (
+          <ImagePlaceholder />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">

@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PartCard } from '@/components/ui/PartCard'
 import { ChevronDown, Search, SlidersHorizontal, X } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import { formatPrice } from '@/lib/utils'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
-import type { BikePartCard } from '@/lib/sanity'
+import type { BikePartCard, SiteSettings } from '@/lib/sanity'
 
 const CATEGORY_LABELS: Record<string, string> = {
   motor:       'Motor & Drive',
@@ -31,6 +32,7 @@ const fadeUp: any = {
 
 export default function PartsPage() {
   const [allParts,      setAllParts]      = useState<BikePartCard[]>([])
+  const [settings,      setSettings]      = useState<SiteSettings | null>(null)
   const [loading,       setLoading]       = useState(true)
   const [search,        setSearch]        = useState('')
   const [category,      setCategory]      = useState('All')
@@ -48,6 +50,7 @@ export default function PartsPage() {
       const top = Math.max(...(data ?? []).map(p => p.retailPrice ?? 0), 1000)
       setMaxPrice(top)
     })
+    sanityClient.fetch(queries.siteSettings).then((d: SiteSettings) => setSettings(d ?? null))
   }, [])
 
   const categories = useMemo(() => {
@@ -116,7 +119,11 @@ export default function PartsPage() {
     <div className="min-h-screen bg-black">
       {/* Hero banner */}
       <div className="relative h-[40vh] min-h-[260px] overflow-hidden">
-        <ImagePlaceholder />
+        {(settings?.partsPageBg as any)?.asset ? (
+          <Image src={urlFor(settings!.partsPageBg!).width(1600).quality(80).url()} alt="" fill priority className="object-cover" />
+        ) : (
+          <ImagePlaceholder />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/90" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import {
   Phone, Mail, MapPin, Clock, ArrowRight,
@@ -166,7 +167,11 @@ export default function ContactPage() {
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="relative h-[42vh] min-h-[280px] overflow-hidden">
-        <ImagePlaceholder />
+        {(settings?.contactPageBg as any)?.asset ? (
+          <Image src={urlFor(settings!.contactPageBg!).width(1600).quality(80).url()} alt="" fill priority className="object-cover" />
+        ) : (
+          <ImagePlaceholder />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/95" />
 
         {/* Floating particles */}

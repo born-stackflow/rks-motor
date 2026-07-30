@@ -51,14 +51,14 @@ export function ModelCard({
       <Link href={`/models/${slug}`} className="block h-full">
         <div className="card overflow-hidden h-full flex flex-col">
           {/* Image */}
-          <div className="relative aspect-[16/10] overflow-hidden bg-dark">
+          <div className="relative aspect-[16/10] overflow-hidden product-shot">
             {src ? (
               <Image
                 src={src}
                 alt={name}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                className="object-contain object-center p-4 product-shot-img"
               />
             ) : (
               <ImagePlaceholder icon={Gauge} />

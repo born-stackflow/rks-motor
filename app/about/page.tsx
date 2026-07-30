@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { StatCounter } from '@/components/ui/StatCounter'
 import { ArrowRight, Award, Zap, Globe, Wrench, Users } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
+import { sanityClient, queries, urlFor } from '@/lib/sanity'
+import type { SiteSettings } from '@/lib/sanity'
 
 export const metadata: Metadata = {
   title: 'About RKS | Premium Italian E-Bikes Since 1985',
@@ -34,12 +37,20 @@ const team = [
   { name: 'Lucia Fontana',    role: 'VP Global Sales & Trade' },
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings: SiteSettings | null = await sanityClient
+    .fetch(queries.siteSettings)
+    .catch(() => null)
+
   return (
     <div className="min-h-screen bg-black">
       {/* Hero */}
       <section className="relative h-[65vh] min-h-[420px] overflow-hidden">
-        <ImagePlaceholder />
+        {(settings?.aboutPageBg as any)?.asset ? (
+          <Image src={urlFor(settings!.aboutPageBg!).width(1600).quality(80).url()} alt="" fill priority className="object-cover" />
+        ) : (
+          <ImagePlaceholder />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/90" />
         <div className="absolute inset-0 flex items-end pb-16">
           <div className="container">
