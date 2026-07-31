@@ -26,8 +26,8 @@ export const translations = {
     footer: {
       sections: { Models: 'Models', Company: 'Company', Support: 'Support', Trade: 'Trade' },
       links: {
-        allModels: 'All Models', sport: 'Sport', adventure: 'Adventure', cruiser: 'Cruiser',
-        electric: 'Electric', compare: 'Compare', aboutUs: 'About Us', news: 'News',
+        allModels: 'All Models', apeRyder: 'Ape Ryder', rks: 'RKS', skyjet: 'Skyjet',
+        compare: 'Compare', aboutUs: 'About Us', news: 'News',
         media: 'Media', careers: 'Careers', parts: 'Parts', dealers: 'Dealers',
         prices: 'Prices', contact: 'Contact', tradePartners: 'Trade Partners',
         applyNow: 'Apply Now', dealerPortal: 'Dealer Portal', wholesale: 'Wholesale',
@@ -132,8 +132,8 @@ export const translations = {
     footer: {
       sections: { Models: 'Modelli', Company: 'Azienda', Support: 'Assistenza', Trade: 'Commerciale' },
       links: {
-        allModels: 'Tutti i Modelli', sport: 'Sport', adventure: 'Avventura', cruiser: 'Cruiser',
-        electric: 'Elettrico', compare: 'Confronta', aboutUs: 'Chi Siamo', news: 'Notizie',
+        allModels: 'Tutti i Modelli', apeRyder: 'Ape Ryder', rks: 'RKS', skyjet: 'Skyjet',
+        compare: 'Confronta', aboutUs: 'Chi Siamo', news: 'Notizie',
         media: 'Media', careers: 'Lavora con Noi', parts: 'Ricambi', dealers: 'Rivenditori',
         prices: 'Prezzi', contact: 'Contatti', tradePartners: 'Partner Commerciali',
         applyNow: 'Candidati Ora', dealerPortal: 'Portale Rivenditori', wholesale: 'Ingrosso',

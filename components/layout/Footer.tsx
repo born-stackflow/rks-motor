@@ -17,10 +17,9 @@ export default function Footer() {
   const footerLinks = {
     [sections.Models]: [
       { name: links.allModels, href: '/models' },
-      { name: links.sport,     href: '/models?category=sport' },
-      { name: links.adventure, href: '/models?category=adventure' },
-      { name: links.cruiser,   href: '/models?category=cruiser' },
-      { name: links.electric,  href: '/models?category=electric' },
+      { name: links.apeRyder,  href: '/models?category=aperyder' },
+      { name: links.rks,       href: '/models?category=rks' },
+      { name: links.skyjet,    href: '/models?category=skyjet' },
       { name: links.compare,   href: '/compare' },
     ],
     [sections.Company]: [
