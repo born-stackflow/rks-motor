@@ -1,272 +1,305 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
+import { Suspense, useId, type ReactNode } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { useSearchParams } from 'next/navigation'
+import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
 import { Badge } from '@/components/ui/Badge'
-import type { BadgeVariant } from '@/components/ui/Badge'
-import { Check, X, ArrowRight } from '@/components/ui/Icon'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
-import { formatPrice } from '@/lib/utils'
-import { urlFor } from '@/lib/sanity'
-import type { BikeModelCard, EBikeSpecs } from '@/lib/sanity'
+import { ArrowRight, Check, Gauge, X } from '@/components/ui/Icon'
+import { useLanguage, useLocalized, useMessages } from '@/contexts/LanguageContext'
+import { compareMessages } from '@/lib/i18n/messages/compare'
+import { BRAND_ORDER, BRANDS, MODEL_AVAILABILITY, SPEC_LABELS, SPEC_ORDER } from '@/lib/site'
+import type { CompareModel } from '@/lib/sanity/types'
+import { cn, formatPrice } from '@/lib/utils'
+import { contactHref, specValue } from '../models/_lib/specs'
 
-export type CompareModel = BikeModelCard & { specs?: EBikeSpecs }
+const SLOTS = 3
+type Slots = Array<string | null>
 
-const BRAND_LABELS: Record<string, string> = {
-  aperyder: 'Ape Ryder',
-  rks:      'RKS',
-  skyjet:   'Skyjet',
+function pad(slugs: Slots): Slots {
+  return Array.from({ length: SLOTS }, (_, i) => slugs[i] ?? null)
 }
 
-const AVAIL_MAP: Record<string, { label: string; variant: BadgeVariant }> = {
-  'in-stock':     { label: 'In Stock',     variant: 'green' },
-  'pre-order':    { label: 'Pre-Order',    variant: 'amber' },
-  'coming-soon':  { label: 'Coming Soon',  variant: 'gold'  },
-  'discontinued': { label: 'Discontinued', variant: 'dark'  },
+function resolveSlots(models: CompareModel[], param: string | null): Slots {
+  const defaults = () => pad(models.slice(0, 2).map((model) => model.slug))
+  if (param === null) return defaults()
+
+  const known = new Set(models.map((model) => model.slug))
+  const seen = new Set<string>()
+  const slots = param
+    .split(',')
+    .slice(0, SLOTS)
+    .map((raw) => {
+      const slug = raw.trim()
+      if (!slug || !known.has(slug) || seen.has(slug)) return null
+      seen.add(slug)
+      return slug
+    })
+  const requested = param.replace(/,/g, '').trim() !== ''
+  return requested && slots.every((slug) => !slug) ? defaults() : pad(slots)
 }
 
-type SpecField = { key: keyof EBikeSpecs; label: string; suffix?: string }
-
-const SPEC_GROUPS: { title: string; fields: SpecField[] }[] = [
-  {
-    title: 'Motor & Battery',
-    fields: [
-      { key: 'motor',        label: 'Motor' },
-      { key: 'maxSpeed',     label: 'Max Speed', suffix: ' km/h' },
-      { key: 'ridingModes',  label: 'Riding Modes' },
-      { key: 'range',        label: 'Range' },
-      { key: 'battery',      label: 'Battery' },
-      { key: 'chargingTime', label: 'Charging Time' },
-    ],
-  },
-  {
-    title: 'Display & Lights',
-    fields: [
-      { key: 'displayPanel', label: 'Display Panel' },
-      { key: 'frontLight',   label: 'Front Light' },
-      { key: 'rearLight',    label: 'Rear Light' },
-    ],
-  },
-  {
-    title: 'Suspension & Brakes',
-    fields: [
-      { key: 'frontFork',      label: 'Front Fork' },
-      { key: 'rearSuspension', label: 'Rear Suspension' },
-      { key: 'brakes',         label: 'Brakes' },
-      { key: 'tires',          label: 'Tires' },
-    ],
-  },
-  {
-    title: 'Drivetrain',
-    fields: [
-      { key: 'gearSystem', label: 'Gear System' },
-      { key: 'chainring',  label: 'Chainring' },
-      { key: 'derailleur', label: 'Derailleur' },
-    ],
-  },
-  {
-    title: 'Frame & Body',
-    fields: [
-      { key: 'frame',       label: 'Frame' },
-      { key: 'saddle',      label: 'Saddle' },
-      { key: 'pedals',      label: 'Pedals' },
-      { key: 'bag',         label: 'Bag / Carrier' },
-      { key: 'fender',      label: 'Fender' },
-      { key: 'rearCarrier', label: 'Rear Carrier' },
-      { key: 'weight',      label: 'Weight' },
-    ],
-  },
-]
-
-function hasAsset(img: unknown): img is { asset: unknown } {
-  return typeof img === 'object' && img !== null && 'asset' in img
-}
-
-function modelImage(model: CompareModel): string | undefined {
-  const src = model.thumbnailImage ?? model.heroImage
-  if (src && hasAsset(src)) return urlFor(src).width(800).height(450).quality(85).url()
-  return undefined
-}
-
-function modelSlug(model: CompareModel): string {
-  return model.slug?.current ?? ''
-}
-
-function specValue(model: CompareModel, field: SpecField): string | null {
-  const raw = model.specs?.[field.key]
-  if (raw === undefined || raw === null || raw === '') return null
-  return `${raw}${field.suffix ?? ''}`
+function writeSlots(slots: Slots) {
+  let end = slots.length
+  while (end > 0 && !slots[end - 1]) end--
+  const ids = slots.slice(0, end).map((slug) => slug ?? '').join(',')
+  window.history.replaceState(null, '', `${window.location.pathname}?ids=${ids}`)
 }
 
 export default function CompareClient({ models }: { models: CompareModel[] }) {
-  const [selected, setSelected] = useState<string[]>(models.slice(0, 2).map(m => m._id))
+  return (
+    <Suspense fallback={<CompareView models={models} param={null} />}>
+      <CompareFromUrl models={models} />
+    </Suspense>
+  )
+}
 
-  const toggleModel = (id: string) => {
-    setSelected(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : prev.length < 3 ? [...prev, id] : prev
-    )
+function CompareFromUrl({ models }: { models: CompareModel[] }) {
+  return <CompareView models={models} param={useSearchParams().get('ids')} />
+}
+
+function Missing({ label }: { label: string }) {
+  return (
+    <>
+      <span aria-hidden="true" className="text-mid">
+        —
+      </span>
+      <span className="sr-only">{label}</span>
+    </>
+  )
+}
+
+function CompareView({ models, param }: { models: CompareModel[]; param: string | null }) {
+  const m = useMessages(compareMessages)
+  const { t, locale } = useLanguage()
+  const l = useLocalized()
+  const ids = useId()
+
+  const slots = resolveSlots(models, param)
+  const compared = slots.flatMap((slug) => models.filter((model) => model.slug === slug))
+
+  const setSlot = (index: number, slug: string) => {
+    const next = [...slots]
+    next[index] = slug || null
+    writeSlots(next)
   }
 
-  const compared = models.filter(m => selected.includes(m._id))
-
-  const visibleGroups = SPEC_GROUPS
-    .map(group => ({
-      ...group,
-      fields: group.fields.filter(f => compared.some(m => specValue(m, f) !== null)),
-    }))
-    .filter(group => group.fields.length > 0)
-
-  const allFeatures = Array.from(new Set(compared.flatMap(m => m.features ?? [])))
+  const specKeys = SPEC_ORDER.filter((key) => compared.some((model) => specValue(model.specs, key)))
+  const showAvailability = compared.some((model) => model.availability)
+  const features = Array.from(new Set(compared.flatMap((model) => model.features ?? [])))
+  const brandGroups = BRAND_ORDER.map((brand) => ({ brand, items: models.filter((model) => model.brand === brand) })).filter(
+    (group) => group.items.length,
+  )
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
-      <div className="border-b border-dark-3 bg-dark-2">
-        <div className="container py-6">
-          <p className="text-red text-xs font-semibold uppercase tracking-[0.3em] mb-2">Side by Side</p>
-          <h1 className="text-4xl md:text-5xl text-off-white leading-none" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
-            Compare Models
-          </h1>
+      <header className="border-b border-dark-3 bg-dark-2">
+        <div className="container animate-fade-up py-10">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-red">{m.eyebrow}</p>
+          <h1 className="font-display text-5xl leading-none text-off-white md:text-6xl">{m.title}</h1>
+          <p className="mt-3 max-w-2xl text-light">{m.subtitle}</p>
         </div>
-      </div>
+      </header>
 
-      <div className="container py-8">
-        {/* Model selector */}
-        <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-light mb-4">Select up to 3 models to compare:</p>
-          <div className="flex flex-wrap gap-3">
-            {models.map(m => (
-              <button
-                key={m._id}
-                onClick={() => toggleModel(m._id)}
-                className={`flex items-center gap-3 px-4 py-2.5 border transition-all duration-200 ${
-                  selected.includes(m._id)
-                    ? 'border-red bg-red/10 text-off-white'
-                    : selected.length >= 3
-                    ? 'border-dark-3 text-mid cursor-not-allowed opacity-40'
-                    : 'border-dark-3 text-light hover:border-red hover:text-off-white'
-                }`}
-                disabled={!selected.includes(m._id) && selected.length >= 3}
-              >
-                <div className="relative w-10 h-7 overflow-hidden">
-                  {modelImage(m) ? (
-                    <Image src={modelImage(m)!} alt={m.name} fill className="object-cover" />
-                  ) : (
-                    <ImagePlaceholder />
-                  )}
-                </div>
-                <span className="text-sm font-semibold">{m.name}</span>
-                {selected.includes(m._id) && <X className="h-3.5 w-3.5 text-red" />}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {compared.length < 2 ? (
-          <div className="flex flex-col items-center justify-center py-32 text-center">
-            <div className="w-16 h-16 bg-red/10 border border-red/20 flex items-center justify-center mb-5">
-              <span className="text-3xl text-red" style={{ fontFamily: 'Bebas Neue' }}>VS</span>
-            </div>
-            <h3 className="text-3xl text-off-white mb-2" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Select at Least 2 Models</h3>
-            <p className="text-light text-sm">Choose models from the selector above to begin comparing.</p>
-          </div>
+      <div className="container py-10">
+        {models.length < 2 ? (
+          <EmptyState
+            title={m.notEnough.title}
+            description={m.notEnough.description}
+            action={{ label: m.notEnough.action, href: '/models' }}
+          />
         ) : (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            {/* Model headers */}
-            <div className="grid gap-4 mb-6" style={{ gridTemplateColumns: `200px repeat(${compared.length}, 1fr)` }}>
-              <div /> {/* label column */}
-              {compared.map(m => {
-                const avail = AVAIL_MAP[m.availability ?? ''] ?? AVAIL_MAP['in-stock']
-                return (
-                  <div key={m._id} className="card overflow-hidden group">
-                    <div className="relative aspect-[16/9] overflow-hidden product-shot">
-                      {modelImage(m) ? (
-                        <Image src={modelImage(m)!} alt={m.name} fill className="object-contain p-3 product-shot-img" />
-                      ) : (
-                        <ImagePlaceholder />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                      <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                        <Badge variant="red">{BRAND_LABELS[m.category] ?? m.category}</Badge>
-                        <Badge variant={avail.variant}>{avail.label}</Badge>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h2 className="text-off-white text-xl leading-none mb-1" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>{m.name}</h2>
-                      {m.price != null && <p className="text-gold font-bold text-lg">{formatPrice(m.price)}</p>}
-                      <Link href={`/models/${modelSlug(m)}`} className="flex items-center gap-1 text-xs text-red font-semibold mt-3 hover:gap-2 transition-all">
-                        View Full Details <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-            {/* Spec comparison tables */}
-            {visibleGroups.map(group => (
-              <div key={group.title} className="mb-6 border border-dark-3">
-                <div className="bg-dark-2 px-5 py-3">
-                  <span className="text-red text-sm font-bold uppercase tracking-wider" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>{group.title}</span>
-                </div>
-                {group.fields.map((field, i) => (
-                  <div key={field.key} className={`grid gap-0 ${i % 2 === 0 ? 'bg-black' : 'bg-dark'}`} style={{ gridTemplateColumns: `200px repeat(${compared.length}, 1fr)` }}>
-                    <div className="px-5 py-3.5 flex items-center border-t border-dark-3">
-                      <span className="spec-label text-xs">{field.label}</span>
-                    </div>
-                    {compared.map(m => (
-                      <div key={m._id} className="px-5 py-3.5 border-t border-l border-dark-3 flex items-center">
-                        <span className="spec-value text-sm">{specValue(m, field) ?? '—'}</span>
-                      </div>
-                    ))}
+          <>
+            <fieldset className="mb-10 border border-dark-3 bg-dark p-5">
+              <legend className="px-2 text-xs font-semibold uppercase tracking-wider text-light">{m.selectors}</legend>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {slots.map((slug, index) => (
+                  <div key={index}>
+                    <label htmlFor={`${ids}-slot-${index}`} className="label">
+                      {m.slot(index + 1)}
+                    </label>
+                    <select
+                      id={`${ids}-slot-${index}`}
+                      value={slug ?? ''}
+                      onChange={(e) => setSlot(index, e.target.value)}
+                      className="select"
+                    >
+                      <option value="">{m.none}</option>
+                      {brandGroups.map(({ brand, items }) => (
+                        <optgroup key={brand} label={BRANDS[brand]}>
+                          {items.map((model) => (
+                            <option
+                              key={model._id}
+                              value={model.slug}
+                              disabled={model.slug !== slug && slots.includes(model.slug)}
+                            >
+                              {model.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
                   </div>
                 ))}
               </div>
-            ))}
+            </fieldset>
 
-            {/* Features comparison */}
-            {allFeatures.length > 0 && (
-              <div className="border border-dark-3">
-                <div className="bg-dark-2 px-5 py-3">
-                  <span className="text-red text-sm font-bold uppercase tracking-wider" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Features</span>
+            {compared.length < 2 ? (
+              <EmptyState title={m.needTwo.title} description={m.needTwo.description} />
+            ) : (
+              <>
+                <p className="mb-3 text-xs text-mid md:hidden">{m.scrollHint}</p>
+                <div
+                  role="region"
+                  aria-labelledby={`${ids}-caption`}
+                  tabIndex={0}
+                  className="overflow-x-auto border border-dark-3 focus-visible:outline-2 focus-visible:outline-red"
+                >
+                  <table
+                    className={cn(
+                      'w-full table-fixed border-collapse text-left',
+                      compared.length === 3 ? 'min-w-[720px]' : 'min-w-[520px]',
+                    )}
+                  >
+                    <caption id={`${ids}-caption`} className="sr-only">
+                      {m.table.caption}
+                    </caption>
+                    <colgroup>
+                      <col className="w-36 md:w-52" />
+                      {compared.map((model) => (
+                        <col key={model._id} />
+                      ))}
+                    </colgroup>
+                    <thead>
+                      <tr className="bg-black">
+                        <td className="sticky left-0 z-10 bg-inherit p-3">
+                          <span className="sr-only">{m.table.spec}</span>
+                        </td>
+                        {compared.map((model) => (
+                          <th key={model._id} scope="col" className="border-l border-dark-3 p-3 align-top font-normal">
+                            <div className="product-shot relative mb-3 aspect-[16/9] overflow-hidden">
+                              {hasImage(model.image) ? (
+                                <SanityImage
+                                  image={model.image}
+                                  alt=""
+                                  fill
+                                  sizes="(max-width: 768px) 60vw, 33vw"
+                                  className="product-shot-img object-contain p-3"
+                                />
+                              ) : (
+                                <ImagePlaceholder icon={Gauge} />
+                              )}
+                            </div>
+                            <Badge variant="red">{BRANDS[model.brand]}</Badge>
+                            <span className="mt-2 block font-display text-2xl leading-none text-off-white">{model.name}</span>
+                            <Link
+                              href={`/models/${model.slug}`}
+                              className="mt-2 inline-flex min-h-10 items-center gap-1 text-xs font-semibold uppercase tracking-wider text-red transition-colors hover:text-red-light"
+                            >
+                              {m.details} <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <Row label={m.table.price}>
+                        {compared.map((model) => (
+                          <td key={model._id} className="border-l border-dark-3 px-4 py-3">
+                            {model.price != null ? (
+                              <span className="text-lg font-bold text-gold">{formatPrice(model.price)}</span>
+                            ) : (
+                              <span className="text-sm text-light">{t.common.priceOnRequest}</span>
+                            )}
+                          </td>
+                        ))}
+                      </Row>
+                      {showAvailability ? (
+                        <Row label={m.table.availability}>
+                          {compared.map((model) => {
+                            const availability = model.availability ? MODEL_AVAILABILITY[model.availability] : null
+                            return (
+                              <td key={model._id} className="border-l border-dark-3 px-4 py-3">
+                                {availability ? (
+                                  <Badge variant={availability.tone}>{availability.label[locale]}</Badge>
+                                ) : (
+                                  <Missing label={m.table.notAvailable} />
+                                )}
+                              </td>
+                            )
+                          })}
+                        </Row>
+                      ) : null}
+                      {specKeys.map((key) => (
+                        <Row key={key} label={l(SPEC_LABELS[key])}>
+                          {compared.map((model) => {
+                            const value = specValue(model.specs, key)
+                            return (
+                              <td key={model._id} className="spec-value break-words border-l border-dark-3 px-4 py-3">
+                                {value ?? <Missing label={m.table.notAvailable} />}
+                              </td>
+                            )
+                          })}
+                        </Row>
+                      ))}
+                      {features.map((feature) => (
+                        <Row key={feature} label={feature}>
+                          {compared.map((model) => (
+                            <td key={model._id} className="border-l border-dark-3 px-4 py-3">
+                              {(model.features ?? []).includes(feature) ? (
+                                <>
+                                  <Check className="h-4 w-4 text-green-400" />
+                                  <span className="sr-only">{m.table.included}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <X className="h-4 w-4 text-mid" />
+                                  <span className="sr-only">{m.table.notIncluded}</span>
+                                </>
+                              )}
+                            </td>
+                          ))}
+                        </Row>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="border-t border-dark-3 bg-black">
+                        <td className="sticky left-0 z-10 bg-inherit p-3" />
+                        {compared.map((model) => (
+                          <td key={model._id} className="border-l border-dark-3 p-3">
+                            <Link
+                              href={contactHref('purchase', model.name)}
+                              className="btn-secondary w-full justify-center text-xs"
+                            >
+                              {t.common.enquire}
+                            </Link>
+                          </td>
+                        ))}
+                      </tr>
+                    </tfoot>
+                  </table>
                 </div>
-                {allFeatures.map((feature, i) => (
-                  <div key={feature} className={`grid gap-0 ${i % 2 === 0 ? 'bg-black' : 'bg-dark'}`} style={{ gridTemplateColumns: `200px repeat(${compared.length}, 1fr)` }}>
-                    <div className="px-5 py-3.5 flex items-center border-t border-dark-3">
-                      <span className="spec-label text-xs">{feature}</span>
-                    </div>
-                    {compared.map(m => (
-                      <div key={m._id} className="px-5 py-3.5 border-t border-l border-dark-3 flex items-center">
-                        {(m.features ?? []).includes(feature)
-                          ? <Check className="h-4 w-4 text-green-400" />
-                          : <X className="h-4 w-4 text-mid" />
-                        }
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
+              </>
             )}
-
-            {/* CTA row */}
-            <div className="grid gap-4 mt-6" style={{ gridTemplateColumns: `200px repeat(${compared.length}, 1fr)` }}>
-              <div />
-              {compared.map(m => (
-                <div key={m._id} className="flex flex-col gap-3">
-                  <Link href={`/models/${modelSlug(m)}`} className="btn-primary w-full justify-center text-xs">
-                    View {m.name.split(' ')[0]} <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                  <Link href={`/contact?model=${modelSlug(m)}&type=purchase`} className="btn-secondary w-full justify-center text-xs">
-                    Enquire
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          </>
         )}
       </div>
     </div>
+  )
+}
+
+function Row({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <tr className="border-t border-dark-3 odd:bg-dark even:bg-black">
+      <th
+        scope="row"
+        className="sticky left-0 z-10 bg-inherit px-4 py-3 align-top text-xs font-normal uppercase tracking-wide text-light"
+      >
+        {label}
+      </th>
+      {children}
+    </tr>
   )
 }
