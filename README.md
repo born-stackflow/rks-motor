@@ -30,19 +30,26 @@ which keeps local development from writing to the production dataset.
 ## How it fits together
 
 ```
-app/
-  (site)/          public pages, rendered statically and revalidated every 60 s
-  studio/          Sanity Studio
-  api/             form endpoints, newsletter, invoice PDF, OG image
-components/        layout, shared UI, Sanity image and rich text renderers
-lib/
-  sanity/          read client, GROQ queries, types, cached server fetch
-  server/          server-only code: write client, mail, form handler, security
-  email/           email layout and templates
-  i18n/            English and Italian copy
-  site.ts          brands, labels and site URL
-sanity/            schemas, Studio dashboard and Studio translations
+src/
+  app/          routes only: pages, layouts, API handlers, sitemap and robots
+    (site)/     public pages, rendered statically and revalidated every 60 s
+    studio/     Sanity Studio
+    api/        form endpoints, newsletter, invoice PDF, OG image
+  features/     one folder per area of the site (home, models, compare, prices, parts,
+                search, cart, news, media, about, dealers, contact, trade) with its
+                views, sub-components and copy (messages.ts)
+  components/   shared building blocks: layout, ui, forms, Sanity image and rich text
+  lib/
+    sanity/     read client, GROQ queries, types, cached server fetch
+    server/     server-only code: write client, mail, form handler, security
+    email/      email layout and templates
+    i18n/       language context and shared English/Italian copy
+    site.ts     brands, labels and site URL
+  sanity/       Studio config, schemas, dashboard and Studio translations
 ```
+
+Route files stay thin: a `page.tsx` fetches data and renders the matching view from `src/features`.
+Anything used by more than one feature lives in `src/components` or `src/lib`.
 
 - **Content.** Pages read published content only. Editors change models, parts, news, dealers and site settings
   in the Studio; changes appear on the site within a minute.
