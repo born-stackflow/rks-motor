@@ -22,7 +22,7 @@ export function Logo() {
       <span className="w-10 h-10 bg-red flex items-center justify-center font-display text-white text-lg tracking-tight">
         RKS
       </span>
-      <span className="hidden sm:block">
+      <span className="hidden sm:block xl:hidden 2xl:block">
         <span className="block font-display text-off-white text-lg leading-none tracking-wide">RKS E-BIKES</span>
         <span className="block text-[9px] text-mid uppercase tracking-[0.25em] mt-0.5">{t.brand.tagline}</span>
       </span>
@@ -125,14 +125,14 @@ export default function Header({ models, socialLinks }: Props) {
         <div className="container flex items-center justify-between w-full">
           <Logo />
 
-          <nav className="hidden lg:flex items-center" aria-label="Main">
+          <nav className="hidden xl:flex items-center" aria-label="Main">
             <div className="relative" onMouseEnter={openMega} onMouseLeave={scheduleClose}>
               <Link
                 href="/models"
                 aria-expanded={megaOpen}
                 onFocus={openMega}
                 className={cn(
-                  'flex items-center gap-1 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider transition-colors',
+                  'flex items-center gap-1 px-2.5 2xl:px-4 py-2 text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap transition-colors',
                   isActive('/models') ? 'text-red' : 'text-light hover:text-off-white',
                 )}
               >
@@ -145,7 +145,7 @@ export default function Header({ models, socialLinks }: Props) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'px-4 py-2 text-[11px] font-semibold uppercase tracking-wider transition-colors',
+                  'px-2.5 2xl:px-4 py-2 text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap transition-colors',
                   isActive(item.href) ? 'text-red' : 'text-light hover:text-off-white',
                 )}
               >
@@ -177,14 +177,14 @@ export default function Header({ models, socialLinks }: Props) {
             <LocaleToggle className="hidden sm:flex px-3 py-1.5 text-[11px]" />
             <Link
               href="/trade"
-              className="hidden lg:inline-flex items-center px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-red border border-red hover:bg-red hover:text-white transition-colors"
+              className="hidden xl:inline-flex items-center whitespace-nowrap px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-red border border-red hover:bg-red hover:text-white transition-colors"
             >
               {t.nav.trade}
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
-              className="lg:hidden w-10 h-10 flex items-center justify-center text-light hover:text-off-white"
+              className="xl:hidden w-10 h-10 flex items-center justify-center text-light hover:text-off-white"
               aria-label={t.nav.menu}
               aria-expanded={mobileOpen}
             >
@@ -200,7 +200,7 @@ export default function Header({ models, socialLinks }: Props) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.15 }}
-              className="hidden lg:block absolute top-full left-0 right-0 bg-dark-2 border-b border-dark-3 shadow-2xl"
+              className="hidden xl:block absolute top-full left-0 right-0 bg-dark-2 border-b border-dark-3 shadow-2xl"
               onMouseEnter={openMega}
               onMouseLeave={scheduleClose}
             >
@@ -280,7 +280,7 @@ export default function Header({ models, socialLinks }: Props) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 bottom-0 top-[72px] z-40 bg-black flex flex-col lg:hidden overflow-y-auto"
+            className="fixed inset-x-0 bottom-0 top-[72px] z-40 bg-black flex flex-col xl:hidden overflow-y-auto"
           >
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-red" />
             <nav className="flex-1 flex flex-col px-8 py-8" aria-label="Mobile">

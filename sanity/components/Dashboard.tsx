@@ -69,7 +69,6 @@ const T = {
     pillUnpaid:    (n: number) => `💳 ${n} unpaid order${n === 1 ? '' : 's'}`,
     pillLowStock:  (n: number) => `⚠️ ${n} low stock`,
     pillFollowUp:  (n: number) => `📅 ${n} overdue follow-up${n === 1 ? '' : 's'}`,
-    builtBy:       'Built by',
     lastRefreshed: 'Last refreshed',
   },
   it: {
@@ -113,7 +112,6 @@ const T = {
     pillUnpaid:    (n: number) => `💳 ${n} ordin${n === 1 ? 'e' : 'i'} non pagat${n === 1 ? 'o' : 'i'}`,
     pillLowStock:  (n: number) => `⚠️ ${n} scorte basse`,
     pillFollowUp:  (n: number) => `📅 ${n} follow-up scadut${n === 1 ? 'o' : 'i'}`,
-    builtBy:       'Creato da',
     lastRefreshed: 'Ultimo aggiornamento',
   },
 } as const
@@ -474,9 +472,6 @@ export function Dashboard() {
 
             {/* ── Footer ────────────────────────────────────────── */}
             <div style={{ marginTop: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-              <span style={{ fontSize: 11, color: '#9ca3af' }}>
-                {t.builtBy} <strong style={{ color: C.muted }}>Tech Logies</strong>
-              </span>
               <span style={{ fontSize: 11, color: '#9ca3af' }}>
                 {t.lastRefreshed}: {lastRefresh.toLocaleTimeString(dateLocale)}
               </span>

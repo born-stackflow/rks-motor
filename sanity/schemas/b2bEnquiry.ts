@@ -28,7 +28,7 @@ export default defineType({
       group: 'business',
       options: {
         list: [
-          { title: 'Motorcycle Dealer', value: 'dealer' },
+          { title: 'E-bike Dealer', value: 'dealer' },
           { title: 'Distributor', value: 'distributor' },
           { title: 'Wholesaler', value: 'wholesaler' },
           { title: 'Fleet Buyer', value: 'fleet' },

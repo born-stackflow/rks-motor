@@ -23,11 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: title, template: `%s | ${SITE_NAME}` },
     description,
     applicationName: 'RKS E-Bikes',
-    alternates: { canonical: '/' },
     openGraph: {
       type: 'website',
       siteName: 'RKS E-Bikes',
-      url: SITE_URL,
       title,
       description,
       images: [{ url: ogImage, width: 1200, height: 630 }],
