@@ -1,378 +1,279 @@
-import { defineMessages } from "../define"
+import { defineMessages } from '../define'
+
+type Link = { label: string; href: string }
+
+export type HeroSlideCopy = {
+  tag: string
+  headline: string
+  accent: string
+  sub: string
+  cta: Link
+  ctaSec: Link
+}
 
 export const homeMessages = defineMessages({
-  "en": {
-    "home": {
-      "stats": [
+  en: {
+    hero: {
+      label: 'Highlights',
+      slideOf: (n: number, total: number) => `Slide ${n} of ${total}`,
+      goTo: (n: number) => `Go to slide ${n}`,
+      previous: 'Previous slide',
+      next: 'Next slide',
+      pause: 'Pause slideshow',
+      play: 'Play slideshow',
+      scroll: 'Scroll',
+      slides: [
         {
-          "value": "1985",
-          "label": "Founded in Milan"
+          tag: 'Ape Ryder · RKS · Skyjet',
+          headline: 'Ride',
+          accent: 'Electric',
+          sub: 'E-bikes from three brands, for the city and beyond.',
+          cta: { label: 'Explore e-bikes', href: '/models' },
+          ctaSec: { label: 'About us', href: '/about' },
         },
         {
-          "value": "40+",
-          "label": "Years of Excellence"
+          tag: 'The range',
+          headline: 'Every',
+          accent: 'Detail',
+          sub: 'Specs, colours and features of every model in one place.',
+          cta: { label: 'View the range', href: '/models' },
+          ctaSec: { label: 'Price list', href: '/prices' },
         },
         {
-          "value": "50+",
-          "label": "Authorized Dealers"
+          tag: 'Find your e-bike',
+          headline: 'Find your',
+          accent: 'Perfect ride',
+          sub: 'From the daily commute to weekend rides: compare models side by side.',
+          cta: { label: 'Browse e-bikes', href: '/models' },
+          ctaSec: { label: 'Compare models', href: '/compare' },
         },
         {
-          "value": "15k+",
-          "label": "Riders Worldwide"
-        }
-      ],
-      "models": {
-        "tag": "Our Lineup",
-        "title": "Featured Models",
-        "viewAll": "View All",
-        "viewAllModels": "View All Models"
-      },
-      "parts": {
-        "tag": "Genuine OEM E-Bike Parts",
-        "title": "E-Bike Parts & Accessories",
-        "subtitle": "Every part is engineered to the same exacting standards as the e-bikes they serve.",
-        "browse": "Browse All E-Bike Parts",
-        "allParts": "All Parts",
-        "shopTag": "Shop",
-        "popularTitle": "Popular E-Bike Parts",
-        "categories": [
-          {
-            "title": "Motor & Drive",
-            "href": "/parts?category=motor"
-          },
-          {
-            "title": "Battery & Charging",
-            "href": "/parts?category=battery"
-          },
-          {
-            "title": "Brakes & Wheels",
-            "href": "/parts?category=brakes"
-          },
-          {
-            "title": "Accessories",
-            "href": "/parts?category=accessories"
-          }
-        ]
-      },
-      "why": {
-        "tag": "Why RKS",
-        "title": "Italian Soul. Global Performance.",
-        "subtitle": "Since 1985, we've been pushing the boundaries of what an e-bike can be.",
-        "items": [
-          {
-            "title": "Italian Craftsmanship",
-            "desc": "Handcrafted in our Milan facility, blending traditional artisanship with modern engineering."
-          },
-          {
-            "title": "Race-Proven Heritage",
-            "desc": "Born from decades of racing. Every road e-bike inherits our track DNA."
-          },
-          {
-            "title": "Dealer Network",
-            "desc": "50+ certified dealers across Europe with expert technicians and genuine parts."
-          },
-          {
-            "title": "Innovation First",
-            "desc": "Pioneering electric mobility and advanced rider assist technologies since 2015."
-          }
-        ]
-      },
-      "newsSection": {
-        "tag": "Latest",
-        "title": "News & Updates",
-        "allNews": "All News",
-        "readMore": "Read more"
-      },
-      "dealer": {
-        "locations": "50+ Locations",
-        "title": "Find Your Nearest Dealer",
-        "desc": "Expert technicians, genuine parts, and test rides available at all authorised RKS dealers.",
-        "cta": "Find a Dealer"
-      },
-      "b2b": {
-        "label": "For Business",
-        "title": "Are You a Dealer or Distributor?",
-        "desc": "Join our trade network and get access to wholesale pricing, exclusive model allocations, and co-op marketing support.",
-        "cta": "Apply as Trade Partner"
-      },
-      "newsletter": {
-        "title": "Stay in the Loop",
-        "subtitle": "New model launches, racing news, exclusive owner offers — monthly.",
-        "placeholder": "Your email address",
-        "subscribe": "Subscribe",
-        "disclaimer": "No spam. Unsubscribe anytime."
-      }
+          tag: 'Genuine parts',
+          headline: 'Keep it',
+          accent: 'Riding',
+          sub: 'Original spare parts and accessories for your e-bike.',
+          cta: { label: 'Browse parts', href: '/parts' },
+          ctaSec: { label: 'Ask about a part', href: '/contact' },
+        },
+        {
+          tag: 'Become a partner',
+          headline: 'Grow your',
+          accent: 'Business',
+          sub: 'Join the RKS programme for dealers and distributors.',
+          cta: { label: 'Apply as a partner', href: '/trade/apply' },
+          ctaSec: { label: 'Learn more', href: '/trade' },
+        },
+      ] satisfies HeroSlideCopy[],
     },
-    "hero": {
-      "slides": [
-        {
-          "tag": "BUILT FOR THE ROAD",
-          "headline": [
-            "POWER",
-            "REDEFINED"
-          ],
-          "sub": "Italian engineering. Zero emissions. Pure performance.",
-          "cta": {
-            "label": "Explore E-Bikes",
-            "href": "/models"
-          },
-          "ctaSec": {
-            "label": "Our Story",
-            "href": "/about"
-          }
-        },
-        {
-          "tag": "PRECISION ENGINEERING",
-          "headline": [
-            "CRAFTED",
-            "TO PERFECTION"
-          ],
-          "sub": "Every component engineered for electric performance.",
-          "cta": {
-            "label": "View E-Bike Lineup",
-            "href": "/models"
-          },
-          "ctaSec": {
-            "label": "Our Story",
-            "href": "/about"
-          }
-        },
-        {
-          "tag": "DISCOVER YOUR E-BIKE",
-          "headline": [
-            "FIND YOUR",
-            "PERFECT RIDE"
-          ],
-          "sub": "From city commuters to adventure machines. All electric.",
-          "cta": {
-            "label": "Browse All E-Bikes",
-            "href": "/models"
-          },
-          "ctaSec": {
-            "label": "Compare E-Bikes",
-            "href": "/compare"
-          }
-        },
-        {
-          "tag": "OEM E-BIKE PARTS",
-          "headline": [
-            "BUILT TO",
-            "LAST"
-          ],
-          "sub": "Genuine e-bike parts. Fast dispatch. Guaranteed performance.",
-          "cta": {
-            "label": "Shop E-Bike Parts",
-            "href": "/parts"
-          },
-          "ctaSec": {
-            "label": "Find Compatible",
-            "href": "/parts"
-          }
-        },
-        {
-          "tag": "BECOME A PARTNER",
-          "headline": [
-            "GROW YOUR",
-            "BUSINESS"
-          ],
-          "sub": "Join our global e-bike dealer and distributor network.",
-          "cta": {
-            "label": "Apply as Trade Partner",
-            "href": "/trade/apply"
-          },
-          "ctaSec": {
-            "label": "Learn More",
-            "href": "/trade"
-          }
-        }
-      ]
-    }
+    marquee: [
+      'Ape Ryder',
+      'RKS',
+      'Skyjet',
+      'E-bikes',
+      'Motors',
+      'Batteries',
+      'Brakes',
+      'Accessories',
+      'Genuine parts',
+      'Partner programme',
+    ],
+    stats: { label: 'RKS in numbers' },
+    models: {
+      tag: 'Our range',
+      title: 'Featured models',
+      viewAll: 'View all models',
+      emptyTitle: 'New models coming soon',
+      emptyDesc: 'The range is being updated. Contact us to find out which e-bikes are available.',
+      emptyCta: 'Contact us',
+    },
+    parts: {
+      tag: 'Genuine parts',
+      title: 'E-bike parts & accessories',
+      subtitle: 'Original spare parts and accessories for Ape Ryder, RKS and Skyjet e-bikes.',
+      points: [
+        'Original parts for our three brands',
+        'Browse by category',
+        'Add parts to your request list and ask for a quote',
+        'Not sure what fits? Ask us',
+      ],
+      browse: 'Browse all parts',
+      categoriesLabel: 'Part categories',
+      count: (n: number) => `${n} ${n === 1 ? 'part' : 'parts'}`,
+      shopTag: 'Shop',
+      popularTitle: 'Popular parts',
+      allParts: 'All parts',
+    },
+    why: {
+      tag: 'Why RKS',
+      title: 'Everything around your e-bike',
+      subtitle: 'From choosing the model to looking after it, in one place.',
+      items: [
+        { title: 'Three brands', desc: 'Ape Ryder, RKS and Skyjet e-bikes in one range, easy to compare side by side.' },
+        { title: 'Genuine parts', desc: 'Original spare parts and accessories made for our models.' },
+        { title: 'Partner network', desc: 'Shops and distributors can join the RKS partner programme.' },
+        { title: 'Assistance', desc: 'Questions about a model, a part or a request? Write to us and our team will reply.' },
+      ],
+    },
+    news: {
+      tag: 'Latest',
+      title: 'News & updates',
+      allNews: 'All news',
+    },
+    dealer: {
+      tag: 'Dealer network',
+      title: 'Find a dealer',
+      desc: 'Look for an RKS partner near you, or contact us and we will point you in the right direction.',
+      cta: 'Find a dealer',
+    },
+    b2b: {
+      label: 'For business',
+      title: 'Are you a dealer or distributor?',
+      desc: 'Tell us about your business: we will review your application and contact you to discuss the trade terms.',
+      cta: 'Apply as a partner',
+      learnMore: 'Learn more',
+    },
+    newsletter: {
+      title: 'Stay in the loop',
+      subtitle: 'News about models, parts and events from RKS.',
+      label: 'Email address',
+      placeholder: 'Your email address',
+      subscribe: 'Subscribe',
+      invalid: 'Please enter a valid email address.',
+      success: 'Thanks, you are subscribed.',
+      disclaimer: 'We only use your email to send you RKS updates. You can unsubscribe at any time.',
+    },
   },
-  "it": {
-    "home": {
-      "stats": [
+  it: {
+    hero: {
+      label: 'In primo piano',
+      slideOf: (n: number, total: number) => `Slide ${n} di ${total}`,
+      goTo: (n: number) => `Vai alla slide ${n}`,
+      previous: 'Slide precedente',
+      next: 'Slide successiva',
+      pause: 'Metti in pausa la presentazione',
+      play: 'Riprendi la presentazione',
+      scroll: 'Scorri',
+      slides: [
         {
-          "value": "1985",
-          "label": "Fondata a Milano"
+          tag: 'Ape Ryder · RKS · Skyjet',
+          headline: 'Pedala',
+          accent: 'In elettrico',
+          sub: 'E-bike di tre marchi, per la città e non solo.',
+          cta: { label: 'Scopri le e-bike', href: '/models' },
+          ctaSec: { label: 'Chi siamo', href: '/about' },
         },
         {
-          "value": "40+",
-          "label": "Anni di Eccellenza"
+          tag: 'La gamma',
+          headline: 'Ogni',
+          accent: 'Dettaglio',
+          sub: 'Specifiche, colori e caratteristiche di ogni modello in un unico posto.',
+          cta: { label: 'Vedi la gamma', href: '/models' },
+          ctaSec: { label: 'Listino prezzi', href: '/prices' },
         },
         {
-          "value": "50+",
-          "label": "Rivenditori Autorizzati"
+          tag: 'Trova la tua e-bike',
+          headline: 'Trova la tua',
+          accent: 'E-bike ideale',
+          sub: 'Dal tragitto quotidiano alle uscite nel weekend: confronta i modelli fianco a fianco.',
+          cta: { label: 'Sfoglia le e-bike', href: '/models' },
+          ctaSec: { label: 'Confronta i modelli', href: '/compare' },
         },
         {
-          "value": "15k+",
-          "label": "Ciclisti nel Mondo"
-        }
+          tag: 'Ricambi originali',
+          headline: 'Sempre',
+          accent: 'In strada',
+          sub: 'Ricambi originali e accessori per la tua e-bike.',
+          cta: { label: 'Sfoglia i ricambi', href: '/parts' },
+          ctaSec: { label: 'Chiedi un ricambio', href: '/contact' },
+        },
+        {
+          tag: 'Diventa partner',
+          headline: 'Fai crescere',
+          accent: 'La tua attività',
+          sub: 'Entra nel programma RKS per rivenditori e distributori.',
+          cta: { label: 'Candidati come partner', href: '/trade/apply' },
+          ctaSec: { label: 'Scopri di più', href: '/trade' },
+        },
       ],
-      "models": {
-        "tag": "La Nostra Gamma",
-        "title": "Modelli in Evidenza",
-        "viewAll": "Vedi Tutti",
-        "viewAllModels": "Vedi Tutti i Modelli"
-      },
-      "parts": {
-        "tag": "Ricambi OEM E-Bike Originali",
-        "title": "Ricambi e Accessori E-Bike",
-        "subtitle": "Ogni ricambio è progettato agli stessi standard rigorosi delle e-bike che serve.",
-        "browse": "Sfoglia Tutti i Ricambi E-Bike",
-        "allParts": "Tutti i Ricambi",
-        "shopTag": "Acquista",
-        "popularTitle": "Ricambi E-Bike Popolari",
-        "categories": [
-          {
-            "title": "Motore e Trasmissione",
-            "href": "/parts?category=motor"
-          },
-          {
-            "title": "Batteria e Ricarica",
-            "href": "/parts?category=battery"
-          },
-          {
-            "title": "Freni e Ruote",
-            "href": "/parts?category=brakes"
-          },
-          {
-            "title": "Accessori",
-            "href": "/parts?category=accessories"
-          }
-        ]
-      },
-      "why": {
-        "tag": "Perché RKS",
-        "title": "Anima Italiana. Performance Globale.",
-        "subtitle": "Dal 1985, spingiamo i confini di ciò che una e-bike può essere.",
-        "items": [
-          {
-            "title": "Artigianato Italiano",
-            "desc": "Realizzata nel nostro stabilimento di Milano, unendo l'artigianato tradizionale all'ingegneria moderna."
-          },
-          {
-            "title": "Eredità da Gara",
-            "desc": "Nata da decenni di competizioni. Ogni e-bike da strada eredita il nostro DNA da pista."
-          },
-          {
-            "title": "Rete di Rivenditori",
-            "desc": "Oltre 50 rivenditori certificati in tutta Europa con tecnici esperti e ricambi originali."
-          },
-          {
-            "title": "Innovazione Prima di Tutto",
-            "desc": "Pionieri della mobilità elettrica e delle tecnologie avanzate di assistenza al pilota dal 2015."
-          }
-        ]
-      },
-      "newsSection": {
-        "tag": "Ultime",
-        "title": "Notizie e Aggiornamenti",
-        "allNews": "Tutte le Notizie",
-        "readMore": "Leggi tutto"
-      },
-      "dealer": {
-        "locations": "50+ Sedi",
-        "title": "Trova il Rivenditore Più Vicino",
-        "desc": "Tecnici esperti, ricambi originali e test ride disponibili presso tutti i rivenditori RKS autorizzati.",
-        "cta": "Trova un Rivenditore"
-      },
-      "b2b": {
-        "label": "Per le Aziende",
-        "title": "Sei un Rivenditore o Distributore?",
-        "desc": "Unisciti alla nostra rete commerciale e ottieni accesso a prezzi all'ingrosso, allocazioni esclusive e supporto marketing.",
-        "cta": "Candidati come Partner"
-      },
-      "newsletter": {
-        "title": "Rimani Aggiornato",
-        "subtitle": "Lanci di nuovi modelli, notizie racing, offerte esclusive per proprietari — mensile.",
-        "placeholder": "Il tuo indirizzo email",
-        "subscribe": "Iscriviti",
-        "disclaimer": "Niente spam. Cancellati in qualsiasi momento."
-      }
     },
-    "hero": {
-      "slides": [
-        {
-          "tag": "COSTRUITA PER LA STRADA",
-          "headline": [
-            "POTENZA",
-            "RIDEFINITA"
-          ],
-          "sub": "Ingegneria italiana. Zero emissioni. Performance pura.",
-          "cta": {
-            "label": "Esplora le E-Bike",
-            "href": "/models"
-          },
-          "ctaSec": {
-            "label": "La Nostra Storia",
-            "href": "/about"
-          }
-        },
-        {
-          "tag": "INGEGNERIA DI PRECISIONE",
-          "headline": [
-            "COSTRUITA",
-            "ALLA PERFEZIONE"
-          ],
-          "sub": "Ogni componente ingegnerizzato per la performance elettrica.",
-          "cta": {
-            "label": "Vedi la Gamma",
-            "href": "/models"
-          },
-          "ctaSec": {
-            "label": "La Nostra Storia",
-            "href": "/about"
-          }
-        },
-        {
-          "tag": "SCOPRI LA TUA E-BIKE",
-          "headline": [
-            "TROVA LA TUA",
-            "RIDE PERFETTA"
-          ],
-          "sub": "Dalla città all'avventura. Completamente elettrico.",
-          "cta": {
-            "label": "Sfoglia le E-Bike",
-            "href": "/models"
-          },
-          "ctaSec": {
-            "label": "Confronta E-Bike",
-            "href": "/compare"
-          }
-        },
-        {
-          "tag": "RICAMBI OEM E-BIKE",
-          "headline": [
-            "COSTRUITA PER",
-            "DURARE"
-          ],
-          "sub": "Ricambi originali e-bike. Spedizione rapida. Performance garantita.",
-          "cta": {
-            "label": "Acquista Ricambi",
-            "href": "/parts"
-          },
-          "ctaSec": {
-            "label": "Trova Compatibile",
-            "href": "/parts"
-          }
-        },
-        {
-          "tag": "DIVENTA UN PARTNER",
-          "headline": [
-            "FAI CRESCERE",
-            "IL TUO BUSINESS"
-          ],
-          "sub": "Unisciti alla nostra rete globale di rivenditori di e-bike.",
-          "cta": {
-            "label": "Candidati come Partner",
-            "href": "/trade/apply"
-          },
-          "ctaSec": {
-            "label": "Scopri di Più",
-            "href": "/trade"
-          }
-        }
-      ]
-    }
-  }
+    marquee: [
+      'Ape Ryder',
+      'RKS',
+      'Skyjet',
+      'E-bike',
+      'Motori',
+      'Batterie',
+      'Freni',
+      'Accessori',
+      'Ricambi originali',
+      'Programma partner',
+    ],
+    stats: { label: 'RKS in cifre' },
+    models: {
+      tag: 'La nostra gamma',
+      title: 'Modelli in evidenza',
+      viewAll: 'Vedi tutti i modelli',
+      emptyTitle: 'Nuovi modelli in arrivo',
+      emptyDesc: 'Stiamo aggiornando la gamma. Contattaci per sapere quali e-bike sono disponibili.',
+      emptyCta: 'Contattaci',
+    },
+    parts: {
+      tag: 'Ricambi originali',
+      title: 'Ricambi e accessori e-bike',
+      subtitle: 'Ricambi originali e accessori per le e-bike Ape Ryder, RKS e Skyjet.',
+      points: [
+        'Ricambi originali per i nostri tre marchi',
+        'Ricerca per categoria',
+        'Aggiungi i ricambi alla lista richieste e chiedi un preventivo',
+        'Non sai cosa è compatibile? Chiedi a noi',
+      ],
+      browse: 'Sfoglia tutti i ricambi',
+      categoriesLabel: 'Categorie di ricambi',
+      count: (n: number) => `${n} ${n === 1 ? 'ricambio' : 'ricambi'}`,
+      shopTag: 'Negozio',
+      popularTitle: 'Ricambi più richiesti',
+      allParts: 'Tutti i ricambi',
+    },
+    why: {
+      tag: 'Perché RKS',
+      title: 'Tutto per la tua e-bike',
+      subtitle: 'Dalla scelta del modello alla sua cura, in un unico posto.',
+      items: [
+        { title: 'Tre marchi', desc: 'Le e-bike Ape Ryder, RKS e Skyjet in un’unica gamma, facili da confrontare.' },
+        { title: 'Ricambi originali', desc: 'Ricambi e accessori originali pensati per i nostri modelli.' },
+        { title: 'Rete partner', desc: 'Negozi e distributori possono entrare nel programma partner RKS.' },
+        { title: 'Assistenza', desc: 'Domande su un modello, un ricambio o una richiesta? Scrivici e il nostro team ti risponderà.' },
+      ],
+    },
+    news: {
+      tag: 'Ultime notizie',
+      title: 'Notizie e aggiornamenti',
+      allNews: 'Tutte le notizie',
+    },
+    dealer: {
+      tag: 'Rete rivenditori',
+      title: 'Trova un rivenditore',
+      desc: 'Cerca un partner RKS vicino a te, oppure contattaci e ti indicheremo a chi rivolgerti.',
+      cta: 'Trova un rivenditore',
+    },
+    b2b: {
+      label: 'Per le aziende',
+      title: 'Sei un rivenditore o un distributore?',
+      desc: 'Raccontaci della tua attività: valuteremo la candidatura e ti contatteremo per parlare delle condizioni commerciali.',
+      cta: 'Candidati come partner',
+      learnMore: 'Scopri di più',
+    },
+    newsletter: {
+      title: 'Resta aggiornato',
+      subtitle: 'Novità su modelli, ricambi ed eventi RKS.',
+      label: 'Indirizzo email',
+      placeholder: 'Il tuo indirizzo email',
+      subscribe: 'Iscriviti',
+      invalid: 'Inserisci un indirizzo email valido.',
+      success: 'Grazie, la tua iscrizione è confermata.',
+      disclaimer: 'Usiamo la tua email solo per inviarti aggiornamenti RKS. Puoi cancellarti in qualsiasi momento.',
+    },
+  },
 })
+
+export type HomeMessages = (typeof homeMessages)['en']

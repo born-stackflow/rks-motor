@@ -1,251 +1,285 @@
 'use client'
 
-import { useState, useEffect, useCallback, Suspense } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useCallback, useEffect, useRef, useState, type AnimationEvent, type FocusEvent } from 'react'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
+import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
 import { useMessages } from '@/contexts/LanguageContext'
 import { homeMessages } from '@/lib/i18n/messages/home'
+import type { Image } from '@/lib/sanity/types'
+import { cn } from '@/lib/utils'
+import { useLowPowerDevice, usePrefersReducedMotion } from './useClientFlags'
+import styles from './HeroSlider.module.css'
 
-const Scene1 = dynamic(() => import('./slides/Slide1Scene'), { ssr: false })
-const Scene2 = dynamic(() => import('./slides/Slide2Scene'), { ssr: false })
-const Scene3 = dynamic(() => import('./slides/Slide3Scene'), { ssr: false })
-const Scene4 = dynamic(() => import('./slides/Slide4Scene'), { ssr: false })
-const Scene5 = dynamic(() => import('./slides/Slide5Scene'), { ssr: false })
+const HeroScene = dynamic(() => import('./HeroScene'), { ssr: false })
 
-const SCENES = [Scene1, Scene2, Scene3, Scene4, Scene5]
-const DURATION = 6000
+export type HeroSlideMedia = { bg?: Image; fg?: Image }
 
-interface HeroSliderProps {
-  cmsBgs?: (string | undefined)[]
-  cmsFgs?: (string | undefined)[]
+type SliderState = { current: number; visited: number[]; changed: boolean }
+
+const CONTROL =
+  'flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center border border-dark-3 bg-dark-2/80 text-off-white transition-colors duration-200 hover:border-red hover:bg-red'
+
+function PauseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+      <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
+    </svg>
+  )
 }
 
-export function HeroSlider({ cmsBgs = [], cmsFgs = [] }: HeroSliderProps) {
-  const t = useMessages(homeMessages)
-  const slides = t.hero.slides as typeof t.hero.slides
+function PlayIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+      <path d="M7 4l13 8-13 8z" />
+    </svg>
+  )
+}
 
-  const [current, setCurrent] = useState(0)
-  const [playing, setPlaying]  = useState(true)
-  const [progress, setProgress] = useState(0)
-  const [low, setLow] = useState(false)
+export function HeroSlider({ media = [] }: { media?: HeroSlideMedia[] }) {
+  const t = useMessages(homeMessages).hero
+  const slides = t.slides
+  const total = slides.length
+
+  const [{ current, visited, changed }, setSlider] = useState<SliderState>({
+    current: 0,
+    visited: [0, 1 % total],
+    changed: false,
+  })
+  const [stopped, setStopped] = useState(false)
+  const [hovered, setHovered] = useState(false)
+  const [inView, setInView] = useState(true)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  const reducedMotion = usePrefersReducedMotion()
+  const lowPower = useLowPowerDevice()
+
+  const show = useCallback(
+    (index: number) => {
+      setSlider((prev) => {
+        const next = (index + total) % total
+        const upcoming = (next + 1) % total
+        const seen = new Set([...prev.visited, next, upcoming])
+        return { current: next, visited: [...seen], changed: true }
+      })
+    },
+    [total],
+  )
+
+  const showManually = (index: number) => {
+    show(index)
+    setStopped(true)
+  }
 
   useEffect(() => {
-    if (typeof navigator !== 'undefined') {
-      setLow((navigator.hardwareConcurrency ?? 4) <= 2)
-    }
+    const element = sectionRef.current
+    if (!element) return
+    const observer = new IntersectionObserver(([entry]) => setInView(entry?.isIntersecting ?? true))
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [])
 
-  const go = useCallback((idx: number) => {
-    setCurrent((idx + slides.length) % slides.length)
-    setProgress(0)
-  }, [slides.length])
+  const autoplay = !stopped && !reducedMotion
+  const running = autoplay && !hovered && inView
 
-  const next = useCallback(() => { go(current + 1); setPlaying(false) }, [current, go])
-  const prev = useCallback(() => { go(current - 1); setPlaying(false) }, [current, go])
+  const handleProgressEnd = (event: AnimationEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) show(current + 1)
+  }
 
-  useEffect(() => {
-    if (!playing) return
-    setProgress(0)
-    const start = Date.now()
-    const tick = setInterval(() => {
-      const pct = ((Date.now() - start) / DURATION) * 100
-      setProgress(Math.min(pct, 100))
-      if (pct >= 100) {
-        setCurrent((c) => (c + 1) % slides.length)
-        setProgress(0)
-      }
-    }, 50)
-    return () => clearInterval(tick)
-  }, [current, playing, slides.length])
+  const handleFocus = (event: FocusEvent<HTMLElement>) => {
+    if (event.target.matches(':focus-visible')) setStopped(true)
+  }
 
   const slide = slides[current]
-  const Scene = SCENES[current]
-  const bgSrc = cmsBgs[current]
-  const fgSrc = cmsFgs[current]
+  const hasForeground = (index: number) => hasImage(media[index]?.fg)
+  const use3d = !lowPower && !reducedMotion && slides.some((_, i) => !hasForeground(i))
+  const show3d = use3d && !hasForeground(current)
 
   return (
     <section
-      className="relative h-screen min-h-[600px] overflow-hidden bg-black"
-      onMouseEnter={() => setPlaying(false)}
-      onMouseLeave={() => setPlaying(true)}
+      ref={sectionRef}
+      aria-roledescription="carousel"
+      aria-label={t.label}
+      className="relative h-svh min-h-[600px] overflow-hidden bg-black"
+      onPointerEnter={(event) => event.pointerType === 'mouse' && setHovered(true)}
+      onPointerLeave={(event) => event.pointerType === 'mouse' && setHovered(false)}
+      onFocus={handleFocus}
     >
-      {/* Background image */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`bg-${current}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-          className="absolute inset-0"
-        >
-          {bgSrc ? (
-            <Image
-              src={bgSrc}
-              alt={slide.headline.join(' ')}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center"
-            />
-          ) : (
-            <ImagePlaceholder />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Foreground: CMS product image OR 3D scene */}
-      <AnimatePresence mode="wait">
-        {fgSrc ? (
-          <motion.div
-            key={`fg-${current}`}
-            className="absolute inset-y-0 right-0 w-1/2 pointer-events-none flex items-end justify-center"
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 60 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      {slides.map((_, i) =>
+        visited.includes(i) ? (
+          <div
+            key={`bg-${i}`}
+            aria-hidden="true"
+            className={cn(
+              'absolute inset-0 transition-opacity duration-700 ease-in-out',
+              i === current ? 'opacity-100' : 'opacity-0',
+            )}
           >
-            <motion.div
-              className="relative w-full h-full max-w-[640px]"
-              animate={{ y: [0, -14, 0] }}
-              transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }}
-            >
-              <Image
-                src={fgSrc}
-                alt={slide.headline.join(' ')}
+            {hasImage(media[i]?.bg) ? (
+              <SanityImage
+                image={media[i]?.bg}
+                alt=""
                 fill
+                priority={i === 0}
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+            ) : (
+              <ImagePlaceholder />
+            )}
+          </div>
+        ) : null,
+      )}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/85" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
+
+      {use3d ? (
+        <div
+          aria-hidden="true"
+          className={cn(
+            'pointer-events-none absolute inset-0 transition-opacity duration-700',
+            show3d ? 'opacity-100' : 'opacity-0',
+          )}
+        >
+          <HeroScene index={current} active={show3d && inView} />
+        </div>
+      ) : null}
+
+      {slides.map((_, i) =>
+        visited.includes(i) && hasForeground(i) ? (
+          <div
+            key={`fg-${i}`}
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute inset-y-0 right-0 flex w-1/2 items-end justify-center transition-[opacity,translate] duration-700 ease-out motion-reduce:translate-none',
+              i === current ? 'translate-x-0 opacity-100' : 'translate-x-16 opacity-0',
+            )}
+          >
+            <div className={cn('relative h-full w-full max-w-[640px]', i === current && styles.float)}>
+              <SanityImage
+                image={media[i]?.fg}
+                alt=""
+                fill
+                priority={i === 0}
                 sizes="(min-width: 1280px) 640px, 50vw"
                 className="object-contain object-bottom drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
-                priority
               />
-            </motion.div>
-          </motion.div>
-        ) : (
-          !low && (
-            <Suspense fallback={null}>
-              <div key={`3d-${current}`} className="absolute inset-0 pointer-events-none">
-                <Scene />
-              </div>
-            </Suspense>
-          )
-        )}
-      </AnimatePresence>
+            </div>
+          </div>
+        ) : null,
+      )}
 
-      {/* Text content */}
-      <div className="relative h-full container flex flex-col justify-center">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`text-${current}`}
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -60 }}
-            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="max-w-2xl"
+      <div className="container relative flex h-full flex-col justify-center" aria-live={running ? 'off' : 'polite'}>
+        <div
+          key={current}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={t.slideOf(current + 1, total)}
+          className="max-w-2xl pb-20"
+        >
+          <p
+            className={cn('mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-red', changed && styles.reveal)}
           >
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-red text-xs font-semibold uppercase tracking-[0.3em] mb-5"
-            >
-              {slide.tag}
-            </motion.p>
-
-            <h1
-              className="text-off-white leading-none mb-6"
-              style={{
-                fontFamily: 'Bebas Neue, sans-serif',
-                fontSize: 'clamp(4rem, 10vw, 9rem)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              {slide.headline[0]}
-              <br />
-              <span className="text-red">{slide.headline[1]}</span>
-            </h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.5 }}
-              className="text-light text-lg md:text-xl max-w-md mb-10 leading-relaxed"
-            >
-              {slide.sub}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45, duration: 0.5 }}
-              className="flex flex-col sm:flex-row gap-3"
-            >
-              <Link href={slide.cta.href} className="btn-primary">
-                {slide.cta.label}
-              </Link>
-              <Link href={slide.ctaSec.href} className="btn-secondary">
-                {slide.ctaSec.label}
-              </Link>
-            </motion.div>
-          </motion.div>
-        </AnimatePresence>
+            {slide.tag}
+          </p>
+          <h1
+            className={cn(
+              'mb-6 font-display text-[clamp(3.25rem,10vw,9rem)] uppercase leading-none tracking-[0.02em] text-off-white',
+              changed && styles.reveal,
+            )}
+            style={changed ? { animationDelay: '80ms' } : undefined}
+          >
+            {slide.headline}
+            <br />
+            <span className="text-red">{slide.accent}</span>
+          </h1>
+          <p
+            className={cn('mb-10 max-w-md text-lg leading-relaxed text-light md:text-xl', changed && styles.reveal)}
+            style={changed ? { animationDelay: '160ms' } : undefined}
+          >
+            {slide.sub}
+          </p>
+          <div
+            className={cn('flex flex-col gap-3 sm:flex-row', changed && styles.reveal)}
+            style={changed ? { animationDelay: '240ms' } : undefined}
+          >
+            <Link href={slide.cta.href} className="btn-primary">
+              {slide.cta.label}
+            </Link>
+            <Link href={slide.ctaSec.href} className="btn-secondary">
+              {slide.ctaSec.label}
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {/* Controls */}
-      <div className="absolute bottom-8 left-0 right-0 container flex items-end justify-between">
+      <div className="container absolute inset-x-0 bottom-5 flex items-end justify-between gap-4 sm:bottom-8">
         <div className="flex items-center gap-6">
-          <span
-            className="text-light text-lg"
-            style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.1em' }}
-          >
+          <span aria-hidden="true" className="hidden font-display text-lg tracking-[0.1em] text-light sm:inline">
             <span className="text-red">{String(current + 1).padStart(2, '0')}</span>
             {' / '}
-            {String(slides.length).padStart(2, '0')}
+            {String(total).padStart(2, '0')}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             {slides.map((_, i) => (
               <button
                 key={i}
-                onClick={() => { go(i); setPlaying(false) }}
-                className={`h-[3px] transition-all duration-300 ${i === current ? 'w-6 bg-red' : 'w-2 bg-light/40 hover:bg-light/70'}`}
-              />
+                type="button"
+                onClick={() => showManually(i)}
+                aria-label={t.goTo(i + 1)}
+                aria-current={i === current ? 'true' : undefined}
+                className="group flex h-10 w-8 items-center justify-center"
+              >
+                <span
+                  className={cn(
+                    'block h-[3px] transition-all duration-300',
+                    i === current ? 'w-6 bg-red' : 'w-2 bg-light/40 group-hover:bg-light/70',
+                  )}
+                />
+              </button>
             ))}
           </div>
         </div>
 
         <div className="flex gap-2">
-          <button
-            onClick={prev}
-            className="w-12 h-12 bg-dark-2/80 hover:bg-red flex items-center justify-center text-off-white border border-dark-3 hover:border-red transition-all duration-200"
-          >
+          {reducedMotion ? null : (
+            <button
+              type="button"
+              onClick={() => setStopped((value) => !value)}
+              aria-label={stopped ? t.play : t.pause}
+              className={CONTROL}
+            >
+              {stopped ? <PlayIcon /> : <PauseIcon />}
+            </button>
+          )}
+          <button type="button" onClick={() => showManually(current - 1)} aria-label={t.previous} className={CONTROL}>
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <button
-            onClick={next}
-            className="w-12 h-12 bg-dark-2/80 hover:bg-red flex items-center justify-center text-off-white border border-dark-3 hover:border-red transition-all duration-200"
-          >
+          <button type="button" onClick={() => showManually(current + 1)} aria-label={t.next} className={CONTROL}>
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-dark-3">
-        <div
-          className="h-full bg-red transition-none"
-          style={{ width: `${progress}%` }}
-        />
+      <div className="absolute inset-x-0 bottom-0 h-[3px] bg-dark-3">
+        {autoplay ? (
+          <div
+            key={current}
+            className={styles.progress}
+            style={{ animationPlayState: running ? 'running' : 'paused' }}
+            onAnimationEnd={handleProgressEnd}
+          />
+        ) : null}
       </div>
 
-      {/* Scroll hint */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce hidden md:flex">
-        <span className="text-[10px] text-mid uppercase tracking-widest">Scroll</span>
-        <div className="w-[1px] h-8 bg-gradient-to-b from-mid to-transparent" />
+      <div
+        aria-hidden="true"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 motion-safe:animate-bounce md:flex"
+      >
+        <span className="text-[10px] uppercase tracking-widest text-light">{t.scroll}</span>
+        <div className="h-8 w-px bg-gradient-to-b from-light to-transparent" />
       </div>
     </section>
   )

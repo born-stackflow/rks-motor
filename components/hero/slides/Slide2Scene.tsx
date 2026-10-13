@@ -1,17 +1,16 @@
 'use client'
 
 import { useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Mesh } from 'three'
+import { useFrame } from '@react-three/fiber'
+import type { Mesh } from 'three'
 
 function WireframeSphere() {
   const outerRef = useRef<Mesh>(null)
   const innerRef = useRef<Mesh>(null)
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
     if (outerRef.current) {
       outerRef.current.rotation.y += delta * 0.5
-      const s = 1 + Math.sin(Date.now() * 0.0015) * 0.05
-      outerRef.current.scale.setScalar(s)
+      outerRef.current.scale.setScalar(1 + Math.sin(clock.elapsedTime * 1.5) * 0.05)
     }
     if (innerRef.current) innerRef.current.rotation.y += delta * 0.2
   })
@@ -31,15 +30,10 @@ function WireframeSphere() {
 
 export default function Slide2Scene() {
   return (
-    <Canvas
-      camera={{ position: [0, 0, 6], fov: 50 }}
-      gl={{ alpha: true, antialias: true }}
-      dpr={[1, 2]}
-      style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-    >
+    <>
       <ambientLight intensity={0.3} />
       <pointLight position={[4, 4, 4]} intensity={50} color="#CC0000" />
       <WireframeSphere />
-    </Canvas>
+    </>
   )
 }

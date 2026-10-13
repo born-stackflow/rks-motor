@@ -1,0 +1,36 @@
+.progress {
+  height: 100%;
+  background-color: var(--color-red);
+  transform-origin: left center;
+  animation: heroProgress 6s linear both;
+}
+
+.reveal {
+  animation: heroReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.float {
+  animation: heroFloat 4s ease-in-out infinite;
+}
+
+@keyframes heroProgress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes heroReveal {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .float {
+    animation: none;
+  }
+}
