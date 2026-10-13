@@ -65,7 +65,7 @@ export default defineType({
       category: 'category',
       media: 'image',
     },
-    prepare({ year, title, category, media }: Record<string, any>) {
+    prepare({ year, title, category, media }) {
       return {
         title: `${year}: ${title}`,
         subtitle: category ?? '',

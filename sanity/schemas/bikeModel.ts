@@ -348,7 +348,7 @@ export default defineType({
       availability: 'availability',
       media: 'heroImage',
     },
-    prepare({ title, category, price, featured, availability, media }: Record<string, any>) {
+    prepare({ title, category, price, featured, availability, media }) {
       const cats: Record<string, string> = {
         aperyder: 'Ape Ryder', rks: 'RKS', skyjet: 'Skyjet',
       }

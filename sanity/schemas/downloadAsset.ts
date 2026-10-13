@@ -110,7 +110,7 @@ export default defineType({
       model: 'model.name',
       media: 'thumbnail',
     },
-    prepare({ title, type, language, model, media }: Record<string, any>) {
+    prepare({ title, type, language, model, media }) {
       const typeIcons: Record<string, string> = { brochure: '📄', specsheet: '📋', presskit: '📦', manual: '📖', pricelist: '💶', 'parts-catalogue': '🔩' }
       return {
         title: `${typeIcons[type] ?? '📎'} ${title}`,

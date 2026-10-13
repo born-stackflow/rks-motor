@@ -2,6 +2,7 @@
 
 import { useClient } from 'sanity'
 import { useState, useEffect, useCallback } from 'react'
+import { getCmsLocale } from '../i18n/cms-translations'
 
 interface Stats {
   newB2C: number
@@ -254,21 +255,12 @@ export function Dashboard() {
   const [loading, setLoading]         = useState(true)
   const [lastRefresh, setLastRefresh] = useState(new Date())
   const [spinning, setSpinning]       = useState(false)
-  const [locale, setLocale]           = useState<Locale>('en')
+  const locale: Locale = getCmsLocale()
 
-  /* ── Restore saved locale ─────────────────────────────────── */
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('rks-cms-locale') as Locale | null
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time sync from localStorage on mount, must run client-only to avoid SSR hydration mismatch
-      if (saved === 'en' || saved === 'it') setLocale(saved)
-    } catch {}
-  }, [])
-
+  // The structure menu reads the locale only at start-up, so switching reloads the whole Studio.
   const toggleLocale = () => {
-    const next: Locale = locale === 'en' ? 'it' : 'en'
-    setLocale(next)
-    try { localStorage.setItem('rks-cms-locale', next) } catch {}
+    try { localStorage.setItem('rks-cms-locale', locale === 'en' ? 'it' : 'en') } catch {}
+    window.location.reload()
   }
 
   const t = T[locale]

@@ -146,7 +146,7 @@ export default defineType({
       status: 'status',
       date: 'submittedAt',
     },
-    prepare({ title, partName, partNumber, status, date }: Record<string, any>) {
+    prepare({ title, partName, partNumber, status, date }) {
       const statusIcon = status === 'new' ? '🔴' : status === 'in-progress' ? '🟡' : '🟢'
       const d = date ? new Date(date).toLocaleDateString('en-GB') : ''
       return {

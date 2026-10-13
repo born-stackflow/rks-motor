@@ -59,7 +59,7 @@ export default defineType({
       threshold: 'lowStockAlert',
       location: 'location',
     },
-    prepare({ model, colour, quantity, threshold, location }: Record<string, any>) {
+    prepare({ model, colour, quantity, threshold, location }) {
       const low = quantity <= (threshold ?? 3)
       return {
         title: `${low ? '⚠️ ' : ''}${model ?? 'Unknown Model'}${colour ? ` — ${colour}` : ''}`,

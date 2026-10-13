@@ -187,7 +187,7 @@ export default defineType({
       date: 'publishedDate',
       media: 'featuredImage',
     },
-    prepare({ title, author, category, featured, date, media }: Record<string, any>) {
+    prepare({ title, author, category, featured, date, media }) {
       const cats: Record<string, string> = { news: '📰', launches: '🏍️', events: '🎪', press: '📋', technology: '⚙️', lifestyle: '🌄' }
       const d = date ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'
       return {

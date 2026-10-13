@@ -75,7 +75,7 @@ export default defineType({
       category: 'category',
       visible: 'isVisible',
     },
-    prepare({ title, order, category, visible }: Record<string, any>) {
+    prepare({ title, order, category, visible }) {
       return {
         title: `${visible === false ? '🔒 ' : ''}${title}`,
         subtitle: `${category ?? 'general'} · #${order ?? '?'}`,

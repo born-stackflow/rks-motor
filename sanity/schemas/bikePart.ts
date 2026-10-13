@@ -325,7 +325,7 @@ export default defineType({
       featured: 'isFeatured',
       media: 'images.0',
     },
-    prepare({ title, partNumber, category, availability, featured, media }: Record<string, any>) {
+    prepare({ title, partNumber, category, availability, featured, media }) {
       const avail: Record<string, string> = { 'in-stock': '✅', 'order-required': '📋', 'out-of-stock': '❌' }
       return {
         title: `${featured ? '⭐ ' : ''}${title}`,

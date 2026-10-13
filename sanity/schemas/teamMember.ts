@@ -77,7 +77,7 @@ export default defineType({
       department: 'department',
       media: 'photo',
     },
-    prepare({ title, role, department, media }: Record<string, any>) {
+    prepare({ title, role, department, media }) {
       return {
         title,
         subtitle: `${role ?? ''}${department ? ` · ${department}` : ''}`,

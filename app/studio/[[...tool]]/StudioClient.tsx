@@ -1,10 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import { NextStudio } from 'next-sanity/studio'
 import config from '@/sanity.config'
+import { getCmsLocale } from '@/sanity/i18n/cms-translations'
 
 type CmsLocale = 'en' | 'it'
+
+const subscribeToNothing = () => () => {}
 
 const brandCss = `
   /* ── RKS Brand — Sanity Studio UI Polish ── */
@@ -78,15 +81,8 @@ const brandCss = `
 
 /* ─── Floating language toggle ───────────────────────────────── */
 function LangFloater() {
-  const [locale, setLocale] = useState<CmsLocale>('en')
+  const locale = useSyncExternalStore(subscribeToNothing, getCmsLocale, () => 'en' as CmsLocale)
   const [hovered, setHovered] = useState(false)
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('rks-cms-locale') as CmsLocale | null
-      if (saved === 'en' || saved === 'it') setLocale(saved)
-    } catch {}
-  }, [])
 
   const switchTo = (next: CmsLocale) => {
     if (next === locale) return

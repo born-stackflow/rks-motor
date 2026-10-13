@@ -180,7 +180,7 @@ export default defineType({
       type: 'type',
       active: 'isActive',
     },
-    prepare({ title, city, country, type, active }: Record<string, any>) {
+    prepare({ title, city, country, type, active }) {
       const typeLabel: Record<string, string> = { dealer: '🏍️', service: '🔧', both: '🏍️🔧' }
       return {
         title: `${active === false ? '🔴 ' : ''}${typeLabel[type] ?? ''} ${title}`,

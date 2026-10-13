@@ -220,7 +220,7 @@ export default defineType({
       status: 'status',
       date: 'submittedAt',
     },
-    prepare({ title, country, quantity, status, date }: Record<string, any>) {
+    prepare({ title, country, quantity, status, date }) {
       const icons: Record<string, string> = { new: '🔴', 'offer-sent': '📧', negotiating: '🤝', closed: '🟢', declined: '❌' }
       const d = date ? new Date(date).toLocaleDateString('en-GB') : ''
       return {

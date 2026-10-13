@@ -95,7 +95,7 @@ export default defineType({
       title: 'Approximate Monthly Quantity',
       type: 'number',
       group: 'order',
-      hidden: ({ document }: any) => !document?.isRecurringOrder,
+      hidden: ({ document }) => !document?.isRecurringOrder,
       validation: (R) => R.min(1),
     }),
     defineField({
@@ -155,7 +155,7 @@ export default defineType({
       status: 'status',
       date: 'submittedAt',
     },
-    prepare({ title, partName, partNumber, quantity, status, date }: Record<string, any>) {
+    prepare({ title, partName, partNumber, quantity, status, date }) {
       const icons: Record<string, string> = { new: '🔴', 'offer-sent': '📧', negotiating: '🤝', closed: '🟢', declined: '❌' }
       const d = date ? new Date(date).toLocaleDateString('en-GB') : ''
       return {

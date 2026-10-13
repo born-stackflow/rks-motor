@@ -96,7 +96,7 @@ export default defineType({
       role: 'sanityRole',
       jobTitle: 'jobTitle',
     },
-    prepare({ name, department, role, jobTitle }: Record<string, any>) {
+    prepare({ name, department, role, jobTitle }) {
       const roleIcon =
         role === 'administrator' ? '🔑' : role === 'editor' ? '✏️' : '👁'
       return {

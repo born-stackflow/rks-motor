@@ -191,7 +191,7 @@ export default defineType({
       status: 'status',
       model: 'model.name',
     },
-    prepare({ orderNumber, customer, status, model }: Record<string, any>) {
+    prepare({ orderNumber, customer, status, model }) {
       const icons: Record<string, string> = {
         pending: '⏳', confirmed: '✅', 'in-production': '🏭',
         ready: '📦', delivered: '🚚', cancelled: '❌',

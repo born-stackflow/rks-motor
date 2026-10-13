@@ -125,7 +125,7 @@ export default defineType({
           ],
           preview: {
             select: { title: 'title', date: 'uploadedAt' },
-            prepare({ title, date }: Record<string, any>) {
+            prepare({ title, date }) {
               return { title: title ?? 'Untitled', subtitle: date ?? '' }
             },
           },
@@ -154,7 +154,7 @@ export default defineType({
       type: 'recordType',
       country: 'country',
     },
-    prepare({ fullName, businessName, type, country }: Record<string, any>) {
+    prepare({ fullName, businessName, type, country }) {
       const icon = type === 'b2b' ? '🏢' : '👤'
       return {
         title: `${icon} ${fullName || businessName || 'Unnamed'}`,

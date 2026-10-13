@@ -1,4 +1,4 @@
-import { defineConfig, definePlugin } from 'sanity'
+import { defineConfig, definePlugin, type CurrentUser } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import type { StructureBuilder } from 'sanity/structure'
@@ -22,16 +22,16 @@ import {
   CogIcon,
   DashboardIcon,
   ArchiveIcon,
-  TrendUpwardIcon,
   LockIcon,
 } from '@sanity/icons'
 import { schemaTypes } from './sanity/schemas'
+import { dataset, projectId } from './lib/sanity/env'
 import { Dashboard } from './sanity/components/Dashboard'
 import { cmsT, getCmsLocale } from './sanity/i18n/cms-translations'
 
 const dashboardPlugin = definePlugin({
   name: 'rks-dashboard',
-  tools: (prev, context) => {
+  tools: (prev) => {
     // Translate the "Overview" tool tab label per stored locale
     const t = cmsT[getCmsLocale()]
     return [
@@ -46,17 +46,12 @@ const dashboardPlugin = definePlugin({
   },
 })
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!
-const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
-
 // ── Role helper ───────────────────────────────────────────────────────────────
-function isAdmin(currentUser: any): boolean {
-  return currentUser?.roles?.some(
-    (r: { name: string }) => r.name === 'administrator'
-  ) ?? false
+function isAdmin(currentUser: CurrentUser | null): boolean {
+  return currentUser?.roles.some((role) => role.name === 'administrator') ?? false
 }
 
-const structure = (S: StructureBuilder, context: { currentUser: any }) => {
+const structure = (S: StructureBuilder, context: { currentUser: CurrentUser | null }) => {
   const admin = isAdmin(context.currentUser)
 
   // Read locale on every structure call — changes take effect after page reload
@@ -67,6 +62,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 
     // ENQUIRIES
     S.listItem()
+      .id('enquiries')
       .title(t.enquiries)
       .icon(BellIcon)
       .child(
@@ -74,6 +70,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
           .title(t.enquiryManagement)
           .items([
             S.listItem()
+              .id('b2cBikeEnquiries')
               .title(t.b2cBikeEnquiries)
               .icon(UserIcon)
               .schemaType('b2cEnquiry')
@@ -83,6 +80,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
                   .defaultOrdering([{ field: 'submittedAt', direction: 'desc' }])
               ),
             S.listItem()
+              .id('b2cPartsEnquiries')
               .title(t.b2cPartsEnquiries)
               .icon(WrenchIcon)
               .schemaType('b2cPartsEnquiry')
@@ -93,6 +91,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
               ),
             S.divider(),
             S.listItem()
+              .id('b2bTradeApplications')
               .title(t.b2bTradeApplications)
               .icon(UsersIcon)
               .schemaType('b2bEnquiry')
@@ -102,6 +101,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
                   .defaultOrdering([{ field: 'submittedAt', direction: 'desc' }])
               ),
             S.listItem()
+              .id('b2bBulkParts')
               .title(t.b2bBulkParts)
               .icon(TagIcon)
               .schemaType('b2bPartsEnquiry')
@@ -117,6 +117,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 
     // CATALOGUE
     S.listItem()
+      .id('eBikeModels')
       .title(t.eBikeModels)
       .icon(DocumentIcon)
       .schemaType('bikeModel')
@@ -127,6 +128,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
       ),
 
     S.listItem()
+      .id('partsAccessories')
       .title(t.partsAccessories)
       .icon(TagsIcon)
       .schemaType('bikePart')
@@ -140,6 +142,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 
     // EDITORIAL
     S.listItem()
+      .id('newsBlog')
       .title(t.newsBlog)
       .icon(ComposeIcon)
       .child(
@@ -147,6 +150,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
           .title(t.editorial)
           .items([
             S.listItem()
+              .id('blogPosts')
               .title(t.blogPosts)
               .icon(DocumentTextIcon)
               .schemaType('blogPost')
@@ -156,6 +160,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
                   .defaultOrdering([{ field: 'publishedDate', direction: 'desc' }])
               ),
             S.listItem()
+              .id('authors')
               .title(t.authors)
               .icon(UserIcon)
               .schemaType('author')
@@ -167,6 +172,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 
     // COMPANY
     S.listItem()
+      .id('company')
       .title(t.company)
       .icon(UsersIcon)
       .child(
@@ -174,16 +180,19 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
           .title(t.companyContent)
           .items([
             S.listItem()
+              .id('teamMembers')
               .title(t.teamMembers)
               .icon(UsersIcon)
               .schemaType('teamMember')
               .child(S.documentTypeList('teamMember').title(t.teamMembers)),
             S.listItem()
+              .id('companyMilestones')
               .title(t.companyMilestones)
               .icon(TimelineIcon)
               .schemaType('milestone')
               .child(S.documentTypeList('milestone').title(t.milestones)),
             S.listItem()
+              .id('dealersServiceCentres')
               .title(t.dealersServiceCentres)
               .icon(PinIcon)
               .schemaType('dealer')
@@ -196,12 +205,14 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
       ),
 
     S.listItem()
+      .id('mediaDownloads')
       .title(t.mediaDownloads)
       .icon(DocumentPdfIcon)
       .schemaType('downloadAsset')
       .child(S.documentTypeList('downloadAsset').title(t.mediaDownloads)),
 
     S.listItem()
+      .id('tradePageFAQs')
       .title(t.tradePageFAQs)
       .icon(TaskIcon)
       .schemaType('tradePageFAQ')
@@ -214,6 +225,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 
     // BUSINESS MANAGEMENT
     S.listItem()
+      .id('businessManagement')
       .title(t.businessManagement)
       .icon(ControlsIcon)
       .child(
@@ -221,6 +233,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
           .title(t.businessManagement)
           .items([
             S.listItem()
+              .id('stockInventory')
               .title(t.stockInventory)
               .icon(StackCompactIcon)
               .schemaType('stockItem')
@@ -230,6 +243,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
                   .defaultOrdering([{ field: 'quantity', direction: 'asc' }])
               ),
             S.listItem()
+              .id('orders')
               .title(t.orders)
               .icon(BillIcon)
               .schemaType('order')
@@ -239,6 +253,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
                   .defaultOrdering([{ field: 'orderDate', direction: 'desc' }])
               ),
             S.listItem()
+              .id('customerPartnerRecords')
               .title(t.customerPartnerRecords)
               .icon(ArchiveIcon)
               .schemaType('customerRecord')
@@ -247,14 +262,6 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
                   .title(t.customerPartnerRecords)
                   .defaultOrdering([{ field: 'fullName', direction: 'asc' }])
               ),
-            S.listItem()
-              .title(t.salesPerformance)
-              .icon(TrendUpwardIcon)
-              .child(
-                S.documentTypeList('order')
-                  .title(t.salesPerformance)
-                  .defaultOrdering([{ field: 'orderDate', direction: 'desc' }])
-              ),
           ])
       ),
 
@@ -262,6 +269,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 
     // STAFF & ACCESS
     S.listItem()
+      .id('staffAccess')
       .title(t.staffAccess)
       .icon(LockIcon)
       .child(
@@ -269,6 +277,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
           .title(t.staffAccessControl)
           .items([
             S.listItem()
+              .id('staffMembersRoles')
               .title(t.staffMembersRoles)
               .icon(UsersIcon)
               .schemaType('staffMember')
@@ -284,6 +293,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 
     // SETTINGS
     S.listItem()
+      .id('siteSettings')
       .title(t.siteSettings)
       .icon(CogIcon)
       .child(
@@ -305,6 +315,7 @@ const structure = (S: StructureBuilder, context: { currentUser: any }) => {
 export default defineConfig({
   name: 'rks-website',
   title: 'RKS E-Bikes CMS',
+  basePath: '/studio',
 
   projectId,
   dataset,
