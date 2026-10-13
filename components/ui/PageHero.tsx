@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
+import { SanityImage } from '@/components/sanity/SanityImage'
+import { hasImage } from '@/lib/sanity/image'
 import { ImagePlaceholder } from './ImagePlaceholder'
 import type { Image } from '@/lib/sanity/types'
 import { cn } from '@/lib/utils'

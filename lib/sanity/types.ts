@@ -114,7 +114,7 @@ export type PartCard = {
   compatibleModels?: Array<{ name: string; slug: string }>
 }
 
-export type PartDetail = PartCard & {
+export type PartDetail = Omit<PartCard, 'compatibleModels'> & {
   manufacturerPartNumber?: string
   replacesPartNumber?: string
   leadTime?: string

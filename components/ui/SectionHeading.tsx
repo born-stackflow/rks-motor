@@ -26,7 +26,6 @@ export function SectionHeading({ title, subtitle, tag, align = 'left', className
       )}
       <h2
         className="font-display text-5xl md:text-6xl lg:text-7xl text-off-white leading-none"
-        style={{ fontFamily: 'Bebas Neue, sans-serif' }}
       >
         {title}
       </h2>

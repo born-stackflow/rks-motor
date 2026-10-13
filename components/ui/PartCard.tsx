@@ -1,54 +1,43 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Badge } from './Badge'
 import { ArrowRight, Wrench } from './Icon'
 import { ImagePlaceholder } from './ImagePlaceholder'
+import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { PART_AVAILABILITY, PART_CATEGORIES } from '@/lib/site'
 import { formatPrice } from '@/lib/utils'
+import type { PartCard as PartCardData } from '@/lib/sanity/types'
 
-interface PartCardProps {
-  name: string
-  slug: string
-  partNumber?: string
-  category?: string
-  price?: number
-  image?: string
-  availability?: 'in-stock' | 'order-required' | 'out-of-stock'
-  compatibleCount?: number
-  isOEM?: boolean
-  index?: number
+const COPY = {
+  en: { fits: (n: number) => `Fits ${n} model${n === 1 ? '' : 's'}`, oem: 'OEM' },
+  it: { fits: (n: number) => `Compatibile con ${n} modell${n === 1 ? 'o' : 'i'}`, oem: 'OEM' },
 }
 
-const availabilityMap = {
-  'in-stock':       { label: 'In Stock',       variant: 'green' as const },
-  'order-required': { label: 'Order Required',  variant: 'amber' as const },
-  'out-of-stock':   { label: 'Out of Stock',    variant: 'red'   as const },
-}
-
-export function PartCard({ name, slug, partNumber, category, price, image, availability, compatibleCount, isOEM, index = 0 }: PartCardProps) {
-  const src = image
-  const avail = availability ? availabilityMap[availability] : null
+export function PartCard({ part, index = 0 }: { part: PartCardData; index?: number }) {
+  const { t, locale } = useLanguage()
+  const availability = part.availability ? PART_AVAILABILITY[part.availability] : null
+  const fits = part.compatibleModels?.length ?? 0
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
-      className="group"
+      viewport={{ once: true, margin: '0px 0px -40px 0px' }}
+      transition={{ duration: 0.5, delay: Math.min(index, 6) * 0.08, ease: 'easeOut' }}
+      className="group h-full"
     >
-      <Link href={`/parts/${slug}`} className="block h-full">
-        <div className="card overflow-hidden h-full flex flex-col">
-          {/* Image */}
+      <Link href={`/parts/${part.slug}`} className="block h-full">
+        <article className="card overflow-hidden h-full flex flex-col">
           <div className="relative aspect-[4/3] overflow-hidden bg-dark">
-            {src ? (
-              <Image
-                src={src}
-                alt={name}
+            {hasImage(part.image) ? (
+              <SanityImage
+                image={part.image}
+                alt={part.image.alt || part.name}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
@@ -56,47 +45,32 @@ export function PartCard({ name, slug, partNumber, category, price, image, avail
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
-              {isOEM && <Badge variant="gold">OEM</Badge>}
-              {avail && <Badge variant={avail.variant}>{avail.label}</Badge>}
+              {part.partType === 'oem' ? <Badge variant="gold">{COPY[locale].oem}</Badge> : null}
+              {availability ? <Badge variant={availability.tone}>{availability.label[locale]}</Badge> : null}
             </div>
-            {category && (
-              <div className="absolute bottom-3 left-3">
-                <Badge variant="dark">{category}</Badge>
-              </div>
-            )}
+            <div className="absolute bottom-3 left-3">
+              <Badge variant="dark">{PART_CATEGORIES[part.category]?.[locale] ?? part.category}</Badge>
+            </div>
           </div>
 
-          {/* Content */}
           <div className="p-5 flex flex-col flex-1">
             <h3 className="text-lg font-bold text-off-white mb-1 group-hover:text-red transition-colors leading-tight">
-              {name}
+              {part.name}
             </h3>
-
-            {partNumber && (
-              <p
-                className="text-gold text-xs mb-2 uppercase tracking-wider"
-                style={{ fontFamily: 'JetBrains Mono, monospace' }}
-              >
-                {partNumber}
-              </p>
-            )}
-
-            {compatibleCount !== undefined && (
-              <p className="text-xs text-mid mb-3">Fits {compatibleCount} model{compatibleCount !== 1 ? 's' : ''}</p>
-            )}
-
+            <p className="text-gold text-xs mb-2 uppercase tracking-wider font-mono">{part.partNumber}</p>
+            {fits > 0 ? <p className="text-xs text-mid mb-3">{COPY[locale].fits(fits)}</p> : null}
             <div className="flex items-center justify-between mt-auto pt-3 border-t border-dark-3">
-              {price ? (
-                <span className="text-lg font-bold text-off-white">{formatPrice(price)}</span>
+              {part.retailPrice ? (
+                <span className="text-lg font-bold text-off-white">{formatPrice(part.retailPrice)}</span>
               ) : (
-                <span className="text-xs text-mid uppercase tracking-wide">Contact for pricing</span>
+                <span className="text-xs text-mid uppercase tracking-wide">{t.common.priceOnRequest}</span>
               )}
               <span className="flex items-center gap-1 text-sm text-red font-semibold group-hover:gap-2 transition-all">
-                View <ArrowRight className="h-4 w-4" />
+                {t.common.viewDetails} <ArrowRight className="h-4 w-4" />
               </span>
             </div>
           </div>
-        </div>
+        </article>
       </Link>
     </motion.div>
   )

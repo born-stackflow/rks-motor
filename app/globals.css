@@ -164,6 +164,22 @@
            focus:border-red;
   }
 
+  .select {
+    @apply w-full px-4 py-3.5 pr-10
+           bg-dark-3 border border-dark-3 text-off-white
+           text-sm rounded-none outline-none appearance-none cursor-pointer
+           transition-all duration-200 focus:border-red;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aaaaaa' stroke-width='2'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 1rem;
+  }
+
+  .input[aria-invalid='true'],
+  .select[aria-invalid='true'] {
+    @apply border-red;
+  }
+
   .label {
     @apply block text-xs font-semibold uppercase tracking-widest text-light mb-2;
   }
