@@ -1,49 +1,67 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import { translations, type Locale } from '@/lib/i18n/translations'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { translations } from '@/lib/i18n/translations'
+import type { Locale, Localized } from '@/lib/site'
 
-type Translations = (typeof translations)[Locale]
+const STORAGE_KEY = 'rks-locale'
 
-interface LanguageContextType {
+type LanguageContextValue = {
   locale: Locale
-  t: Translations
+  t: (typeof translations)[Locale]
   setLocale: (locale: Locale) => void
 }
 
-const LanguageContext = createContext<LanguageContextType>({
+const LanguageContext = createContext<LanguageContextValue>({
   locale: 'en',
   t: translations.en,
   setLocale: () => {},
 })
 
+function detectLocale(): Locale {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved === 'en' || saved === 'it') return saved
+  } catch {}
+  return navigator.language.toLowerCase().startsWith('it') ? 'it' : 'en'
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('en')
 
   useEffect(() => {
-    const saved = localStorage.getItem('rks-locale') as Locale | null
-    if (saved === 'en' || saved === 'it') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time sync from localStorage on mount, must run client-only to avoid SSR hydration mismatch
-      setLocaleState(saved)
-    } else if (typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('it')) {
-      setLocaleState('it')
-    }
+    const detected = detectLocale()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the stored locale only exists in the browser; reading it during render would break hydration
+    if (detected !== 'en') setLocaleState(detected)
   }, [])
 
   useEffect(() => {
     document.documentElement.lang = locale
   }, [locale])
 
-  const setLocale = (newLocale: Locale) => {
-    setLocaleState(newLocale)
-    localStorage.setItem('rks-locale', newLocale)
-  }
+  const setLocale = useCallback((next: Locale) => {
+    setLocaleState(next)
+    try {
+      localStorage.setItem(STORAGE_KEY, next)
+    } catch {}
+  }, [])
 
-  return (
-    <LanguageContext.Provider value={{ locale, t: translations[locale], setLocale }}>
-      {children}
-    </LanguageContext.Provider>
-  )
+  const value = useMemo(() => ({ locale, t: translations[locale], setLocale }), [locale, setLocale])
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
 export const useLanguage = () => useContext(LanguageContext)
+
+export function useLocale() {
+  return useContext(LanguageContext).locale
+}
+
+export function useMessages<T>(messages: Record<Locale, T>): T {
+  return messages[useContext(LanguageContext).locale]
+}
+
+export function useLocalized() {
+  const locale = useContext(LanguageContext).locale
+  return useCallback((value: Localized) => value[locale], [locale])
+}
