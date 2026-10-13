@@ -6,7 +6,7 @@
 
 const PROJECT_ID = 'f3zi3siz'
 const DATASET    = 'production'
-const TOKEN      = 'skCokcXeHjy0bvustRJFE2PCYDbkjoIiZSRL374jmrhYIwhi6XbV3L2lyq2PUVTPu9jSj5BqiVw9rQxymHKPMRgPt5cVlz14G64XV0jTMhhVtkRBHU2jcLrfLfpnlDz9cGhp1u38YGzctTsVcysBIH8tppmm2c0oUmHZKYlAdspEQ7SuD8g2'
+const TOKEN      = process.env.SANITY_API_TOKEN
 const API        = `https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`
 
 function b(text, style = 'normal', key) {

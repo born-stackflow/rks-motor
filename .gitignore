@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -42,3 +43,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# graphify
+.graphify/
+
+# claude code: local state and agent documentation
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+**/CLAUDE.md
+**/CLAUDE.local.md
+
+# secrets pulled from vercel (not covered by .env*)
+env.download
+
+# vendor handoff notes (contain personal data)
+DEPLOYMENT_NOTES.md

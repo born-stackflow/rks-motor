@@ -9,7 +9,7 @@ const client = createClient({
   projectId: 'f3zi3siz',
   dataset: 'production',
   apiVersion: '2024-01-01',
-  token: process.env.SANITY_API_TOKEN || 'skCokcXeHjy0bvustRJFE2PCYDbkjoIiZSRL374jmrhYIwhi6XbV3L2lyq2PUVTPu9jSj5BqiVw9rQxymHKPMRgPt5cVlz14G64XV0jTMhhVtkRBHU2jcLrfLfpnlDz9cGhp1u38YGzctTsVcysBIH8tppmm2c0oUmHZKYlAdspEQ7SuD8g2',
+  token: process.env.SANITY_API_TOKEN,
   useCdn: false,
 })
 
