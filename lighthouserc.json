@@ -1,0 +1,28 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm start -- -p 3100",
+      "startServerReadyPattern": "Ready",
+      "url": [
+        "http://localhost:3100/",
+        "http://localhost:3100/models",
+        "http://localhost:3100/models/nitro-pro",
+        "http://localhost:3100/contact"
+      ],
+      "numberOfRuns": 3,
+      "settings": { "onlyCategories": ["performance", "accessibility", "best-practices", "seo"] }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.9 }],
+        "categories:accessibility": ["warn", { "minScore": 0.95 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 200 }],
+        "resource-summary:script:size": ["warn", { "maxNumericValue": 300000 }],
+        "total-byte-weight": ["warn", { "maxNumericValue": 1200000 }]
+      }
+    },
+    "upload": { "target": "filesystem", "outputDir": ".lighthouseci" }
+  }
+}

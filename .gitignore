@@ -62,3 +62,6 @@ DEPLOYMENT_NOTES.md
 
 # playwright mcp output
 .playwright-mcp/
+
+# lighthouse ci reports
+.lighthouseci/

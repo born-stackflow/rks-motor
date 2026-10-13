@@ -12,7 +12,10 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run lint"
+    "check": "npm run typecheck && npm run lint",
+    "perf:size": "node scripts/size-budget.mjs",
+    "perf:lh": "npx --yes @lhci/cli@0.15 autorun",
+    "analyze": "next experimental-analyze"
   },
   "dependencies": {
     "@portabletext/react": "^6.2.0",
@@ -41,9 +44,16 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.184.1",
+    "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4"
+  ]
 }
