@@ -123,6 +123,7 @@ export function HeroSlider({ media = [] }: { media?: HeroSlideMedia[] }) {
                 alt=""
                 fill
                 priority={i === 0}
+                quality={55}
                 sizes="100vw"
                 className="object-cover object-center"
               />
@@ -162,7 +163,7 @@ export function HeroSlider({ media = [] }: { media?: HeroSlideMedia[] }) {
                 image={media[i]?.fg}
                 alt=""
                 fill
-                priority={i === 0}
+                loading={i === 0 ? 'eager' : 'lazy'}
                 sizes="(min-width: 1280px) 640px, 50vw"
                 className="object-contain object-bottom drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
               />

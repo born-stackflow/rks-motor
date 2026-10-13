@@ -23,7 +23,7 @@ export function PageHero({ eyebrow, title, subtitle, image, children, size = 'md
       )}
     >
       {hasImage(image) ? (
-        <SanityImage image={image} alt="" fill priority sizes="100vw" className="object-cover" />
+        <SanityImage image={image} alt="" fill priority quality={55} sizes="100vw" className="object-cover" />
       ) : (
         <ImagePlaceholder />
       )}

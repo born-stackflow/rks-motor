@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Badge } from './Badge'
 import { ArrowRight, Wrench } from './Icon'
 import { ImagePlaceholder } from './ImagePlaceholder'
@@ -22,7 +22,7 @@ export function PartCard({ part, index = 0 }: { part: PartCardData; index?: numb
   const fits = part.compatibleModels?.length ?? 0
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -40px 0px' }}
@@ -37,7 +37,7 @@ export function PartCard({ part, index = 0 }: { part: PartCardData; index?: numb
                 image={part.image}
                 alt={part.image.alt || part.name}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                sizes="(max-width: 640px) 90vw, (max-width: 1280px) 45vw, 300px"
                 className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
@@ -72,6 +72,6 @@ export function PartCard({ part, index = 0 }: { part: PartCardData; index?: numb
           </div>
         </article>
       </Link>
-    </motion.div>
+    </m.div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
 import type { Image } from '@/lib/sanity/types'
 
@@ -14,14 +14,14 @@ function DriftingImage({ image, opacity }: { image: Image; opacity: number }) {
   const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       aria-hidden="true"
       className="absolute inset-0 overflow-hidden"
       style={reducedMotion ? undefined : { y }}
     >
-      <SanityImage image={image} alt="" fill sizes="100vw" className="object-cover object-center" style={{ opacity }} />
-    </motion.div>
+      <SanityImage image={image} alt="" fill quality={55} sizes="100vw" className="object-cover object-center" style={{ opacity }} />
+    </m.div>
   )
 }
 

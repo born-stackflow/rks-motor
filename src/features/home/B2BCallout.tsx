@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
 import { ArrowRight, Building2 } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
@@ -19,14 +19,14 @@ export function B2BCallout({ background }: { background?: Image }) {
     <section className="relative overflow-hidden bg-black py-16 md:py-20">
       <div aria-hidden="true" className="absolute inset-0">
         {hasImage(background) ? (
-          <SanityImage image={background} alt="" fill sizes="100vw" className="object-cover object-center" />
+          <SanityImage image={background} alt="" fill quality={55} sizes="100vw" className="object-cover object-center" />
         ) : (
           <ImagePlaceholder icon={Building2} />
         )}
       </div>
       <div className="absolute inset-0 bg-black/75" />
 
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-32 -left-32 h-[700px] w-[700px] rounded-full bg-[radial-gradient(circle,rgba(180,0,0,0.55)_0%,rgba(120,0,0,0.25)_35%,transparent_70%)]"
         animate={{ scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }}
@@ -38,7 +38,7 @@ export function B2BCallout({ background }: { background?: Image }) {
       />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         {[0, 1, 2, 3].map((i) => (
-          <motion.div
+          <m.div
             key={i}
             className="absolute h-px w-full"
             style={{ top: `${18 + i * 22}%`, background: SCANLINE }}
@@ -55,7 +55,7 @@ export function B2BCallout({ background }: { background?: Image }) {
       <div className="container relative">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
           <div className="flex max-w-2xl items-stretch gap-6">
-            <motion.div
+            <m.div
               aria-hidden="true"
               className="w-[3px] flex-shrink-0 self-stretch rounded-full bg-red"
               initial={{ scaleY: 0 }}

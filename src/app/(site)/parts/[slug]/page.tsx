@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
-import { imageUrl } from '@/lib/sanity/client'
+import { imageUrl } from '@/lib/sanity/image'
 import { getNavModels } from '@/lib/sanity/data'
 import { sanityFetchSafe } from '@/lib/sanity/fetch'
 import { partBySlugQuery, partSlugsQuery } from '@/lib/sanity/queries'

@@ -1,7 +1,7 @@
 import type { SanityImageSource } from '@sanity/image-url'
 import type { PortableTextBlock } from '@portabletext/types'
 
-export type Image = SanityImageSource & { alt?: string; caption?: string }
+export type Image = SanityImageSource & { alt?: string; caption?: string; color?: string }
 
 export type Brand = 'aperyder' | 'rks' | 'skyjet'
 export type ModelAvailability = 'in-stock' | 'pre-order' | 'coming-soon' | 'discontinued'

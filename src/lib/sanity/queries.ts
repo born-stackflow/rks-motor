@@ -1,22 +1,24 @@
 import { defineQuery } from 'next-sanity'
 
+/** Image projection that also returns the dominant colour Sanity computes for every asset, used as placeholder. */
+const withColor = `{..., "color": asset->metadata.palette.dominant.background}`
+
 const modelCard = /* groq */ `
   _id, name, "slug": slug.current, "brand": category, tagline, price, isNew, isFeatured, availability,
-  "image": coalesce(colours[0].image, heroImage),
-  features,
+  "image": coalesce(colours[0].image, heroImage)${withColor},
   "motor": specs.motor, "maxSpeed": specs.maxSpeed, "range": specs.range, "battery": specs.battery
 `
 
 const partCard = /* groq */ `
   _id, name, "slug": slug.current, partNumber, category, partType, retailPrice, availability,
   isFeatured, soldAs,
-  "image": images[0],
+  "image": images[0]${withColor},
   "compatibleModels": compatibleModels[]->{ name, "slug": slug.current }
 `
 
 const postCard = /* groq */ `
   _id, title, "slug": slug.current, excerpt, category, isFeatured, publishedDate, tags,
-  "image": featuredImage,
+  "image": featuredImage${withColor},
   author->{ name, photo, role }
 `
 
@@ -25,26 +27,27 @@ export const settingsQuery = defineQuery(`*[_type == "siteSettings"][0]{
   socialLinks, statsBar, announcementBanner, footerText,
   metaTitle, metaDescription, ogImage, googleVerification,
   "heroSlides": [
-    { "bg": heroSlide1Bg, "fg": heroSlide1Fg },
-    { "bg": heroSlide2Bg, "fg": heroSlide2Fg },
-    { "bg": heroSlide3Bg, "fg": heroSlide3Fg },
-    { "bg": heroSlide4Bg, "fg": heroSlide4Fg },
-    { "bg": heroSlide5Bg, "fg": heroSlide5Fg }
+    { "bg": heroSlide1Bg${withColor}, "fg": heroSlide1Fg${withColor} },
+    { "bg": heroSlide2Bg${withColor}, "fg": heroSlide2Fg${withColor} },
+    { "bg": heroSlide3Bg${withColor}, "fg": heroSlide3Fg${withColor} },
+    { "bg": heroSlide4Bg${withColor}, "fg": heroSlide4Fg${withColor} },
+    { "bg": heroSlide5Bg${withColor}, "fg": heroSlide5Fg${withColor} }
   ],
-  partsSectionBg, whySectionBg, b2bSectionBg, dealerSectionBg,
+  "partsSectionBg": partsSectionBg${withColor}, "whySectionBg": whySectionBg${withColor},
+  "b2bSectionBg": b2bSectionBg${withColor}, "dealerSectionBg": dealerSectionBg${withColor},
   "partsTiles": {
-    "motor": partsTileMotorImage,
-    "battery": partsTileBatteryImage,
-    "brakes": partsTileBrakesImage,
-    "accessories": partsTileAccessoriesImage
+    "motor": partsTileMotorImage${withColor},
+    "battery": partsTileBatteryImage${withColor},
+    "brakes": partsTileBrakesImage${withColor},
+    "accessories": partsTileAccessoriesImage${withColor}
   },
   "pageBackgrounds": {
-    "models": modelsPageBg,
-    "parts": partsPageBg,
-    "news": newsPageBg,
-    "about": aboutPageBg,
-    "contact": contactPageBg,
-    "dealers": dealersPageBg
+    "models": modelsPageBg${withColor},
+    "parts": partsPageBg${withColor},
+    "news": newsPageBg${withColor},
+    "about": aboutPageBg${withColor},
+    "contact": contactPageBg${withColor},
+    "dealers": dealersPageBg${withColor}
   }
 }`)
 
@@ -61,8 +64,9 @@ export const modelSlugsQuery = defineQuery(`*[_type == "bikeModel" && defined(sl
 
 export const modelBySlugQuery = defineQuery(`*[_type == "bikeModel" && slug.current == $slug][0]{
   ${modelCard},
-  b2cPriceNote, heroImage, hotspotImage, gallery, colours, specs, description,
-  keyFeatures[]{ title, description, image },
+  features, b2cPriceNote, "heroImage": heroImage${withColor}, "hotspotImage": hotspotImage${withColor},
+  "gallery": gallery[]${withColor}, "colours": colours[]{ ..., "image": image${withColor} }, specs, description,
+  keyFeatures[]{ title, description, "image": image${withColor} },
   hotspots,
   "specSheetUrl": specSheetPDF.asset->url,
   "related": select(
@@ -73,7 +77,7 @@ export const modelBySlugQuery = defineQuery(`*[_type == "bikeModel" && slug.curr
 }`)
 
 export const compareModelsQuery = defineQuery(`*[_type == "bikeModel"]
-  | order(order asc, name asc) { ${modelCard}, specs }`)
+  | order(order asc, name asc) { ${modelCard}, specs, features }`)
 
 export const featuredPartsQuery = defineQuery(`*[_type == "bikePart" && isFeatured == true]
   | order(name asc) [0...8] { ${partCard} }`)
@@ -85,7 +89,7 @@ export const partSlugsQuery = defineQuery(`*[_type == "bikePart" && defined(slug
 export const partBySlugQuery = defineQuery(`*[_type == "bikePart" && slug.current == $slug][0]{
   ${partCard},
   manufacturerPartNumber, replacesPartNumber, leadTime, quantityInPackage, packageIncludes, warranty,
-  description, images, dimensions, technicalSpecs, material, surfaceFinish, coating,
+  description, "images": images[]${withColor}, dimensions, technicalSpecs, material, surfaceFinish, coating,
   fitmentNotes, yearRangeFrom, yearRangeTo,
   "compatibleModels": compatibleModels[]->{ name, "slug": slug.current, "brand": category, "image": heroImage },
   "related": *[_type == "bikePart" && category == ^.category && _id != ^._id] | order(name asc) [0...4] { ${partCard} },

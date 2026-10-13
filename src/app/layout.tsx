@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Bebas_Neue, Inter } from 'next/font/google'
+import { preconnect } from 'react-dom'
 import { SITE_NAME, SITE_URL } from '@/lib/site'
 import { getSiteSettings } from '@/lib/sanity/data'
-import { urlFor } from '@/lib/sanity/client'
+import { urlFor } from '@/lib/sanity/image'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
@@ -41,6 +42,7 @@ export const viewport: Viewport = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  preconnect('https://cdn.sanity.io')
   return (
     <html lang="en" className={`${inter.variable} ${bebasNeue.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-black text-off-white font-body" suppressHydrationWarning>
