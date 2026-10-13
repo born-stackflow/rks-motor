@@ -2,230 +2,67 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url)
-    
-    const title = searchParams.get('title') || 'RKS'
-    const subtitle = searchParams.get('subtitle') || 'Premium Italian Motorcycles'
-    const type = searchParams.get('type') || 'general'
-    const price = searchParams.get('price')
-    const specs = searchParams.get('specs')
-    
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1d3557',
-            background: 'linear-gradient(135deg, #1d3557 0%, #e63946 100%)',
-            fontFamily: 'Inter, sans-serif',
-          }}
-        >
-          {/* Header */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '40px',
-              left: '60px',
-              display: 'flex',
-              alignItems: 'center',
-              color: 'white',
-            }}
-          >
-            <div
-              style={{
-                width: '60px',
-                height: '60px',
-                backgroundColor: 'white',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: '20px',
-              }}
-            >
-              <span
-                style={{
-                  color: '#e63946',
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                }}
-              >
-                MB
-              </span>
-            </div>
-            <div
-              style={{
-                fontSize: '32px',
-                fontWeight: 'bold',
-                color: 'white',
-              }}
-            >
-              RKS
-            </div>
-          </div>
+const clip = (value: string | null, max: number) => {
+  const text = (value ?? '').trim()
+  return text.length > max ? `${text.slice(0, max - 1)}…` : text
+}
 
-          {/* Main Content */}
+/** Default social preview image: GET /api/og?title=…&subtitle=…&eyebrow=… */
+export function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const title = clip(searchParams.get('title'), 60) || 'RKS E-Bikes'
+  const subtitle = clip(searchParams.get('subtitle'), 110) || 'Ape Ryder · RKS · Skyjet'
+  const eyebrow = clip(searchParams.get('eyebrow'), 40) || 'E-bikes & parts'
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: '64px 72px',
+          backgroundColor: '#0a0a0a',
+          backgroundImage: 'radial-gradient(circle at 85% 20%, rgba(204,0,0,0.35), transparent 55%)',
+          color: '#f5f5f5',
+          fontFamily: 'sans-serif',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <div
             style={{
+              width: 72,
+              height: 72,
+              backgroundColor: '#cc0000',
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              textAlign: 'center',
-              color: 'white',
-              maxWidth: '800px',
-              padding: '0 60px',
+              fontSize: 30,
+              fontWeight: 800,
+              letterSpacing: 1,
             }}
           >
-            {/* Title */}
-            <h1
-              style={{
-                fontSize: type === 'model' ? '64px' : '72px',
-                fontWeight: 'bold',
-                margin: '0',
-                lineHeight: '1.1',
-                textAlign: 'center',
-                background: 'linear-gradient(to bottom right, #ffffff, #ffd166)',
-                backgroundClip: 'text',
-                color: 'transparent',
-              }}
-            >
-              {title}
-            </h1>
-
-            {/* Subtitle */}
-            <p
-              style={{
-                fontSize: '32px',
-                margin: '20px 0 40px 0',
-                opacity: 0.9,
-                textAlign: 'center',
-              }}
-            >
-              {subtitle}
-            </p>
-
-            {/* Type-specific content */}
-            {type === 'model' && (
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '40px',
-                  marginTop: '20px',
-                }}
-              >
-                {price && (
-                  <div
-                    style={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      padding: '20px 30px',
-                      borderRadius: '12px',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <div style={{ fontSize: '16px', opacity: 0.8 }}>Price from</div>
-                    <div style={{ fontSize: '32px', fontWeight: 'bold' }}>{price}</div>
-                  </div>
-                )}
-                {specs && (
-                  <div
-                    style={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      padding: '20px 30px',
-                      borderRadius: '12px',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <div style={{ fontSize: '16px', opacity: 0.8 }}>Engine</div>
-                    <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{specs}</div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {type === 'news' && (
-              <div
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  padding: '20px 30px',
-                  borderRadius: '12px',
-                  fontSize: '24px',
-                  fontWeight: '600',
-                }}
-              >
-                📰 Latest News
-              </div>
-            )}
-
-            {type === 'parts' && (
-              <div
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  padding: '20px 30px',
-                  borderRadius: '12px',
-                  fontSize: '24px',
-                  fontWeight: '600',
-                }}
-              >
-                🔧 Genuine Parts & Accessories
-              </div>
-            )}
+            RKS
           </div>
-
-          {/* Decorative Elements */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '40px',
-              right: '60px',
-              opacity: 0.6,
-              fontSize: '48px',
-            }}
-          >
-            🏍️
-          </div>
-
-          <div
-            style={{
-              position: 'absolute',
-              top: '40px',
-              right: '60px',
-              opacity: 0.3,
-              fontSize: '24px',
-            }}
-          >
-            🇮🇹
-          </div>
-
-          {/* Footer */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '40px',
-              left: '60px',
-              color: 'white',
-              opacity: 0.8,
-              fontSize: '18px',
-            }}
-          >
-            Premium Italian Motorcycles Since 1985
-          </div>
+          <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: 6 }}>RKS E-BIKES</div>
         </div>
-      ),
-      {
-        width: 1200,
-        height: 630,
-      }
-    )
-  } catch (e: any) {
-    console.error('Failed to generate OG image:', e)
-    return new Response('Failed to generate image', { status: 500 })
-  }
+
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ fontSize: 24, color: '#cc0000', fontWeight: 700, letterSpacing: 6, textTransform: 'uppercase' }}>
+            {eyebrow}
+          </div>
+          <div style={{ fontSize: 84, fontWeight: 800, lineHeight: 1.05, marginTop: 16, textTransform: 'uppercase' }}>
+            {title}
+          </div>
+          <div style={{ width: 96, height: 6, backgroundColor: '#cc0000', marginTop: 28 }} />
+          <div style={{ fontSize: 32, color: '#aaaaaa', marginTop: 28 }}>{subtitle}</div>
+        </div>
+
+        <div style={{ display: 'flex', fontSize: 24, color: '#777777', letterSpacing: 2 }}>rksitalia.it</div>
+      </div>
+    ),
+    { width: 1200, height: 630 },
+  )
 }

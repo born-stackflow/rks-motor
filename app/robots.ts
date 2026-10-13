@@ -1,19 +1,10 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next'
+import { SITE_URL } from '@/lib/site'
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: [
-        '/api/',
-        '/sanity/',
-        '/studio/',
-        '/admin/',
-        '/_next/',
-        '/private/',
-      ],
-    },
-    sitemap: 'https://rks.com/sitemap.xml',
+    rules: [{ userAgent: '*', allow: ['/', '/api/og'], disallow: ['/api/', '/studio', '/cart', '/search'] }],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   }
 }
