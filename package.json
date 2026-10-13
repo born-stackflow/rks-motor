@@ -1,5 +1,5 @@
 {
-  "name": "motorcycle-website",
+  "name": "rks-website",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -10,25 +10,25 @@
     "dev:turbo": "node --max-old-space-size=4096 node_modules/next/dist/bin/next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
-    "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "@sanity/client": "^7.22.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.26.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
-    "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "next-sanity": "^13.0.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.12.3",
     "sanity": "^5.26.0",
-    "swiper": "^12.2.0",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^3.6.0",
     "three": "^0.184.0",
     "zod": "^4.4.3"
