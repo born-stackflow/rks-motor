@@ -3,12 +3,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { ChevronDown, Menu, Search, ShoppingCart, X } from '@/components/ui/Icon'
 import { SocialIcon, SOCIAL_LABELS, socialEntries } from '@/components/ui/SocialIcon'
 import { SanityImage } from '@/components/sanity/SanityImage'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
+import { useSlowConnection } from '@/lib/useSlowConnection'
 import { useCart } from '@/lib/cart'
 import { BRAND_ORDER, BRANDS } from '@/lib/site'
 import type { Brand, ModelNavItem, SocialLinks } from '@/lib/sanity/types'
@@ -16,9 +17,10 @@ import type { Brand, ModelNavItem, SocialLinks } from '@/lib/sanity/types'
 type Props = { models: ModelNavItem[]; socialLinks?: SocialLinks }
 
 export function Logo() {
+  const prefetch = useSlowConnection() ? false : undefined
   const { t } = useLanguage()
   return (
-    <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="RKS E-Bikes">
+    <Link prefetch={prefetch} href="/" className="flex items-center gap-3 shrink-0" aria-label="RKS E-Bikes">
       <span className="w-10 h-10 bg-red flex items-center justify-center font-display text-white text-lg tracking-tight">
         RKS
       </span>
@@ -50,6 +52,7 @@ function LocaleToggle({ className }: { className?: string }) {
 }
 
 export default function Header({ models, socialLinks }: Props) {
+  const prefetch = useSlowConnection() ? false : undefined
   const { t } = useLanguage()
   const pathname = usePathname()
   const cartItems = useCart()
@@ -127,7 +130,7 @@ export default function Header({ models, socialLinks }: Props) {
 
           <nav className="hidden xl:flex items-center" aria-label="Main">
             <div className="relative" onMouseEnter={openMega} onMouseLeave={scheduleClose}>
-              <Link
+              <Link prefetch={prefetch}
                 href="/models"
                 aria-expanded={megaOpen}
                 onFocus={openMega}
@@ -141,7 +144,7 @@ export default function Header({ models, socialLinks }: Props) {
               </Link>
             </div>
             {navItems.map((item) => (
-              <Link
+              <Link prefetch={prefetch}
                 key={item.href}
                 href={item.href}
                 className={cn(
@@ -155,14 +158,14 @@ export default function Header({ models, socialLinks }: Props) {
           </nav>
 
           <div className="flex items-center gap-1 sm:gap-2">
-            <Link
+            <Link prefetch={prefetch}
               href="/search"
               aria-label={t.nav.search}
               className="w-10 h-10 flex items-center justify-center text-light hover:text-red transition-colors"
             >
               <Search className="h-4 w-4" />
             </Link>
-            <Link
+            <Link prefetch={prefetch}
               href="/cart"
               aria-label={t.nav.cart}
               className="relative w-10 h-10 flex items-center justify-center text-light hover:text-red transition-colors"
@@ -175,7 +178,7 @@ export default function Header({ models, socialLinks }: Props) {
               ) : null}
             </Link>
             <LocaleToggle className="hidden sm:flex px-3 py-1.5 text-[11px]" />
-            <Link
+            <Link prefetch={prefetch}
               href="/trade"
               className="hidden xl:inline-flex items-center whitespace-nowrap px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-red border border-red hover:bg-red hover:text-white transition-colors"
             >
@@ -195,7 +198,7 @@ export default function Header({ models, socialLinks }: Props) {
 
         <AnimatePresence>
           {megaOpen && brands.length > 0 ? (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
@@ -209,7 +212,7 @@ export default function Header({ models, socialLinks }: Props) {
                   <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-mid mb-5">{t.nav.brands}</p>
                   <div className="space-y-1">
                     {brands.map((brand) => (
-                      <Link
+                      <Link prefetch={prefetch}
                         key={brand}
                         href={`/models?brand=${brand}`}
                         onMouseEnter={() => setActiveBrand(brand)}
@@ -224,7 +227,7 @@ export default function Header({ models, socialLinks }: Props) {
                         {BRANDS[brand]}
                       </Link>
                     ))}
-                    <Link
+                    <Link prefetch={prefetch}
                       href="/models"
                       className="block px-4 py-2 text-[11px] text-mid hover:text-off-white uppercase tracking-widest mt-3 border-t border-dark-3 pt-4"
                     >
@@ -239,7 +242,7 @@ export default function Header({ models, socialLinks }: Props) {
                   {byBrand[activeBrand].length > 0 ? (
                     <div className="grid grid-cols-4 xl:grid-cols-6 gap-3">
                       {byBrand[activeBrand].slice(0, 12).map((model) => (
-                        <Link key={model._id} href={`/models/${model.slug}`} className="group text-center">
+                        <Link prefetch={prefetch} key={model._id} href={`/models/${model.slug}`} className="group text-center">
                           <div className="relative aspect-square bg-dark border border-dark-3 overflow-hidden mb-2 group-hover:border-red/50 transition-colors">
                             <SanityImage
                               image={model.image}
@@ -259,7 +262,7 @@ export default function Header({ models, socialLinks }: Props) {
                     <p className="text-mid text-sm">{t.nav.noModels}</p>
                   )}
                   <div className="mt-5 pt-4 border-t border-dark-3">
-                    <Link
+                    <Link prefetch={prefetch}
                       href={`/models?brand=${activeBrand}`}
                       className="text-[11px] font-semibold uppercase tracking-widest text-red hover:text-red-light transition-colors"
                     >
@@ -268,14 +271,14 @@ export default function Header({ models, socialLinks }: Props) {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           ) : null}
         </AnimatePresence>
       </header>
 
       <AnimatePresence>
         {mobileOpen ? (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -296,7 +299,7 @@ export default function Header({ models, socialLinks }: Props) {
               {mobileModelsOpen ? (
                 <div className="pl-4 mb-2">
                   {brands.map((brand) => (
-                    <Link
+                    <Link prefetch={prefetch}
                       key={brand}
                       href={`/models?brand=${brand}`}
                       className="block py-1.5 text-light hover:text-red text-sm font-semibold uppercase tracking-widest"
@@ -304,7 +307,7 @@ export default function Header({ models, socialLinks }: Props) {
                       {BRANDS[brand]}
                     </Link>
                   ))}
-                  <Link
+                  <Link prefetch={prefetch}
                     href="/models"
                     className="block py-1.5 text-mid hover:text-off-white text-xs font-semibold uppercase tracking-widest mt-1 border-t border-dark-3 pt-2"
                   >
@@ -313,7 +316,7 @@ export default function Header({ models, socialLinks }: Props) {
                 </div>
               ) : null}
               {navItems.map((item) => (
-                <Link
+                <Link prefetch={prefetch}
                   key={item.href}
                   href={item.href}
                   className={cn(
@@ -325,7 +328,7 @@ export default function Header({ models, socialLinks }: Props) {
                 </Link>
               ))}
               <div className="mt-8 pt-8 border-t border-dark-3 flex flex-wrap items-center gap-4">
-                <Link href="/trade" className="btn-primary">
+                <Link prefetch={prefetch} href="/trade" className="btn-primary">
                   {t.nav.trade}
                 </Link>
                 <LocaleToggle className="flex px-4 py-3 text-sm" />
@@ -347,7 +350,7 @@ export default function Header({ models, socialLinks }: Props) {
                 </div>
               ) : null}
             </nav>
-          </motion.div>
+          </m.div>
         ) : null}
       </AnimatePresence>
     </>

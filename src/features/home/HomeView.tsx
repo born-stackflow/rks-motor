@@ -32,13 +32,13 @@ export function HomeView({ data }: { data: HomeData }) {
         <Marquee />
         <StatsBar stats={data.stats} />
         <FeaturedModels models={data.models} />
-        <PartsSection tiles={data.partTiles} background={data.backgrounds.parts} />
-        <PopularParts parts={data.parts} />
-        <WhySection background={data.backgrounds.why} />
-        <NewsSection posts={data.posts} />
-        <DealerTeaser background={data.backgrounds.dealer} />
-        <B2BCallout background={data.backgrounds.b2b} />
-        <Newsletter />
+        <div className="cv-auto"><PartsSection tiles={data.partTiles} background={data.backgrounds.parts} /></div>
+        {data.parts.length > 0 ? <div className="cv-auto"><PopularParts parts={data.parts} /></div> : null}
+        <div className="cv-auto"><WhySection background={data.backgrounds.why} /></div>
+        {data.posts.length > 0 ? <div className="cv-auto"><NewsSection posts={data.posts} /></div> : null}
+        <div className="cv-auto"><DealerTeaser background={data.backgrounds.dealer} /></div>
+        <div className="cv-auto"><B2BCallout background={data.backgrounds.b2b} /></div>
+        <div className="cv-auto"><Newsletter /></div>
       </div>
     </MotionConfig>
   )

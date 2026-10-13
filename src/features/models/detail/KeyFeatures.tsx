@@ -1,7 +1,7 @@
 'use client'
 
 import { useId, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
 import type { KeyFeature } from '@/lib/sanity/types'
@@ -66,7 +66,7 @@ export function KeyFeatures({ features, tag, title }: Props) {
 
           <div id={panelId} aria-live="polite" className="relative min-h-[420px] overflow-hidden bg-black">
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div
+              <m.div
                 key={active}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -97,7 +97,7 @@ export function KeyFeatures({ features, tag, title }: Props) {
                     <p className="max-w-md text-sm leading-relaxed text-light">{current.description}</p>
                   ) : null}
                 </div>
-              </motion.div>
+              </m.div>
             </AnimatePresence>
           </div>
         </div>

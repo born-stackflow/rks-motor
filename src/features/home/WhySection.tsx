@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Headphones, Users, Wrench, Zap } from '@/components/ui/Icon'
 import { useMessages } from '@/lib/i18n/LanguageContext'
 import { homeMessages } from './messages'
@@ -16,7 +16,7 @@ export function WhySection({ background }: { background?: Image }) {
   return (
     <section className="section relative overflow-hidden bg-dark">
       <ParallaxBg image={background} opacity={0.05} />
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(204,0,0,0.06)_0%,transparent_70%)]"
         animate={{ scale: [1, 1.2, 1] }}
@@ -34,7 +34,7 @@ export function WhySection({ background }: { background?: Image }) {
           {t.items.map((item, i) => {
             const Icon = ICONS[i % ICONS.length]
             return (
-              <motion.li
+              <m.li
                 key={item.title}
                 initial={{ y: 24 }}
                 whileInView={{ y: 0 }}
@@ -57,7 +57,7 @@ export function WhySection({ background }: { background?: Image }) {
                   {item.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-light">{item.desc}</p>
-              </motion.li>
+              </m.li>
             )
           })}
         </ul>

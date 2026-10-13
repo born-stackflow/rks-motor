@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useMessages } from '@/lib/i18n/LanguageContext'
 import { homeMessages } from './messages'
 import { cn } from '@/lib/utils'
@@ -18,7 +18,7 @@ export function StatsBar({ stats }: { stats: Array<{ value: string; label: strin
   return (
     <section aria-label={t.label} className="relative overflow-hidden py-10">
       <div className="absolute inset-0 bg-red">
-        <motion.div
+        <m.div
           className="absolute inset-0 opacity-20"
           style={{ backgroundImage: STRIPES }}
           animate={{ x: ['0px', '61px'] }}
@@ -33,7 +33,7 @@ export function StatsBar({ stats }: { stats: Array<{ value: string; label: strin
           )}
         >
           {stats.map((stat, i) => (
-            <motion.div
+            <m.div
               key={`${stat.label}-${i}`}
               initial={{ y: 16 }}
               whileInView={{ y: 0 }}
@@ -45,7 +45,7 @@ export function StatsBar({ stats }: { stats: Array<{ value: string; label: strin
               <dd className="order-1 mb-1 font-display text-4xl tracking-[0.04em] text-white md:text-5xl">
                 {stat.value}
               </dd>
-            </motion.div>
+            </m.div>
           ))}
         </dl>
       </div>

@@ -3,7 +3,7 @@
 import { Suspense, useId, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m as Motion } from 'framer-motion'
 import { PageHero } from '@/components/ui/PageHero'
 import { ModelCard } from '@/components/ui/ModelCard'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -272,7 +272,7 @@ function Catalogue({ models, brand }: { models: ModelCardData[]; brand: Brand | 
 
       <AnimatePresence>
         {compare.length > 0 ? (
-          <motion.aside
+          <Motion.aside
             key="compare-bar"
             aria-label={m.compare.bar}
             initial={{ y: '100%' }}
@@ -325,7 +325,7 @@ function Catalogue({ models, brand }: { models: ModelCardData[]; brand: Brand | 
                 )}
               </div>
             </div>
-          </motion.aside>
+          </Motion.aside>
         ) : null}
       </AnimatePresence>
     </>

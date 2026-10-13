@@ -212,3 +212,9 @@
     @apply block mt-3 h-[3px] w-[60px] bg-red mx-auto;
   }
 }
+
+/* Below-the-fold blocks: the browser skips their layout and paint until they approach the viewport. */
+@utility cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}

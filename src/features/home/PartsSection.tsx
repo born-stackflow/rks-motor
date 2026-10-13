@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
 import { ArrowRight, Wrench } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
@@ -60,7 +60,7 @@ export function PartsSection({ tiles, background }: { tiles: PartTile[]; backgro
             {tiles.map((tile, i) => {
               const label = localize(PART_CATEGORIES[tile.category])
               return (
-                <motion.li
+                <m.li
                   key={tile.category}
                   initial={{ scale: 0.94 }}
                   whileInView={{ scale: 1 }}
@@ -97,7 +97,7 @@ export function PartsSection({ tiles, background }: { tiles: PartTile[]; backgro
                       <ArrowRight className="h-3.5 w-3.5 text-white" />
                     </div>
                   </Link>
-                </motion.li>
+                </m.li>
               )
             })}
           </ul>

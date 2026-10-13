@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
+import { useSlowConnection } from '@/lib/useSlowConnection'
 import { Mail, MapPin, Phone } from '@/components/ui/Icon'
 import { SocialIcon, SOCIAL_LABELS, socialEntries } from '@/components/ui/SocialIcon'
 import { BRAND_ORDER, BRANDS } from '@/lib/site'
@@ -10,6 +11,7 @@ import type { SiteSettings } from '@/lib/sanity/types'
 type Props = { settings: Pick<SiteSettings, 'socialLinks' | 'footerText' | 'phone' | 'email' | 'address'> | null }
 
 export default function Footer({ settings }: Props) {
+  const prefetch = useSlowConnection() ? false : undefined
   const { t } = useLanguage()
   const { links, sections } = t.footer
 
@@ -56,7 +58,7 @@ export default function Footer({ settings }: Props) {
   ].filter((item) => item !== null)
 
   return (
-    <footer className="bg-black border-t border-dark-3">
+    <footer className="cv-auto bg-black border-t border-dark-3">
       <div className="divider-red" />
       <div className="container py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10">
@@ -106,7 +108,7 @@ export default function Footer({ settings }: Props) {
               <ul className="space-y-2">
                 {column.items.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className="text-light text-sm hover:text-red transition-colors">
+                    <Link prefetch={prefetch} href={item.href} className="text-light text-sm hover:text-red transition-colors">
                       {item.name}
                     </Link>
                   </li>

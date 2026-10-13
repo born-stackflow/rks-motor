@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { SanityImage, hasImage } from '@/components/sanity/SanityImage'
 import { RichText } from '@/components/sanity/RichText'
@@ -18,7 +19,6 @@ import { contactHref, specRows, specValue } from '@/features/models/specs'
 import { EnquiryActions } from './EnquiryActions'
 import { Hotspots } from './Hotspots'
 import { KeyFeatures } from './KeyFeatures'
-import { Lightbox } from './Lightbox'
 
 const QUICK_STATS = [
   { key: 'motor', icon: Zap },
@@ -26,6 +26,10 @@ const QUICK_STATS = [
   { key: 'range', icon: Zap },
   { key: 'battery', icon: Zap },
 ] as const
+
+const loadLightbox = () => import('./Lightbox').then((module) => module.Lightbox)
+const Lightbox = dynamic(loadLightbox, { ssr: false })
+const warmLightbox = () => void loadLightbox()
 
 export function ModelDetailView({ model }: { model: ModelDetail }) {
   const m = useMessages(modelDetailMessages)
@@ -55,7 +59,7 @@ export function ModelDetailView({ model }: { model: ModelDetail }) {
     <div className="min-h-screen bg-black">
       <section className="relative flex min-h-[560px] items-end overflow-hidden md:h-[80vh]">
         {hasImage(model.heroImage) ? (
-          <SanityImage image={model.heroImage} alt="" fill priority sizes="100vw" className="object-cover object-center" />
+          <SanityImage image={model.heroImage} alt="" fill priority quality={55} sizes="100vw" className="object-cover object-center" />
         ) : (
           <ImagePlaceholder />
         )}
@@ -101,6 +105,8 @@ export function ModelDetailView({ model }: { model: ModelDetail }) {
               type="button"
               disabled={!hasImage(productImage)}
               onClick={() => hasImage(productImage) && setLightbox({ image: productImage, alt: model.name })}
+              onPointerEnter={warmLightbox}
+              onFocus={warmLightbox}
               aria-label={m.enlarge}
               className="product-shot group relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden disabled:cursor-default"
             >
@@ -224,6 +230,8 @@ export function ModelDetailView({ model }: { model: ModelDetail }) {
                     <button
                       type="button"
                       onClick={() => setLightbox({ image, alt })}
+                      onPointerEnter={warmLightbox}
+                      onFocus={warmLightbox}
                       aria-label={`${m.enlarge}: ${alt}`}
                       className="group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden bg-dark"
                     >
@@ -331,13 +339,15 @@ export function ModelDetailView({ model }: { model: ModelDetail }) {
         </div>
       </section>
 
-      <Lightbox
-        image={lightbox?.image ?? null}
-        alt={lightbox?.alt ?? ''}
+      {lightbox ? (
+        <Lightbox
+        image={lightbox.image}
+        alt={lightbox.alt}
         label={m.lightbox.label(model.name)}
         closeLabel={m.lightbox.close}
         onClose={() => setLightbox(null)}
-      />
+        />
+      ) : null}
     </div>
   )
 }
