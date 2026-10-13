@@ -1,0 +1,378 @@
+import { defineMessages } from "../define"
+
+export const homeMessages = defineMessages({
+  "en": {
+    "home": {
+      "stats": [
+        {
+          "value": "1985",
+          "label": "Founded in Milan"
+        },
+        {
+          "value": "40+",
+          "label": "Years of Excellence"
+        },
+        {
+          "value": "50+",
+          "label": "Authorized Dealers"
+        },
+        {
+          "value": "15k+",
+          "label": "Riders Worldwide"
+        }
+      ],
+      "models": {
+        "tag": "Our Lineup",
+        "title": "Featured Models",
+        "viewAll": "View All",
+        "viewAllModels": "View All Models"
+      },
+      "parts": {
+        "tag": "Genuine OEM E-Bike Parts",
+        "title": "E-Bike Parts & Accessories",
+        "subtitle": "Every part is engineered to the same exacting standards as the e-bikes they serve.",
+        "browse": "Browse All E-Bike Parts",
+        "allParts": "All Parts",
+        "shopTag": "Shop",
+        "popularTitle": "Popular E-Bike Parts",
+        "categories": [
+          {
+            "title": "Motor & Drive",
+            "href": "/parts?category=motor"
+          },
+          {
+            "title": "Battery & Charging",
+            "href": "/parts?category=battery"
+          },
+          {
+            "title": "Brakes & Wheels",
+            "href": "/parts?category=brakes"
+          },
+          {
+            "title": "Accessories",
+            "href": "/parts?category=accessories"
+          }
+        ]
+      },
+      "why": {
+        "tag": "Why RKS",
+        "title": "Italian Soul. Global Performance.",
+        "subtitle": "Since 1985, we've been pushing the boundaries of what an e-bike can be.",
+        "items": [
+          {
+            "title": "Italian Craftsmanship",
+            "desc": "Handcrafted in our Milan facility, blending traditional artisanship with modern engineering."
+          },
+          {
+            "title": "Race-Proven Heritage",
+            "desc": "Born from decades of racing. Every road e-bike inherits our track DNA."
+          },
+          {
+            "title": "Dealer Network",
+            "desc": "50+ certified dealers across Europe with expert technicians and genuine parts."
+          },
+          {
+            "title": "Innovation First",
+            "desc": "Pioneering electric mobility and advanced rider assist technologies since 2015."
+          }
+        ]
+      },
+      "newsSection": {
+        "tag": "Latest",
+        "title": "News & Updates",
+        "allNews": "All News",
+        "readMore": "Read more"
+      },
+      "dealer": {
+        "locations": "50+ Locations",
+        "title": "Find Your Nearest Dealer",
+        "desc": "Expert technicians, genuine parts, and test rides available at all authorised RKS dealers.",
+        "cta": "Find a Dealer"
+      },
+      "b2b": {
+        "label": "For Business",
+        "title": "Are You a Dealer or Distributor?",
+        "desc": "Join our trade network and get access to wholesale pricing, exclusive model allocations, and co-op marketing support.",
+        "cta": "Apply as Trade Partner"
+      },
+      "newsletter": {
+        "title": "Stay in the Loop",
+        "subtitle": "New model launches, racing news, exclusive owner offers — monthly.",
+        "placeholder": "Your email address",
+        "subscribe": "Subscribe",
+        "disclaimer": "No spam. Unsubscribe anytime."
+      }
+    },
+    "hero": {
+      "slides": [
+        {
+          "tag": "BUILT FOR THE ROAD",
+          "headline": [
+            "POWER",
+            "REDEFINED"
+          ],
+          "sub": "Italian engineering. Zero emissions. Pure performance.",
+          "cta": {
+            "label": "Explore E-Bikes",
+            "href": "/models"
+          },
+          "ctaSec": {
+            "label": "Our Story",
+            "href": "/about"
+          }
+        },
+        {
+          "tag": "PRECISION ENGINEERING",
+          "headline": [
+            "CRAFTED",
+            "TO PERFECTION"
+          ],
+          "sub": "Every component engineered for electric performance.",
+          "cta": {
+            "label": "View E-Bike Lineup",
+            "href": "/models"
+          },
+          "ctaSec": {
+            "label": "Our Story",
+            "href": "/about"
+          }
+        },
+        {
+          "tag": "DISCOVER YOUR E-BIKE",
+          "headline": [
+            "FIND YOUR",
+            "PERFECT RIDE"
+          ],
+          "sub": "From city commuters to adventure machines. All electric.",
+          "cta": {
+            "label": "Browse All E-Bikes",
+            "href": "/models"
+          },
+          "ctaSec": {
+            "label": "Compare E-Bikes",
+            "href": "/compare"
+          }
+        },
+        {
+          "tag": "OEM E-BIKE PARTS",
+          "headline": [
+            "BUILT TO",
+            "LAST"
+          ],
+          "sub": "Genuine e-bike parts. Fast dispatch. Guaranteed performance.",
+          "cta": {
+            "label": "Shop E-Bike Parts",
+            "href": "/parts"
+          },
+          "ctaSec": {
+            "label": "Find Compatible",
+            "href": "/parts"
+          }
+        },
+        {
+          "tag": "BECOME A PARTNER",
+          "headline": [
+            "GROW YOUR",
+            "BUSINESS"
+          ],
+          "sub": "Join our global e-bike dealer and distributor network.",
+          "cta": {
+            "label": "Apply as Trade Partner",
+            "href": "/trade/apply"
+          },
+          "ctaSec": {
+            "label": "Learn More",
+            "href": "/trade"
+          }
+        }
+      ]
+    }
+  },
+  "it": {
+    "home": {
+      "stats": [
+        {
+          "value": "1985",
+          "label": "Fondata a Milano"
+        },
+        {
+          "value": "40+",
+          "label": "Anni di Eccellenza"
+        },
+        {
+          "value": "50+",
+          "label": "Rivenditori Autorizzati"
+        },
+        {
+          "value": "15k+",
+          "label": "Ciclisti nel Mondo"
+        }
+      ],
+      "models": {
+        "tag": "La Nostra Gamma",
+        "title": "Modelli in Evidenza",
+        "viewAll": "Vedi Tutti",
+        "viewAllModels": "Vedi Tutti i Modelli"
+      },
+      "parts": {
+        "tag": "Ricambi OEM E-Bike Originali",
+        "title": "Ricambi e Accessori E-Bike",
+        "subtitle": "Ogni ricambio è progettato agli stessi standard rigorosi delle e-bike che serve.",
+        "browse": "Sfoglia Tutti i Ricambi E-Bike",
+        "allParts": "Tutti i Ricambi",
+        "shopTag": "Acquista",
+        "popularTitle": "Ricambi E-Bike Popolari",
+        "categories": [
+          {
+            "title": "Motore e Trasmissione",
+            "href": "/parts?category=motor"
+          },
+          {
+            "title": "Batteria e Ricarica",
+            "href": "/parts?category=battery"
+          },
+          {
+            "title": "Freni e Ruote",
+            "href": "/parts?category=brakes"
+          },
+          {
+            "title": "Accessori",
+            "href": "/parts?category=accessories"
+          }
+        ]
+      },
+      "why": {
+        "tag": "Perché RKS",
+        "title": "Anima Italiana. Performance Globale.",
+        "subtitle": "Dal 1985, spingiamo i confini di ciò che una e-bike può essere.",
+        "items": [
+          {
+            "title": "Artigianato Italiano",
+            "desc": "Realizzata nel nostro stabilimento di Milano, unendo l'artigianato tradizionale all'ingegneria moderna."
+          },
+          {
+            "title": "Eredità da Gara",
+            "desc": "Nata da decenni di competizioni. Ogni e-bike da strada eredita il nostro DNA da pista."
+          },
+          {
+            "title": "Rete di Rivenditori",
+            "desc": "Oltre 50 rivenditori certificati in tutta Europa con tecnici esperti e ricambi originali."
+          },
+          {
+            "title": "Innovazione Prima di Tutto",
+            "desc": "Pionieri della mobilità elettrica e delle tecnologie avanzate di assistenza al pilota dal 2015."
+          }
+        ]
+      },
+      "newsSection": {
+        "tag": "Ultime",
+        "title": "Notizie e Aggiornamenti",
+        "allNews": "Tutte le Notizie",
+        "readMore": "Leggi tutto"
+      },
+      "dealer": {
+        "locations": "50+ Sedi",
+        "title": "Trova il Rivenditore Più Vicino",
+        "desc": "Tecnici esperti, ricambi originali e test ride disponibili presso tutti i rivenditori RKS autorizzati.",
+        "cta": "Trova un Rivenditore"
+      },
+      "b2b": {
+        "label": "Per le Aziende",
+        "title": "Sei un Rivenditore o Distributore?",
+        "desc": "Unisciti alla nostra rete commerciale e ottieni accesso a prezzi all'ingrosso, allocazioni esclusive e supporto marketing.",
+        "cta": "Candidati come Partner"
+      },
+      "newsletter": {
+        "title": "Rimani Aggiornato",
+        "subtitle": "Lanci di nuovi modelli, notizie racing, offerte esclusive per proprietari — mensile.",
+        "placeholder": "Il tuo indirizzo email",
+        "subscribe": "Iscriviti",
+        "disclaimer": "Niente spam. Cancellati in qualsiasi momento."
+      }
+    },
+    "hero": {
+      "slides": [
+        {
+          "tag": "COSTRUITA PER LA STRADA",
+          "headline": [
+            "POTENZA",
+            "RIDEFINITA"
+          ],
+          "sub": "Ingegneria italiana. Zero emissioni. Performance pura.",
+          "cta": {
+            "label": "Esplora le E-Bike",
+            "href": "/models"
+          },
+          "ctaSec": {
+            "label": "La Nostra Storia",
+            "href": "/about"
+          }
+        },
+        {
+          "tag": "INGEGNERIA DI PRECISIONE",
+          "headline": [
+            "COSTRUITA",
+            "ALLA PERFEZIONE"
+          ],
+          "sub": "Ogni componente ingegnerizzato per la performance elettrica.",
+          "cta": {
+            "label": "Vedi la Gamma",
+            "href": "/models"
+          },
+          "ctaSec": {
+            "label": "La Nostra Storia",
+            "href": "/about"
+          }
+        },
+        {
+          "tag": "SCOPRI LA TUA E-BIKE",
+          "headline": [
+            "TROVA LA TUA",
+            "RIDE PERFETTA"
+          ],
+          "sub": "Dalla città all'avventura. Completamente elettrico.",
+          "cta": {
+            "label": "Sfoglia le E-Bike",
+            "href": "/models"
+          },
+          "ctaSec": {
+            "label": "Confronta E-Bike",
+            "href": "/compare"
+          }
+        },
+        {
+          "tag": "RICAMBI OEM E-BIKE",
+          "headline": [
+            "COSTRUITA PER",
+            "DURARE"
+          ],
+          "sub": "Ricambi originali e-bike. Spedizione rapida. Performance garantita.",
+          "cta": {
+            "label": "Acquista Ricambi",
+            "href": "/parts"
+          },
+          "ctaSec": {
+            "label": "Trova Compatibile",
+            "href": "/parts"
+          }
+        },
+        {
+          "tag": "DIVENTA UN PARTNER",
+          "headline": [
+            "FAI CRESCERE",
+            "IL TUO BUSINESS"
+          ],
+          "sub": "Unisciti alla nostra rete globale di rivenditori di e-bike.",
+          "cta": {
+            "label": "Candidati come Partner",
+            "href": "/trade/apply"
+          },
+          "ctaSec": {
+            "label": "Scopri di Più",
+            "href": "/trade"
+          }
+        }
+      ]
+    }
+  }
+})

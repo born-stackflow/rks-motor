@@ -9,8 +9,8 @@ export function formatPrice(price: number, currency = 'EUR') {
   return new Intl.NumberFormat('it-IT', { style: 'currency', currency, maximumFractionDigits: 0 }).format(price)
 }
 
-export function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+export function formatDate(date: string, locale: 'en' | 'it' = 'en') {
+  return new Date(date).toLocaleDateString(locale === 'it' ? 'it-IT' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
 export function slugify(text: string) {

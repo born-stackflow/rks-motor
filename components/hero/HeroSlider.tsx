@@ -7,7 +7,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { ChevronLeft, ChevronRight } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useMessages } from '@/contexts/LanguageContext'
+import { homeMessages } from '@/lib/i18n/messages/home'
 
 const Scene1 = dynamic(() => import('./slides/Slide1Scene'), { ssr: false })
 const Scene2 = dynamic(() => import('./slides/Slide2Scene'), { ssr: false })
@@ -24,7 +25,7 @@ interface HeroSliderProps {
 }
 
 export function HeroSlider({ cmsBgs = [], cmsFgs = [] }: HeroSliderProps) {
-  const { t } = useLanguage()
+  const t = useMessages(homeMessages)
   const slides = t.hero.slides as typeof t.hero.slides
 
   const [current, setCurrent] = useState(0)

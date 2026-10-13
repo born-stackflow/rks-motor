@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client'
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url'
 import { apiVersion, dataset, projectId } from './env'
 
@@ -11,7 +11,7 @@ export const sanityClient = createClient({
   perspective: 'published',
 })
 
-const builder = imageUrlBuilder({ projectId, dataset })
+const builder = createImageUrlBuilder({ projectId, dataset })
 
 export function urlFor(source: SanityImageSource) {
   return builder.image(source).auto('format')

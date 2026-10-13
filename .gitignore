@@ -59,3 +59,6 @@ env.download
 
 # vendor handoff notes (contain personal data)
 DEPLOYMENT_NOTES.md
+
+# playwright mcp output
+.playwright-mcp/

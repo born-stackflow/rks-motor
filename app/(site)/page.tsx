@@ -11,7 +11,8 @@ import { ModelCard } from '@/components/ui/ModelCard'
 import { PartCard } from '@/components/ui/PartCard'
 import { ArrowRight, Zap, Award, Globe, Wrench, Building2 } from '@/components/ui/Icon'
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useMessages } from '@/contexts/LanguageContext'
+import { homeMessages } from '@/lib/i18n/messages/home'
 import { sanityClient, queries, urlFor } from '@/lib/sanity'
 import type { BikeModelCard, BikePartCard, BlogPostCard, SiteSettings, PartCategorySummary } from '@/lib/sanity'
 
@@ -165,7 +166,7 @@ function AnimatedStat({ value, label, index }: { value: string; label: string; i
 }
 
 export default function HomePage() {
-  const { t } = useLanguage()
+  const t = useMessages(homeMessages)
   const h = t.home
 
   const [featuredModels,  setFeaturedModels]  = useState<BikeModelCard[]>([])
