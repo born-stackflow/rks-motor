@@ -1,31 +1,23 @@
 import type { Metadata } from 'next'
-import { sanityClient, queries, urlFor } from '@/lib/sanity'
-import type { BlogPostCard, SiteSettings } from '@/lib/sanity'
-import NewsClient from './NewsClient'
-
-export const metadata: Metadata = {
-  title: 'News & Updates | RKS E-Bikes',
-  description: 'Stay up to date with the latest RKS E-Bikes news — product launches, technology deep-dives, events, and industry insights.',
-  openGraph: {
-    title: 'RKS E-Bikes — News & Updates',
-    description: 'Latest news from RKS E-Bikes: model launches, battery technology, events, and more.',
-    type: 'website',
-  },
-}
+import { sanityFetchSafe } from '@/lib/sanity/fetch'
+import { getSiteSettings } from '@/lib/sanity/data'
+import { allPostsQuery } from '@/lib/sanity/queries'
+import type { PostCard } from '@/lib/sanity/types'
+import { NewsList } from './_components/NewsList'
 
 export const revalidate = 60
 
+export const metadata: Metadata = {
+  title: 'News',
+  description: 'Launches, events and stories from the Ape Ryder, RKS and Skyjet e-bike world.',
+  alternates: { canonical: '/news' },
+}
+
 export default async function NewsPage() {
-  const posts: BlogPostCard[] = await sanityClient
-    .fetch(queries.allPosts)
-    .catch(() => [])
-  const settings: SiteSettings | null = await sanityClient
-    .fetch(queries.siteSettings)
-    .catch(() => null)
+  const [posts, settings] = await Promise.all([
+    sanityFetchSafe<PostCard[]>(allPostsQuery, {}, []),
+    getSiteSettings(),
+  ])
 
-  const bgUrl = (settings?.newsPageBg as any)?.asset
-    ? urlFor(settings!.newsPageBg!).width(1600).quality(80).url()
-    : undefined
-
-  return <NewsClient posts={posts} bgUrl={bgUrl} />
+  return <NewsList posts={posts} heroImage={settings?.pageBackgrounds?.news ?? null} />
 }
