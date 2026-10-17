@@ -13,6 +13,7 @@ import { PartsSection, type PartTile } from './PartsSection'
 import { PopularParts } from './PopularParts'
 import { StatsBar } from './StatsBar'
 import { WhySection } from './WhySection'
+import { EicmaPopupLauncher } from './eicma/EicmaPopupLauncher'
 
 export type HomeData = {
   heroSlides: HeroSlideMedia[]
@@ -39,6 +40,7 @@ export function HomeView({ data }: { data: HomeData }) {
         <div className="cv-auto"><DealerTeaser background={data.backgrounds.dealer} /></div>
         <div className="cv-auto"><B2BCallout background={data.backgrounds.b2b} /></div>
         <div className="cv-auto"><Newsletter /></div>
+        <EicmaPopupLauncher />
       </div>
     </MotionConfig>
   )
