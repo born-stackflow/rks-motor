@@ -9,7 +9,8 @@ const EicmaPopup = dynamic(() => import('./EicmaPopup'), { ssr: false })
 const OPEN_DELAY_MS = 1500
 
 /**
- * Shows the EICMA invitation once per visitor, only before and during the fair.
+ * Shows the EICMA invitation on every visit to the site (once per browser session), before and during the fair.
+ * Coming back to the home page within the same session does not reopen it.
  * The popup code and the poster load only when it is actually going to open, after the page has settled.
  */
 export function EicmaPopupLauncher() {
@@ -19,23 +20,20 @@ export function EicmaPopupLauncher() {
     const current = eicmaPhase()
     if (current.kind === 'after') return
     try {
-      if (localStorage.getItem(EICMA.dismissKey)) return
+      if (sessionStorage.getItem(EICMA.dismissKey)) return
     } catch {}
-    const timer = window.setTimeout(() => setPhase(current), OPEN_DELAY_MS)
+    const timer = window.setTimeout(() => {
+      try {
+        sessionStorage.setItem(EICMA.dismissKey, new Date().toISOString())
+      } catch {}
+      setPhase(current)
+    }, OPEN_DELAY_MS)
     return () => window.clearTimeout(timer)
   }, [])
 
   if (!phase) return null
 
   return (
-    <EicmaPopup
-      phase={phase}
-      onClose={() => {
-        try {
-          localStorage.setItem(EICMA.dismissKey, new Date().toISOString())
-        } catch {}
-        setPhase(null)
-      }}
-    />
+    <EicmaPopup phase={phase} onClose={() => setPhase(null)} />
   )
 }
