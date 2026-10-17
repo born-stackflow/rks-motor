@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { Building2, Calendar, MapPin, Package, X } from '@/components/ui/Icon'
-import { useMessages } from '@/lib/i18n/LanguageContext'
+import { ArrowRight, Building2, Calendar, MapPin, Package, X } from '@/components/ui/Icon'
+import { useLocale, useMessages } from '@/lib/i18n/LanguageContext'
 import { EICMA, type EicmaPhase } from './event'
 import { eicmaMessages } from './messages'
 import styles from './eicma.module.css'
@@ -12,6 +12,7 @@ type Props = { phase: Exclude<EicmaPhase, { kind: 'after' }>; onClose: () => voi
 
 export default function EicmaPopup({ phase, onClose }: Props) {
   const m = useMessages(eicmaMessages)
+  const locale = useLocale()
   const ref = useRef<HTMLDialogElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -79,6 +80,16 @@ export default function EicmaPopup({ phase, onClose }: Props) {
               </div>
             ))}
           </dl>
+
+          <a
+            href={EICMA.website[locale]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.cta}
+          >
+            {m.learnMore}
+            <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
 
         <button ref={closeRef} type="button" onClick={onClose} className={styles.close} aria-label={m.close}>

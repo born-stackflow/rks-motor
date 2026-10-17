@@ -115,6 +115,25 @@
 }
 
 
+.cta {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 22px;
+  background: #cc0000;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+}
+
+.cta:hover {
+  background: #990000;
+}
+
 .close {
   position: absolute;
   top: 10px;
@@ -134,7 +153,8 @@
   background: rgb(255 255 255 / 0.26);
 }
 
-.close:focus-visible {
+.close:focus-visible,
+.cta:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 3px;
 }
