@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { ArrowRight, Building2, Calendar, MapPin, Package, X } from '@/components/ui/Icon'
+import { Building2, Calendar, MapPin, Package, X } from '@/components/ui/Icon'
 import { useMessages } from '@/lib/i18n/LanguageContext'
 import { EICMA, type EicmaPhase } from './event'
 import { eicmaMessages } from './messages'
@@ -79,11 +79,6 @@ export default function EicmaPopup({ phase, onClose }: Props) {
               </div>
             ))}
           </dl>
-
-          <a href={EICMA.calendar} download="eicma-2026-rks.ics" className={styles.cta}>
-            {m.addToCalendar}
-            <ArrowRight className="h-4 w-4" />
-          </a>
         </div>
 
         <button ref={closeRef} type="button" onClick={onClose} className={styles.close} aria-label={m.close}>

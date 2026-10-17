@@ -3,7 +3,6 @@ export const EICMA = {
   opens: new Date('2026-11-03T00:00:00+01:00'),
   closes: new Date('2026-11-09T00:00:00+01:00'),
   poster: '/events/eicma-2026-poster.jpg',
-  calendar: '/events/eicma-2026.ics',
   dismissKey: 'rks-eicma-2026-popup',
 }
 
