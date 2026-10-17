@@ -56,6 +56,8 @@ export default function EicmaPopup({ phase, onClose }: Props) {
             fill
             sizes="(max-width: 767px) 92vw, 392px"
             quality={75}
+            loading="eager"
+            fetchPriority="high"
             className={styles.posterImg}
           />
         </div>

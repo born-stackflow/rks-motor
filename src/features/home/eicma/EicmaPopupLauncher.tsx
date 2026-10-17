@@ -1,17 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
+import EicmaPopup from './EicmaPopup'
 import { EICMA, eicmaPhase, type EicmaPhase } from './event'
 
-const EicmaPopup = dynamic(() => import('./EicmaPopup'), { ssr: false })
-
-const OPEN_DELAY_MS = 1500
-
 /**
- * Shows the EICMA invitation on every visit to the site (once per browser session), before and during the fair.
- * Coming back to the home page within the same session does not reopen it.
- * The popup code and the poster load only when it is actually going to open, after the page has settled.
+ * Opens the EICMA invitation as soon as the home page is ready, on every visit to the site (once per browser
+ * session), before and during the fair. Coming back to the home page within the same session does not reopen it.
  */
 export function EicmaPopupLauncher() {
   const [phase, setPhase] = useState<Exclude<EicmaPhase, { kind: 'after' }> | null>(null)
@@ -21,19 +16,13 @@ export function EicmaPopupLauncher() {
     if (current.kind === 'after') return
     try {
       if (sessionStorage.getItem(EICMA.dismissKey)) return
+      sessionStorage.setItem(EICMA.dismissKey, new Date().toISOString())
     } catch {}
-    const timer = window.setTimeout(() => {
-      try {
-        sessionStorage.setItem(EICMA.dismissKey, new Date().toISOString())
-      } catch {}
-      setPhase(current)
-    }, OPEN_DELAY_MS)
-    return () => window.clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the session flag only exists in the browser; opening must wait for hydration
+    setPhase(current)
   }, [])
 
   if (!phase) return null
 
-  return (
-    <EicmaPopup phase={phase} onClose={() => setPhase(null)} />
-  )
+  return <EicmaPopup phase={phase} onClose={() => setPhase(null)} />
 }
